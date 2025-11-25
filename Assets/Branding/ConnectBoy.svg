@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.86149878"
-     inkscape:cx="1143.9366"
-     inkscape:cy="228.09086"
+     inkscape:zoom="0.60917163"
+     inkscape:cx="1025.1626"
+     inkscape:cy="-9.0286542"
      inkscape:window-width="1600"
      inkscape:window-height="847"
      inkscape:window-x="-8"
@@ -33,17 +33,76 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
-     id="defs1" />
+     id="defs1">
+    <rect
+       x="1279.1661"
+       y="98.939827"
+       width="148.57827"
+       height="124.59919"
+       id="rect8" />
+  </defs>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <rect
+       style="fill:#ffff00;stroke-width:0.600001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;paint-order:fill markers stroke"
+       id="rect1"
+       width="60"
+       height="70"
+       x="117.65684"
+       y="62.890202" />
+    <g
+       id="path5"
+       transform="translate(206.46606,-10.907273)"
+       style="stroke:#ececec;stroke-opacity:1"
+       inkscape:export-filename="xando.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200">
+      <path
+         style="color:#000000;fill:#000000;stroke:#ececec;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke"
+         d="m 96.797366,105.32183 -55.07526,-0.0752 m 55.07526,-19.924801 -55.07526,-0.07525 m 37.57525,-17.500003 -0.0752,55.075254 m -19.92475,-55.075254 -0.0752,55.075254"
+         id="path6" />
+      <path
+         style="color:#000000;fill:#282828;stroke:#ececec;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke"
+         d="m 59.300781,65.246094 a 2.5,2.5 0 0 0 -2.503906,2.496093 l -0.01953,15.025391 -15.052735,-0.02148 a 2.5,2.5 0 0 0 -2.501953,2.496093 2.5,2.5 0 0 0 2.496094,2.503907 l 15.050781,0.02148 -0.01953,15.000002 -15.025391,-0.0215 a 2.5,2.5 0 0 0 -2.501953,2.49805 2.5,2.5 0 0 0 2.496094,2.50195 l 15.023437,0.0215 -0.01953,15.05078 a 2.5,2.5 0 0 0 2.496094,2.50391 2.5,2.5 0 0 0 2.503906,-2.4961 l 0.01953,-15.05273 15,0.0215 -0.01953,15.02344 a 2.5,2.5 0 0 0 2.496094,2.50391 2.5,2.5 0 0 0 2.503906,-2.4961 l 0.01953,-15.02539 15.052735,0.0215 a 2.5,2.5 0 0 0 2.501953,-2.4961 2.5,2.5 0 0 0 -2.496094,-2.5039 L 81.75,102.80078 81.76953,87.800781 96.794921,87.822261 A 2.5,2.5 0 0 0 99.296874,85.326167 2.5,2.5 0 0 0 96.80078,82.822261 L 81.777344,82.800781 81.796875,67.75 a 2.5,2.5 0 0 0 -2.496094,-2.503906 2.5,2.5 0 0 0 -2.503906,2.496093 l -0.01953,15.052735 -15,-0.02148 L 61.796875,67.75 a 2.5,2.5 0 0 0 -2.496094,-2.503906 z m 2.46875,22.527343 15,0.02148 -0.01953,15.000003 -15,-0.0215 z"
+         id="path7" />
+    </g>
+    <circle
+       style="fill:#ffff00;fill-opacity:1;stroke:#282828;stroke-width:0.666667;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       id="path8"
+       cx="255.61751"
+       cy="64.144699"
+       r="4.6666665" />
+    <circle
+       style="fill:#ffff00;fill-opacity:1;stroke:#282828;stroke-width:0.666667;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       id="circle8"
+       cx="295.83408"
+       cy="104.51437"
+       r="4.6666665" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.17450988,0,0,0.20091174,39.527094,53.387607)"
+       id="text8"
+       style="font-weight:bold;font-size:85.3333px;font-family:Montserrat;-inkscape-font-specification:'Montserrat Bold';text-align:center;white-space:pre;shape-inside:url(#rect8);display:inline;fill:#5ac6ff;fill-opacity:1;stroke:#282828;stroke-width:3.77953;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"><tspan
+         x="1327.0444"
+         y="177.36873"
+         id="tspan4"><tspan
+           style="font-weight:800;-inkscape-font-specification:'Montserrat Ultra-Bold'"
+           id="tspan3">x</tspan></tspan></text>
+    <rect
+       style="fill:#ffff00;stroke-width:0.925821;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;paint-order:fill markers stroke"
+       id="rect2"
+       width="100"
+       height="100"
+       x="318.31866"
+       y="-23.542063" />
     <path
-       style="fill:none;stroke:#ffffff;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
-       d="m 247.62743,5.1877409 c -4.63483,0.86058 -10,5.2859501 -10,10.0000001 0,4.71405 5.36517,9.13942 10,10 16.13892,2.99664 28.86108,-22.9966361 45,-20.0000001 4.63483,0.86058 10,5.2859501 10,10.0000001 0,4.71405 -5.36517,9.13942 -10,10 -16.13892,2.99664 -28.86108,-22.9966361 -45,-20.0000001 z"
+       style="fill:none;stroke:#ffffff;stroke-width:3.14324;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       d="m 345.17594,15.785025 c -4.76723,0.91849 -10.28565,5.641648 -10.28565,10.672913 0,5.031264 5.51842,9.754422 10.28565,10.672912 16.59993,3.198287 29.68551,-24.544107 46.28544,-21.345825 4.76723,0.91849 10.28565,5.641648 10.28565,10.672913 0,5.031264 -5.51842,9.754422 -10.28565,10.672912 -16.59993,3.198287 -29.68551,-24.544107 -46.28544,-21.345825 z"
        id="path1"
        sodipodi:nodetypes="sssssss"
-       inkscape:export-filename="..\UI\Leminscate.pnd.png"
+       inkscape:export-filename="Logo.png"
        inkscape:export-xdpi="200"
        inkscape:export-ydpi="200" />
   </g>
