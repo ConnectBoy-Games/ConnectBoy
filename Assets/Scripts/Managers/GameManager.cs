@@ -1,18 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioManager))]
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    /// <summary> The singleton instance of the game manager  </summary>
+    public static GameManager instance;
 
-    // Update is called once per frame
-    void Update()
+    public AudioManager audioManager;
+    public AccountManager accountManager;
+
+    void Awake() //Singleton Manager
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
+
+        accountManager = new();
+        accountManager.Setup();
+        audioManager = GetComponent<AudioManager>();
+
+        print("Sets up Game Manager!!!");
     }
 }
