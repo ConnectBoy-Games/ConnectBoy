@@ -29,7 +29,6 @@ public class LoginPanel : MonoBehaviour
 
     void Start()
     {
-        enableSignUpPanel.GetComponent<Image>().CrossFadeAlpha(0.5f, 0.1f, true);
         //TODO: Check if we are signed in
     }
 
@@ -38,18 +37,12 @@ public class LoginPanel : MonoBehaviour
     {
         signupPanel.SetActive(false);
         loginPanel.SetActive(true);
-
-        enableLoginPanel.GetComponent<Image>().CrossFadeAlpha(1f, 0.5f, true);
-        enableSignUpPanel.GetComponent<Image>().CrossFadeAlpha(0.5f, 0.5f, true);
     }
 
     public void EnableSignUpPanel()
     {
         loginPanel.SetActive(false);
         signupPanel.SetActive(true);
-
-        enableSignUpPanel.GetComponent<Image>().CrossFadeAlpha(1f, 0.5f, true);
-        enableLoginPanel.GetComponent<Image>().CrossFadeAlpha(0.5f, 0.5f, true);
     }
 
     public void LoginButtonClicked()
