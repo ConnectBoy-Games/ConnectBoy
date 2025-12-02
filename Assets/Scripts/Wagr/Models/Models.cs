@@ -28,6 +28,7 @@ namespace Wagr
     public class Profile
     {
         public int uid { get; private set; }
+        public int dpIndex { get; private set; }
         public int balance { get; private set; }
         public string username { get; private set; }
 

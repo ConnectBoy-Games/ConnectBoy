@@ -848,11 +848,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: 0e6bf84d-d446-401a-bf76-44434697848a
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: Chess Wager
+  organizationId: oyale_salami
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.60917163"
-     inkscape:cx="1025.1626"
-     inkscape:cy="-9.0286542"
+     inkscape:zoom="1.2183433"
+     inkscape:cx="1049.3759"
+     inkscape:cy="107.93346"
      inkscape:window-width="1600"
      inkscape:window-height="847"
      inkscape:window-x="-8"
@@ -34,6 +34,12 @@
      inkscape:current-layer="layer1" />
   <defs
      id="defs1">
+    <rect
+       x="548.28555"
+       y="72.229234"
+       width="456.18755"
+       height="133.14584"
+       id="rect3" />
     <rect
        x="1279.1661"
        y="98.939827"
@@ -87,9 +93,9 @@
        style="font-weight:bold;font-size:85.3333px;font-family:Montserrat;-inkscape-font-specification:'Montserrat Bold';text-align:center;white-space:pre;shape-inside:url(#rect8);display:inline;fill:#5ac6ff;fill-opacity:1;stroke:#282828;stroke-width:3.77953;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"><tspan
          x="1327.0444"
          y="177.36873"
-         id="tspan4"><tspan
+         id="tspan2"><tspan
            style="font-weight:800;-inkscape-font-specification:'Montserrat Ultra-Bold'"
-           id="tspan3">x</tspan></tspan></text>
+           id="tspan1">x</tspan></tspan></text>
     <rect
        style="fill:#ffff00;stroke-width:0.925821;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;paint-order:fill markers stroke"
        id="rect2"
@@ -105,5 +111,24 @@
        inkscape:export-filename="Logo.png"
        inkscape:export-xdpi="200"
        inkscape:export-ydpi="200" />
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text1"
+       style="fill:#5ac6ff;font-size:85.33333333px;-inkscape-font-specification:'Montserrat Ultra-Bold';font-family:Montserrat;stroke-miterlimit:5;paint-order:fill markers stroke;text-align:center;stroke-width:11.33858268;stroke-linejoin:round;stroke:#282828;stroke-linecap:round;font-weight:800;white-space:pre;shape-inside:url(#rect3)" />
+    <text
+       xml:space="preserve"
+       style="font-weight:800;font-size:22.5778px;font-family:Montserrat;-inkscape-font-specification:'Montserrat Ultra-Bold';text-align:center;text-anchor:middle;fill:#f9f9f9;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;paint-order:fill markers stroke;fill-opacity:1;stroke-dasharray:none"
+       x="265.27371"
+       y="20.335144"
+       id="text6"
+       inkscape:export-filename="..\UI\3dots.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200"><tspan
+         sodipodi:role="line"
+         id="tspan6"
+         style="stroke-width:0.5;fill:#f9f9f9;fill-opacity:1;stroke-dasharray:none;stroke:none"
+         x="265.27371"
+         y="20.335144">...</tspan></text>
   </g>
 </svg>
