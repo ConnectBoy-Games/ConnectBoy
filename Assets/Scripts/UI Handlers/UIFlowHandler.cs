@@ -3,13 +3,12 @@ using UnityEngine;
 public class UIFlowHandler : MonoBehaviour
 {
     [SerializeField] private GameObject menuPanel;
+    [SerializeField] private GameObject notificationPanel;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject profilePanel;
     [SerializeField] private GameObject walletPanel;
     [SerializeField] private GameObject gamesPanel;
     [SerializeField] private GameObject loginPanel;
-
-    [SerializeField] private Transition splitTransition;
 
     void Start()
     {
@@ -17,37 +16,31 @@ public class UIFlowHandler : MonoBehaviour
         settingsPanel.GetComponent<SettingsPanel>().backAction = GotoMainMenu;
         profilePanel.GetComponent<ProfilePanel>().backAction = GotoMainMenu;
         walletPanel.GetComponent<WalletPanel>().backAction = GotoMainMenu;
+        notificationPanel.GetComponent<NotificationPanel>().backAction = GotoMainMenu;
     }
 
-    public void PlayTransition()
+    public void GoToNotification()
     {
-        splitTransition.gameObject.SetActive(true);
-        splitTransition.ClearCallbacks();
-        splitTransition.playbackEnded.AddListener(() => { splitTransition.gameObject.SetActive(false); });
-        splitTransition.Play();
+        notificationPanel.SetActive(true);
     }
 
     public void GotoSettings()
     {
-        PlayTransition();
         settingsPanel.SetActive(true);
     }
 
     public void GotoProfile()
     {
-        PlayTransition();
         profilePanel.SetActive(true);
     }
 
     public void GotoWallet()
     {
-        PlayTransition();
         walletPanel.SetActive(true);
     }
 
     public void GotoMainMenu()
     {
-        PlayTransition();
         DisableAll();
         menuPanel.SetActive(true);
         gamesPanel.SetActive(true);
@@ -61,5 +54,6 @@ public class UIFlowHandler : MonoBehaviour
         settingsPanel.SetActive(false);
         walletPanel.SetActive(false);
         loginPanel.SetActive(false);
+        notificationPanel.SetActive(false);
     }
 }

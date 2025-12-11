@@ -1,9 +1,35 @@
 namespace Wagr
 {
+    public enum GameName : byte
+    {
+        xando,
+        minifootball,
+        archery,
+        dotsandboxes,
+        fourinarow,
+        minigolf
+    }
+
     public enum LoginState : byte
     {
         guestMode = 0,
         loggedIn
+    }
+
+    public class NotificationObject
+    {
+        public int uid;
+        public int userId;
+        public int wager;
+        public GameName gameName;
+        public string message;
+        public string userName;
+        public string timeText;
+
+        public NotificationObject(string Json)
+        {
+
+        }
     }
 
     public class PlayerStats
