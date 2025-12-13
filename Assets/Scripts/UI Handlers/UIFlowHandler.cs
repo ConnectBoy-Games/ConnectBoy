@@ -15,7 +15,7 @@ public class UIFlowHandler : MonoBehaviour
         loginPanel.GetComponent<LoginPanel>().backAction = GotoMainMenu;
         settingsPanel.GetComponent<SettingsPanel>().backAction = GotoMainMenu;
         profilePanel.GetComponent<ProfilePanel>().backAction = GotoMainMenu;
-        walletPanel.GetComponent<WalletPanel>().backAction = GotoMainMenu;
+        //walletPanel.GetComponent<WalletPanel>().backAction = GotoMainMenu;
         notificationPanel.GetComponent<NotificationPanel>().backAction = GotoMainMenu;
     }
 

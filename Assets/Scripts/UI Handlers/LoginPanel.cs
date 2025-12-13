@@ -1,7 +1,9 @@
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Authentication;
+using Unity.Services.Authentication.PlayerAccounts;
+using Unity.Services.CloudSave;
 using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,144 +11,70 @@ using UnityEngine.UI;
 
 public class LoginPanel : MonoBehaviour
 {
-    [SerializeField] Button enableLoginPanel;
-    [SerializeField] Button enableSignUpPanel;
-
-    [SerializeField] GameObject loginPanel;
-    [SerializeField] GameObject signupPanel;
-
-    [Header("Login Fields")]
-    [SerializeField] TMP_InputField loginEmailField;
-    [SerializeField] TMP_InputField loginPasswordField;
-
-    [Header("SignUp Fields")]
-    [SerializeField] TMP_InputField signUpUsernameField;
-    [SerializeField] TMP_InputField signUpEmailField;
-    [SerializeField] TMP_InputField signUpPasswordField;
-
+    private bool newUser = false; //Is the user a first timer?
     public UnityAction backAction;
 
-    async void Awake()
+    [SerializeField] GameObject loginButton;
+    [SerializeField] GameObject usernamePanel;
+    [SerializeField] Button submitUsername;
+    [SerializeField] TMP_InputField usernameInput;
+
+    async void Start()
+    {
+        await UnityServices.InitializeAsync();
+        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        SetupEvents();
+
+        // Check if a cached player already exists by checking if the session token exists
+        if (!AuthenticationService.Instance.SessionTokenExists)
+        {
+            newUser = true;
+        }
+        else
+        {
+            newUser = false;
+        }
+
+
+        // Register the Unity Player Accounts sign-in event handler after services initialization.
+        //PlayerAccountService.Instance.SignedIn += SignInWithUnityAuth;
+    }
+
+    // Call this from a button or other application-specific trigger to begin the sign-in flow.
+    public async void StartPlayerAccountsSignInAsync()
+    {
+        if (PlayerAccountService.Instance.IsSignedIn)
+        {
+            // If the player is already signed into Unity Player Accounts, proceed directly to the Unity Authentication sign-in.
+            await SignInWithUnityAuth();
+        }
+        else
+        {
+            try
+            {
+                // This will open the system browser and prompt the user to sign in to Unity Player Accounts
+                await PlayerAccountService.Instance.StartSignInAsync();
+            }
+            catch (PlayerAccountsException ex)
+            {
+                // Compare error code to PlayerAccountsErrorCodes
+                // Notify the player with the proper error message
+                Debug.LogException(ex);
+            }
+            catch (RequestFailedException ex)
+            {
+                // Compare error code to CommonErrorCodes
+                // Notify the player with the proper error message
+                Debug.LogException(ex);
+            }
+        }
+    }
+
+    async Task SignInWithUnityAuth()
     {
         try
         {
-            await UnityServices.InitializeAsync();
-            SetupAuthenticators();
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e);
-            //TODO: Display errors!
-        }
-    }
-
-    void Start()
-    {
-        //TODO: Check if we are signed in
-    }
-
-    #region UI Handling
-    public void EnableLoginPanel()
-    {
-        signupPanel.SetActive(false);
-        loginPanel.SetActive(true);
-    }
-
-    public void EnableSignUpPanel()
-    {
-        loginPanel.SetActive(false);
-        signupPanel.SetActive(true);
-    }
-
-    public void LoginButtonClicked()
-    {
-        string email = loginEmailField.text;
-        string password = loginPasswordField.text;
-
-        var task = SignInWithUsernamePasswordAsync(email, password);
-        if(task.IsCompletedSuccessfully)
-        {
-            Debug.Log("Logged in successfully");
-        }
-    }
-
-    public void CreateAccountButtonClicked()
-    {
-        string email = signUpEmailField.text;
-        string password = signUpPasswordField.text;
-        string username = signUpUsernameField.text;
-        var task = SignUpWithUsernamePasswordAsync(email, password);
-
-        if(task.IsCompletedSuccessfully)
-        {
-            Debug.Log("Created account succesfully");
-        }
-    }
-
-    public void ClearAllFields()
-    {
-        loginEmailField.text = "";
-        loginPasswordField.text = "";
-
-        signUpUsernameField.text = "";
-        signUpEmailField.text = "";
-        signUpPasswordField.text = "";
-    }
-
-    public void LoginWithGoogle()
-    {
-        /*
-         * if(login == successful)
-         * {
-         *      loginState = LoginState.loggedIn;
-         * }
-         */
-    }
-
-    public void LoginWithApple()
-    {
-        /*
-         * if(login == successful)
-         * {
-         *      loginState = LoginState.loggedIn;
-         * }
-         */
-    }
-
-    public void LoginInGuestMode()
-    {
-        GameManager.instance.accountManager.loginState = Wagr.LoginState.guestMode;
-        backAction.Invoke();
-    }
-    #endregion
-
-
-    async Task SignUpWithUsernamePasswordAsync(string username, string password)
-    {
-        try
-        {
-            await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
-            Debug.Log("SignUp is successful.");
-        }
-        catch (AuthenticationException ex)
-        {
-            // Compare error code to AuthenticationErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-        catch (RequestFailedException ex)
-        {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-    }
-
-    async Task SignInWithUsernamePasswordAsync(string username, string password)
-    {
-        try
-        {
-            await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
+            await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
             Debug.Log("SignIn is successful.");
         }
         catch (AuthenticationException ex)
@@ -163,25 +91,24 @@ public class LoginPanel : MonoBehaviour
         }
     }
 
-    async Task UpdatePasswordAsync(string currentPassword, string newPassword)
+    public void LoginInGuestMode()
     {
-        try
-        {
-            await AuthenticationService.Instance.UpdatePasswordAsync(currentPassword, newPassword);
-            Debug.Log("Password updated.");
-        }
-        catch (AuthenticationException ex)
-        {
-            // Compare error code to AuthenticationErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-        catch (RequestFailedException ex)
-        {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
+        GameManager.instance.accountManager.loginState = Wagr.LoginState.guestMode;
+        backAction.Invoke();
+    }
+
+    public void SignOut(bool clearSessionToken = false)
+    {
+        // Sign out of Unity Authentication, with the option to clear the session token
+        AuthenticationService.Instance.SignOut(clearSessionToken);
+
+        // Sign out of Unity Player Accounts
+        PlayerAccountService.Instance.SignOut();
+    }
+
+    public void GoToTermsOfService()
+    {
+        Application.OpenURL("www.google.com");
     }
 
     public string GetPlayerName()
@@ -190,18 +117,42 @@ public class LoginPanel : MonoBehaviour
         return uname.Result;
     }
 
-    public void SetPlayerName(string name)
+    public async void SetUserName(string name)
     {
-        AuthenticationService.Instance.UpdatePlayerNameAsync(name);
-    }
+        try
+        {
+            //var uName = AuthenticationService.Instance.GetPlayerNameAsync();
+            //print(uName);
 
-    public void SetupAuthenticators()
-    {
+            var task = await AuthenticationService.Instance.UpdatePlayerNameAsync(usernameInput.text);
+            print("Username:" + task);
+            backAction.Invoke();
+        }
+        catch (RequestFailedException ex)
+        {
+            Debug.Log(ex.Message);
+        }
     }
 
     // Setup authentication event handlers if desired
     private void SetupEvents()
     {
+        PlayerAccountService.Instance.SignedIn += () =>
+        {
+            Debug.Log("Player signed in successfully");
+            GameManager.instance.accountManager.loginState = Wagr.LoginState.loggedIn;
+            
+            if(newUser)
+            {
+                loginButton.SetActive(false);
+                usernamePanel.SetActive(true);
+            }
+            else
+            {
+                backAction.Invoke();
+            }
+        };
+
         AuthenticationService.Instance.SignedIn += () =>
         {
             // Shows how to get a playerID
@@ -226,6 +177,19 @@ public class LoginPanel : MonoBehaviour
         {
             Debug.Log("Player session could not be refreshed and expired.");
         };
+
+        print("Setup Events");
     }
 
+    private void CheckStates()
+    {
+        // this is true if the access token exists, but it can be expired or refreshing
+        Debug.Log($"Is SignedIn: {AuthenticationService.Instance.IsSignedIn}");
+
+        // this is true if the access token exists and is valid/has not expired
+        Debug.Log($"Is Authorized: {AuthenticationService.Instance.IsAuthorized}");
+
+        // this is true if the access token exists but has expired
+        Debug.Log($"Is Expired: {AuthenticationService.Instance.IsExpired}");
+    }
 }

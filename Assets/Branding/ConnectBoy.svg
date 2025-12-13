@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.86149881"
-     inkscape:cx="1218.8061"
-     inkscape:cy="676.14719"
+     inkscape:zoom="0.43074941"
+     inkscape:cx="1647.1294"
+     inkscape:cy="925.13186"
      inkscape:window-width="1600"
      inkscape:window-height="847"
      inkscape:window-x="-8"
@@ -93,9 +93,9 @@
        style="font-weight:bold;font-size:85.3333px;font-family:Montserrat;-inkscape-font-specification:'Montserrat Bold';text-align:center;white-space:pre;shape-inside:url(#rect8);display:inline;fill:#5ac6ff;fill-opacity:1;stroke:#282828;stroke-width:3.77953;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"><tspan
          x="1327.0444"
          y="177.36873"
-         id="tspan4"><tspan
+         id="tspan2"><tspan
            style="font-weight:800;-inkscape-font-specification:'Montserrat Ultra-Bold'"
-           id="tspan3">x</tspan></tspan></text>
+           id="tspan1">x</tspan></tspan></text>
     <rect
        style="fill:#ffff00;stroke-width:0.925821;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;paint-order:fill markers stroke"
        id="rect2"
@@ -139,6 +139,21 @@
        y="173.82979"
        ry="8.7226515"
        inkscape:export-filename="..\UI\Rounded Rect.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <path
+       style="fill:#f9f9f9;stroke-width:0.378433;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;paint-order:fill markers stroke"
+       id="path2"
+       sodipodi:type="arc"
+       sodipodi:cx="536.45294"
+       sodipodi:cy="211.57187"
+       sodipodi:rx="50"
+       sodipodi:ry="50"
+       sodipodi:start="0"
+       sodipodi:end="3.1513391"
+       sodipodi:arc-type="slice"
+       d="m 586.45294,211.57187 a 50,50 0 0 1 -25.14081,43.38226 50,50 0 0 1 -50.14001,-0.24434 50,50 0 0 1 -24.7168,-43.62524 l 49.99762,0.48732 z"
+       inkscape:export-filename="..\UI\half_circle.png"
        inkscape:export-xdpi="200"
        inkscape:export-ydpi="200" />
   </g>
