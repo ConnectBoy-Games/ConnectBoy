@@ -6,7 +6,7 @@ public class AccountManager
 
     public void Setup()
     {
-
+        loginState = Wagr.LoginState.unsignned;
     }
 
     public bool CheckUsername()

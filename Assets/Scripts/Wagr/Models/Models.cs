@@ -12,7 +12,8 @@ namespace Wagr
 
     public enum LoginState : byte
     {
-        guestMode = 0,
+        unsignned = 0,
+        guestMode,
         loggedIn
     }
 

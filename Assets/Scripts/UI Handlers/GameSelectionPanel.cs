@@ -10,18 +10,17 @@ public class GameSelectionPanel : MonoBehaviour
 
     void Start()
     {
-
-    }
-
-    private void OnEnable()
-    {
         UpdateUsernameDisplay();
     }
 
-    async void UpdateUsernameDisplay()
+    public void UpdateUsernameDisplay()
     {
-        var uName = await AuthenticationService.Instance.GetPlayerNameAsync();
-        displayName.text = uName;
+        var uName = AuthenticationService.Instance.PlayerName;
+        
+        if(uName != null || uName != "")
+        {
+            displayName.text = uName;
+        }
     }
 
     public void LoadGame(string name)

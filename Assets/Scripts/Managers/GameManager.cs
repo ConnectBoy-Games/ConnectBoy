@@ -24,7 +24,5 @@ public class GameManager : MonoBehaviour
         accountManager = new();
         accountManager.Setup();
         audioManager = GetComponent<AudioManager>();
-
-        print("Sets up Game Manager!!!");
     }
 }

@@ -1,3 +1,5 @@
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 using UnityEngine;
 
 public class UIFlowHandler : MonoBehaviour
@@ -9,6 +11,18 @@ public class UIFlowHandler : MonoBehaviour
     [SerializeField] private GameObject walletPanel;
     [SerializeField] private GameObject gamesPanel;
     [SerializeField] private GameObject loginPanel;
+
+    async void Awake()
+    {
+        await UnityServices.InitializeAsync();
+
+        if(GameManager.instance.accountManager.loginState == Wagr.LoginState.unsignned)
+        {
+            menuPanel.SetActive(false);
+            gamesPanel.SetActive(false);
+            loginPanel.SetActive(true);
+        }
+    }
 
     void Start()
     {

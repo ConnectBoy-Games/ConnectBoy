@@ -11,6 +11,7 @@
    inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -23,9 +24,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.43074941"
-     inkscape:cx="1647.1294"
-     inkscape:cy="925.13186"
+     inkscape:zoom="0.60917165"
+     inkscape:cx="1497.9358"
+     inkscape:cy="1458.538"
      inkscape:window-width="1600"
      inkscape:window-height="847"
      inkscape:window-x="-8"
@@ -34,6 +35,35 @@
      inkscape:current-layer="layer1" />
   <defs
      id="defs1">
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Strips1_4"
+       preserveAspectRatio="xMidYMid"
+       id="pattern10"
+       patternTransform="matrix(8,0,0,8,-1.2284792,-9.0932312)"
+       x="-2"
+       y="0" />
+    <pattern
+       inkscape:collect="always"
+       patternUnits="userSpaceOnUse"
+       width="5"
+       height="1"
+       patternTransform="translate(0,0) scale(2,2)"
+       preserveAspectRatio="xMidYMid"
+       id="Strips1_4"
+       style="fill:#779977"
+       inkscape:stockid="Stripes 05 (1:4)"
+       inkscape:isstock="true"
+       inkscape:label="Stripes 05 (1:4)">
+      <rect
+   style="stroke:none"
+   x="0"
+   y="-0.5"
+   width="1"
+   height="2"
+   id="rect158" />
+
+    </pattern>
     <rect
        x="548.28555"
        y="72.229234"
@@ -141,20 +171,109 @@
        inkscape:export-filename="..\UI\Rounded Rect.png"
        inkscape:export-xdpi="200"
        inkscape:export-ydpi="200" />
-    <path
+    <circle
        style="fill:#f9f9f9;stroke-width:0.378433;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;paint-order:fill markers stroke"
        id="path2"
-       sodipodi:type="arc"
-       sodipodi:cx="536.45294"
-       sodipodi:cy="211.57187"
-       sodipodi:rx="50"
-       sodipodi:ry="50"
-       sodipodi:start="0"
-       sodipodi:end="3.1513391"
-       sodipodi:arc-type="slice"
-       d="m 586.45294,211.57187 a 50,50 0 0 1 -25.14081,43.38226 50,50 0 0 1 -50.14001,-0.24434 50,50 0 0 1 -24.7168,-43.62524 l 49.99762,0.48732 z"
-       inkscape:export-filename="..\UI\half_circle.png"
+       inkscape:export-filename="..\UI\circle.png"
        inkscape:export-xdpi="200"
-       inkscape:export-ydpi="200" />
+       inkscape:export-ydpi="200"
+       cx="536.45294"
+       cy="211.57187"
+       r="50" />
+    <g
+       id="g12"
+       transform="translate(-58.634951,26.059978)"
+       inkscape:export-filename="..\UI\Pitch.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
+      <rect
+         style="fill:url(#pattern10);fill-opacity:1;stroke:#fffff5;stroke-width:0.296821;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-opacity:1;paint-order:fill markers stroke"
+         id="rect5"
+         width="250"
+         height="150"
+         x="261.57187"
+         y="-495.09323"
+         transform="rotate(90)" />
+      <rect
+         style="fill:#77c377;fill-opacity:1;stroke:#fffff5;stroke-width:0.296821;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-opacity:1;paint-order:fill markers stroke"
+         id="rect10"
+         width="250"
+         height="150"
+         x="261.57187"
+         y="-495.09323"
+         transform="rotate(90)" />
+      <rect
+         style="fill:url(#pattern10);fill-opacity:1;stroke:#fffff5;stroke-width:0.296821;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-opacity:1;paint-order:fill markers stroke"
+         id="rect11"
+         width="250"
+         height="150"
+         x="261.57187"
+         y="-495.09323"
+         transform="rotate(90)" />
+      <rect
+         style="fill:none;fill-opacity:1;stroke:#fffff5;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         id="rect7"
+         width="65.10939"
+         height="27.320223"
+         x="387.53854"
+         y="497.91177" />
+      <circle
+         style="fill:none;stroke:#fffff5;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         id="circle6"
+         inkscape:export-filename="..\UI\circle.png"
+         inkscape:export-xdpi="200"
+         inkscape:export-ydpi="200"
+         cx="420.09323"
+         cy="384.83453"
+         r="12.5" />
+      <rect
+         style="fill:#f9f9f9;fill-opacity:1;stroke-width:0.213831;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;paint-order:fill markers stroke"
+         id="rect6"
+         width="150"
+         height="1.7373326"
+         x="345.09323"
+         y="384.83453" />
+      <path
+         style="fill:none;stroke:#fffff5;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         id="circle11"
+         inkscape:export-filename="..\UI\circle.png"
+         inkscape:export-xdpi="200"
+         inkscape:export-ydpi="200"
+         sodipodi:type="arc"
+         sodipodi:cx="420.09323"
+         sodipodi:cy="497.72733"
+         sodipodi:rx="12.5"
+         sodipodi:ry="12.5"
+         sodipodi:start="3.1415927"
+         sodipodi:end="0"
+         sodipodi:arc-type="arc"
+         d="m 407.59323,497.72733 a 12.5,12.5 0 0 1 12.5,-12.5 12.5,12.5 0 0 1 12.5,12.5"
+         sodipodi:open="true" />
+      <rect
+         style="fill:none;fill-opacity:1;stroke:#fffff5;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         id="rect12"
+         width="65.10939"
+         height="27.320223"
+         x="387.53854"
+         y="-275.23199"
+         transform="scale(1,-1)" />
+      <path
+         style="fill:none;stroke:#fffff5;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:5;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         id="path12"
+         inkscape:export-filename="..\UI\circle.png"
+         inkscape:export-xdpi="200"
+         inkscape:export-ydpi="200"
+         sodipodi:type="arc"
+         sodipodi:cx="420.09323"
+         sodipodi:cy="-275.41644"
+         sodipodi:rx="12.5"
+         sodipodi:ry="12.5"
+         sodipodi:start="3.1415927"
+         sodipodi:end="0"
+         sodipodi:arc-type="arc"
+         d="m 407.59323,-275.41644 a 12.5,12.5 0 0 1 12.5,-12.5 12.5,12.5 0 0 1 12.5,12.5"
+         sodipodi:open="true"
+         transform="scale(1,-1)" />
+    </g>
   </g>
 </svg>

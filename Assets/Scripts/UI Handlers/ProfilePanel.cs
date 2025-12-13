@@ -3,6 +3,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class ProfilePanel : MonoBehaviour
 {
@@ -14,15 +15,16 @@ public class ProfilePanel : MonoBehaviour
         UpdateUsernameDisplay();
     }
 
-    async void UpdateUsernameDisplay()
+    public void UpdateUsernameDisplay()
     {
-        var uName = await AuthenticationService.Instance.GetPlayerNameAsync();
+        var uName = AuthenticationService.Instance.PlayerName;
         displayName.text = uName;
     }
 
     public async void SetUsername()
     {
         await AuthenticationService.Instance.UpdatePlayerNameAsync(displayName.name);
+        await AuthenticationService.Instance.GetPlayerNameAsync();
     }
 
     void FixedUpdate()
@@ -40,6 +42,8 @@ public class ProfilePanel : MonoBehaviour
 
         // Sign out of Unity Player Accounts
         PlayerAccountService.Instance.SignOut();
+        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+        GameManager.instance.accountManager.loginState = Wagr.LoginState.unsignned;
     }
 
     public void GoBack()
