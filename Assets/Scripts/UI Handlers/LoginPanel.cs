@@ -93,7 +93,7 @@ public class LoginPanel : MonoBehaviour
 
     public void LoginInGuestMode()
     {
-        GameManager.instance.accountManager.loginState = Wagr.LoginState.guestMode;
+        GameManager.instance.accountManager.loginState = LoginState.guestMode;
         backAction.Invoke();
     }
 
@@ -140,7 +140,7 @@ public class LoginPanel : MonoBehaviour
         PlayerAccountService.Instance.SignedIn += () =>
         {
             Debug.Log("Player signed in successfully");
-            GameManager.instance.accountManager.loginState = Wagr.LoginState.loggedIn;
+            GameManager.instance.accountManager.loginState = LoginState.loggedIn;
             
             if(newUser)
             {

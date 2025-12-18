@@ -16,7 +16,7 @@ public class UIFlowHandler : MonoBehaviour
     {
         await UnityServices.InitializeAsync();
 
-        if(GameManager.instance.accountManager.loginState == Wagr.LoginState.unsignned)
+        if(GameManager.instance.accountManager.loginState == LoginState.unsignned)
         {
             menuPanel.SetActive(false);
             gamesPanel.SetActive(false);

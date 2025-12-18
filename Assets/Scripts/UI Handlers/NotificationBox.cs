@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class NotificationBox : MonoBehaviour
 {
-    public Wagr.NotificationObject notification;
+    public NotificationObject notification;
 
     public Image gameImage;
     [SerializeField] private TMP_Text userText;

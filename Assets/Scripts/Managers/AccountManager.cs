@@ -1,12 +1,12 @@
 public class AccountManager
 {
-    public Wagr.LoginState loginState;
-    public Wagr.PlayerStats playerStats;
-    public Wagr.Profile playerProfile;
+    public LoginState loginState;
+    public PlayerStats playerStats;
+    public Profile playerProfile;
 
     public void Setup()
     {
-        loginState = Wagr.LoginState.unsignned;
+        loginState = LoginState.unsignned;
     }
 
     public bool CheckUsername()

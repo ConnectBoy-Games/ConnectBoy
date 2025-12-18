@@ -1,5 +1,9 @@
+using Newtonsoft.Json;
+using System;
+
 namespace Wagr
 {
+    [Serializable]
     public enum GameName : byte
     {
         xando,
@@ -10,58 +14,56 @@ namespace Wagr
         minigolf
     }
 
-    public enum LoginState : byte
+    [Serializable]
+    public enum ChatType : byte
     {
-        unsignned = 0,
-        guestMode,
-        loggedIn
+        invalid = 0
     }
 
-    public class NotificationObject
+    [Serializable]
+    public enum ActionType : byte
     {
-        public int uid;
-        public int userId;
-        public int wager;
-        public GameName gameName;
-        public string message;
-        public string userName;
-        public string timeText;
-
-        public NotificationObject(string Json)
-        {
-
-        }
+        invalid = 0
     }
 
-    public class PlayerStats
+    /// <summary> Represents a gaming session both on the server and client</summary>
+    [Serializable]
+    public class Session
     {
-        uint gamesPlayed { get; set; }
-        uint gamesWon { get; set; }
-        uint gamesLost { get; set; }
-        uint winRate { get; set; }
-        uint winStreak { get; set; }
+        public string sessionId { get; private set; }
+        public string serverUrl { get; private set; }
+        public int wager { get; private set; }
+        public string hostId { get; private set; }
+        public string hostName { get; private set; }
+        public string friendId { get; private set; }
+        public string friendName { get; private set; }
 
-        public PlayerStats(string json)
+        private int hostScore;
+        private int friendScore;
+
+        public Session()
         {
 
         }
 
-        public void ToJson()
+        public Session(string json)
         {
+            var sesh = JsonConvert.DeserializeObject<Session>(json);
 
+            sessionId = sesh.sessionId;
+            serverUrl = sesh.serverUrl;
+            wager = sesh.wager;
+            hostId = sesh.hostId;
+            hostName = sesh.hostName;
+            friendId = sesh.friendId;
+            friendName = sesh.friendName;
+            hostScore = sesh.hostScore;
+            friendScore = sesh.friendScore;
         }
-    }
 
-    public class Profile
-    {
-        public int uid { get; private set; }
-        public int dpIndex { get; private set; }
-        public int balance { get; private set; }
-        public string username { get; private set; }
-
-        public Profile(string json)
+        public string ToJson()
         {
-
+            return JsonConvert.SerializeObject(this);
         }
     }
 }
