@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class XandOManager : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class XandOManager : MonoBehaviour
     [SerializeField] private GameObject imageX; //0
     [SerializeField] private GameObject imageO; //1
     [SerializeField] private List<GameObject> buttons = new();
-    [SerializeField] private Dictionary<int, int> gameState = new(); //Index, Type
+    public Dictionary<int, int> gameState = new(); //Index, Type
 
     void Start()
     {
@@ -33,28 +33,37 @@ public class XandOManager : MonoBehaviour
 
             if (turnUser == User.bot)
             {
-                Invoke(nameof(MakeAIMove), 0.3f);
+                Invoke(nameof(MakeAIMove), 1f);
             }
+        }
+    }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            var temp = JsonConvert.SerializeObject(gameState, Formatting.Indented);
+            Debug.Log(temp);
         }
     }
 
     public void MakeMove(int index)
     {
-        if (!gameState.ContainsKey(index) && turnUser == User.host) //Valid move
+        if (gameState.TryGetValue(index, out var temp) == false && turnUser == User.host) //Valid move
         {
             if (gameMode == GameMode.vsPlayer)
             {
                 //TODO: Send move to server
                 SendMoveToServer();
             }
-            else //BotMode
+            else //Playing Against A Bot
             {
                 gameState[index] = userPosition; //Update the game state
                 PlacePiece(index, userPosition); //Place the piece on the board
-                CheckBoardState(); //Check if there is a win
                 turnUser = User.bot;
                 uiHandler.SetTurnText(turnUser);
-                Invoke(nameof(MakeAIMove), 0.3f); //Allow the bot make a move
+                CheckBoardState(); //Check if there is a win
+                Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move
             }
         }
     }
@@ -84,8 +93,6 @@ public class XandOManager : MonoBehaviour
         }
         gameState = new();
     }
-
-    
     #endregion
 
     #region AI Handling Functions
@@ -118,57 +125,65 @@ public class XandOManager : MonoBehaviour
             //No one has won yet
             for (int i = 0; i < 9; i++)
             {
-                if (!gameState.ContainsKey(i))
+                if (!gameState.TryGetValue(i, out _))
                 {
-                    break; //Game should keep on going
-                }
-                else
-                {
-                    //Game is a draw
-
-                    Invoke(nameof(ClearBoard), 0.5f);
+                    return; //Game should keep on going (There's still free space)
                 }
             }
+
+            //Game is a draw
+            uiHandler.SetTurnText(turnUser, "Draw!!!");
+            Invoke(nameof(ClearBoard), 2f);
         }
     }
 
     /// <summary>Returns true if there is a win on the board</summary>
     private bool CheckWinState(int type)
     {
-        if(gameState.TryGetValue(0, out var state1) && gameState.TryGetValue(1, out var state2) && gameState.TryGetValue(2, out var state3)) //1
+        int state1 = -1, state2 = -1, state3 = -1;
+
+        if (gameState.TryGetValue(0, out state1) && gameState.TryGetValue(1, out state2) && gameState.TryGetValue(2, out state3)) //1
         {
             return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState.TryGetValue(3, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(5, out state3)) //2
+        state1 = -1; state2 = -1; state3 = -1;
+        if (gameState.TryGetValue(3, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(5, out state3)) //2
         {
             return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState.TryGetValue(6, out state1) && gameState.TryGetValue(7, out state2) && gameState.TryGetValue(8, out state3)) //3
+        state1 = -1; state2 = -1; state3 = -1;
+        if (gameState.TryGetValue(6, out state1) && gameState.TryGetValue(7, out state2) && gameState.TryGetValue(8, out state3)) //3
         {
             return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState.TryGetValue(0, out state1) && gameState.TryGetValue(3, out state2) && gameState.TryGetValue(6, out state3)) //4
+        state1 = -1; state2 = -1; state3 = -1;
+        if (gameState.TryGetValue(0, out state1) && gameState.TryGetValue(3, out state2) && gameState.TryGetValue(6, out state3)) //4
         {
             return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState.TryGetValue(1, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(7, out state3)) //5
+        state1 = -1; state2 = -1; state3 = -1;
+        if (gameState.TryGetValue(1, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(7, out state3)) //5
         {
             return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState.TryGetValue(2, out state1) && gameState.TryGetValue(5, out state2) && gameState.TryGetValue(8, out state3)) //6
+        state1 = -1; state2 = -1; state3 = -1;
+        if (gameState.TryGetValue(2, out state1) && gameState.TryGetValue(5, out state2) && gameState.TryGetValue(8, out state3)) //6
         {
             return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState.TryGetValue(0, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(8, out state3)) //7
+        state1 = -1; state2 = -1; state3 = -1;
+        if (gameState.TryGetValue(0, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(8, out state3)) //7
         {
             return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState.TryGetValue(6, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(2, out state3)) //8
+        state1 = -1; state2 = -1; state3 = -1;
+        if (gameState.TryGetValue(6, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(2, out state3)) //8
         {
             return (state1 == type) && (state2 == type) && (state3 == type);
         }
         else
         {
+            print("State 1: " + state1 + "State 2: " + state2 + "State 3: " + state3);
             return false;
         }
     }
@@ -178,14 +193,14 @@ public class XandOManager : MonoBehaviour
         int index = ThinkMove();
         gameState[index] = botPosition;
         PlacePiece(index, botPosition); //Place the piece on the board
-        CheckBoardState(); //Check if there is a win
         turnUser = User.host;
         uiHandler.SetTurnText(turnUser);
+        CheckBoardState(); //Check if there is a win
     }
 
     private int ThinkMove()
     {
-        if (!gameState.ContainsKey(4))
+        if (!gameState.TryGetValue(4, out _))
         {
             return 4;
         }
@@ -194,56 +209,56 @@ public class XandOManager : MonoBehaviour
             for (int i = 0; i < 3; i++)
             {
                 //Rows Handling
-                if (gameState.ContainsKey(0 + i) && gameState.ContainsKey(6 + i))
+                if (gameState.TryGetValue(0 + i, out _) && gameState.TryGetValue(6 + i, out _) && !gameState.TryGetValue(3 + i, out _))
                 {
                     return 3 + i;
                 }
-                else if (gameState.ContainsKey(0 + i) && gameState.ContainsKey(3 + i))
+                else if (gameState.TryGetValue(0 + i, out _) && gameState.TryGetValue(3 + i, out _) && !gameState.TryGetValue(6 + i, out _))
                 {
                     return 6 + i;
                 }
-                else if (gameState.ContainsKey(3 + i) && gameState.ContainsKey(6 + i))
+                else if (gameState.TryGetValue(3 + i, out _) && gameState.TryGetValue(6 + i, out _) && !gameState.TryGetValue(0 + i, out _))
                 {
                     return 0 + i;
                 }
                 //Column Handling
-                else if (gameState.ContainsKey(0 + i) && gameState.ContainsKey(1 + i))
+                else if (gameState.TryGetValue(0 + i, out _) && gameState.TryGetValue(1 + i, out _) && !gameState.TryGetValue(2 + i, out _))
                 {
                     return 2 + i;
                 }
-                else if (gameState.ContainsKey(0 + i) && gameState.ContainsKey(2 + i))
+                else if (gameState.TryGetValue(0 + i, out _) && gameState.TryGetValue(2 + i, out _) && !gameState.TryGetValue(1 + i, out _))
                 {
                     return 1 + i;
                 }
-                else if (gameState.ContainsKey(1 + i) && gameState.ContainsKey(2 + i))
+                else if (gameState.TryGetValue(1 + i, out _) && gameState.TryGetValue(2 + i, out _) && !gameState.TryGetValue(0 + i, out _))
                 {
                     return 0 + i;
                 }
             }
 
             //R Diagonal Handling
-            if (gameState.ContainsKey(6) && gameState.ContainsKey(4))
+            if (gameState.TryGetValue(6, out _) && gameState.TryGetValue(4, out _) && !gameState.TryGetValue(2, out _))
             {
                 return 2;
             }
-            else if (gameState.ContainsKey(6) && gameState.ContainsKey(2))
+            else if (gameState.TryGetValue(6, out _) && gameState.TryGetValue(2, out _) && !gameState.TryGetValue(4, out _))
             {
                 return 4;
             }
-            else if (gameState.ContainsKey(4) && gameState.ContainsKey(2))
+            else if (gameState.TryGetValue(4, out _) && gameState.TryGetValue(2, out _) && !gameState.TryGetValue(6, out _))
             {
                 return 6;
             }
             //L Diagonal Handling
-            else if (gameState.ContainsKey(0) && gameState.ContainsKey(4))
+            else if (gameState.TryGetValue(0, out _) && gameState.TryGetValue(4, out _) && !gameState.TryGetValue(8, out _))
             {
                 return 8;
             }
-            else if (gameState.ContainsKey(0) && gameState.ContainsKey(8))
+            else if (gameState.TryGetValue(0, out _) && gameState.TryGetValue(8, out _) && !gameState.TryGetValue(4, out _))
             {
                 return 4;
             }
-            else if (gameState.ContainsKey(4) && gameState.ContainsKey(8))
+            else if (gameState.TryGetValue(4, out _) && gameState.TryGetValue(8, out _) && !gameState.TryGetValue(0, out _))
             {
                 return 0;
             }
@@ -251,7 +266,7 @@ public class XandOManager : MonoBehaviour
             //Else ... Play a random move
             for (int i = 0; i < 9; i++)
             {
-                if (!gameState.ContainsKey(i))
+                if (!gameState.TryGetValue(i, out _))
                 {
                     return i;
                 }
