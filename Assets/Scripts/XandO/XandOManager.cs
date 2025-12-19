@@ -135,37 +135,37 @@ public class XandOManager : MonoBehaviour
     /// <summary>Returns true if there is a win on the board</summary>
     private bool CheckWinState(int type)
     {
-        if (gameState[0] == type && gameState[1] == type && gameState[2] == type) //1
+        if(gameState.TryGetValue(0, out var state1) && gameState.TryGetValue(1, out var state2) && gameState.TryGetValue(2, out var state3)) //1
         {
-            return true;
+            return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState[3] == type && gameState[4] == type && gameState[5] == type) //2
+        else if (gameState.TryGetValue(3, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(5, out state3)) //2
         {
-            return true;
+            return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState[6] == type && gameState[7] == type && gameState[8] == type) //3
+        else if (gameState.TryGetValue(6, out state1) && gameState.TryGetValue(7, out state2) && gameState.TryGetValue(8, out state3)) //3
         {
-            return true;
+            return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState[0] == type && gameState[3] == type && gameState[6] == type) //4
+        else if (gameState.TryGetValue(0, out state1) && gameState.TryGetValue(3, out state2) && gameState.TryGetValue(6, out state3)) //4
         {
-            return true;
+            return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState[1] == type && gameState[4] == type && gameState[7] == type) //5
+        else if (gameState.TryGetValue(1, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(7, out state3)) //5
         {
-            return true;
+            return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState[2] == type && gameState[5] == type && gameState[8] == type) //6
+        else if (gameState.TryGetValue(2, out state1) && gameState.TryGetValue(5, out state2) && gameState.TryGetValue(8, out state3)) //6
         {
-            return true;
+            return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState[0] == type && gameState[4] == type && gameState[8] == type) //7
+        else if (gameState.TryGetValue(0, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(8, out state3)) //7
         {
-            return true;
+            return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        else if (gameState[6] == type && gameState[4] == type && gameState[2] == type) //8
+        else if (gameState.TryGetValue(6, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(2, out state3)) //8
         {
-            return true;
+            return (state1 == type) && (state2 == type) && (state3 == type);
         }
         else
         {
