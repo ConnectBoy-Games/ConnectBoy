@@ -146,7 +146,7 @@ public class XandOManager : MonoBehaviour
         {
             return (state1 == type) && (state2 == type) && (state3 == type);
         }
-        state1 = -1; state2 = -1; state3 = -1;
+        state1 = -1; state2 = -1; state3 = -1; 
         if (gameState.TryGetValue(3, out state1) && gameState.TryGetValue(4, out state2) && gameState.TryGetValue(5, out state3)) //2
         {
             return (state1 == type) && (state2 == type) && (state3 == type);
