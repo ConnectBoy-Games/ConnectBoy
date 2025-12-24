@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Oyale #321
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 272b021d35334ea4388cc45b28247a4b, type: 2}
-  m_sharedMaterial: {fileID: 4789541300707972002, guid: 272b021d35334ea4388cc45b28247a4b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ed89140e25acc1b4a8b35d531caceba5, type: 2}
+  m_sharedMaterial: {fileID: 3076998557652437135, guid: ed89140e25acc1b4a8b35d531caceba5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: af71060094d258f4b9e0e91839236326, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 229394a2fc8bbcc49931befec431e8b2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: af71060094d258f4b9e0e91839236326, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 229394a2fc8bbcc49931befec431e8b2, type: 3}
   m_Type: 1
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -370,8 +370,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Invites you to play a game of X and O with a Wager of <color=green>#500.</color>
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 272b021d35334ea4388cc45b28247a4b, type: 2}
-  m_sharedMaterial: {fileID: 4789541300707972002, guid: 272b021d35334ea4388cc45b28247a4b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ed89140e25acc1b4a8b35d531caceba5, type: 2}
+  m_sharedMaterial: {fileID: 3076998557652437135, guid: ed89140e25acc1b4a8b35d531caceba5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -505,8 +505,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 3hrs ago
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 272b021d35334ea4388cc45b28247a4b, type: 2}
-  m_sharedMaterial: {fileID: 4789541300707972002, guid: 272b021d35334ea4388cc45b28247a4b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ed89140e25acc1b4a8b35d531caceba5, type: 2}
+  m_sharedMaterial: {fileID: 3076998557652437135, guid: ed89140e25acc1b4a8b35d531caceba5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -646,7 +646,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: af71060094d258f4b9e0e91839236326, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 229394a2fc8bbcc49931befec431e8b2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -665,7 +665,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3742833787730215544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5db98b139046e59499363e7266193b5b, type: 3}
+  m_Script: {fileID: 11500000, guid: c976796b1fc0ad84d83470fa2ae915d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   notification:
@@ -676,10 +676,10 @@ MonoBehaviour:
     message: 
     userName: 
     timeText: 
-  gameImage: {fileID: 3742833788007516507}
-  userText: {fileID: 3742833786365935696}
-  timeText: {fileID: 3742833787560171452}
-  inviteText: {fileID: 3742833787482222281}
+  gameImage: {fileID: 0}
+  userText: {fileID: 0}
+  timeText: {fileID: 0}
+  inviteText: {fileID: 0}
 --- !u!114 &3742833787730215811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -815,8 +815,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ebd7c7546be829a448e2ed75d810f762, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 229394a2fc8bbcc49931befec431e8b2, type: 3}
+  m_Type: 1
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
@@ -824,4 +824,4 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 1
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 5
