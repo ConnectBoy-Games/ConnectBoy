@@ -43,7 +43,7 @@ public class ProfilePanel : MonoBehaviour
         // Sign out of Unity Player Accounts
         PlayerAccountService.Instance.SignOut();
         SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
-        GameManager.instance.accountManager.loginState = LoginState.unsignned;
+        GameManager.instance.accountManager.LogOut();
     }
 
     public void GoBack()

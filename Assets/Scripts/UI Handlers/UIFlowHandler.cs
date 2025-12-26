@@ -1,5 +1,3 @@
-using Unity.Services.Authentication;
-using Unity.Services.Core;
 using UnityEngine;
 
 public class UIFlowHandler : MonoBehaviour
@@ -8,20 +6,20 @@ public class UIFlowHandler : MonoBehaviour
     [SerializeField] private GameObject notificationPanel;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject profilePanel;
-    [SerializeField] private GameObject walletPanel;
+    [SerializeField] private GameObject gameDetailPanel;
     [SerializeField] private GameObject gamesPanel;
     [SerializeField] private GameObject loginPanel;
 
-    async void Awake()
+    void Awake()
     {
-        await UnityServices.InitializeAsync();
-
+        /*
         if(GameManager.instance.accountManager.loginState == LoginState.unsignned)
         {
             menuPanel.SetActive(false);
             gamesPanel.SetActive(false);
             loginPanel.SetActive(true);
         }
+        */
     }
 
     void Start()
@@ -29,7 +27,7 @@ public class UIFlowHandler : MonoBehaviour
         loginPanel.GetComponent<LoginPanel>().backAction = GotoMainMenu;
         settingsPanel.GetComponent<SettingsPanel>().backAction = GotoMainMenu;
         profilePanel.GetComponent<ProfilePanel>().backAction = GotoMainMenu;
-        //walletPanel.GetComponent<WalletPanel>().backAction = GotoMainMenu;
+        gameDetailPanel.GetComponent<GameDetailPanel>().backAction = GotoMainMenu;
         notificationPanel.GetComponent<NotificationPanel>().backAction = GotoMainMenu;
     }
 
@@ -48,9 +46,10 @@ public class UIFlowHandler : MonoBehaviour
         profilePanel.SetActive(true);
     }
 
-    public void GotoWallet()
+    public void GotoGameDetail(Wagr.GameName gameName)
     {
-        walletPanel.SetActive(true);
+        gameDetailPanel.SetActive(true);
+        gameDetailPanel.GetComponent<GameDetailPanel>().SelectGame(gameName);
     }
 
     public void GotoMainMenu()
@@ -66,7 +65,7 @@ public class UIFlowHandler : MonoBehaviour
         profilePanel.SetActive(false);
         gamesPanel.SetActive(false);
         settingsPanel.SetActive(false);
-        walletPanel.SetActive(false);
+        gameDetailPanel.SetActive(false);
         loginPanel.SetActive(false);
         notificationPanel.SetActive(false);
     }
