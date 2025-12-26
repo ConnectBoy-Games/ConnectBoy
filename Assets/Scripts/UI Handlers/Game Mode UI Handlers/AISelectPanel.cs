@@ -35,21 +35,21 @@ public class AISelectPanel : MonoBehaviour
         {
             case 0: //Easy mode
                 difficultyText.text = "Easy";
-                easyHead.CrossFadeAlpha(1, 0.5f, true);
-                mediumHead.CrossFadeAlpha(0, 0.5f, true);
-                hardHead.CrossFadeAlpha(0, 0.5f, true);
+                easyHead.CrossFadeAlpha(1, 1, true);
+                mediumHead.CrossFadeAlpha(0, 1, true);
+                hardHead.CrossFadeAlpha(0, 1, true);
                 break;
             case 1: //Medium mode
                 difficultyText.text = "Medium";
-                mediumHead.CrossFadeAlpha(1, 0.5f, true);
-                easyHead.CrossFadeAlpha(0, 0.5f, true);
-                hardHead.CrossFadeAlpha(0, 0.5f, true);
+                mediumHead.CrossFadeAlpha(1, 1, true);
+                easyHead.CrossFadeAlpha(0, 1, true);
+                hardHead.CrossFadeAlpha(0, 1, true);
                 break;
             case 2: //Hard mode
                 difficultyText.text = "Hard";
-                hardHead.CrossFadeAlpha(1, 0.5f, true);
-                easyHead.CrossFadeAlpha(0, 0.5f, true);
-                mediumHead.CrossFadeAlpha(0, 0.5f, true);
+                hardHead.CrossFadeAlpha(1, 1, true);
+                easyHead.CrossFadeAlpha(0, 1, true);
+                mediumHead.CrossFadeAlpha(0, 1, true);
                 break;
         }
 
