@@ -9,6 +9,9 @@ public class AISelectPanel : MonoBehaviour
 
     void OnEnable()
     {
+        easyHead.canvasRenderer.SetAlpha(0);
+        mediumHead.canvasRenderer.SetAlpha(0);
+        hardHead.canvasRenderer.SetAlpha(0);
         SetDificulty();
     }
 
@@ -19,6 +22,11 @@ public class AISelectPanel : MonoBehaviour
     [SerializeField] private TMP_Text difficultyText;
     [SerializeField] private Color[] difficultyColor;
 
+    [Header("Difficulty Heads")]
+    [SerializeField] private Image easyHead;
+    [SerializeField] private Image mediumHead;
+    [SerializeField] private Image hardHead;
+
     public void SetDificulty()
     {
         int value = (int)difficultySlider.value;
@@ -27,12 +35,21 @@ public class AISelectPanel : MonoBehaviour
         {
             case 0: //Easy mode
                 difficultyText.text = "Easy";
+                easyHead.CrossFadeAlpha(1, 0.5f, true);
+                mediumHead.CrossFadeAlpha(0, 0.5f, true);
+                hardHead.CrossFadeAlpha(0, 0.5f, true);
                 break;
             case 1: //Medium mode
                 difficultyText.text = "Medium";
+                mediumHead.CrossFadeAlpha(1, 0.5f, true);
+                easyHead.CrossFadeAlpha(0, 0.5f, true);
+                hardHead.CrossFadeAlpha(0, 0.5f, true);
                 break;
             case 2: //Hard mode
                 difficultyText.text = "Hard";
+                hardHead.CrossFadeAlpha(1, 0.5f, true);
+                easyHead.CrossFadeAlpha(0, 0.5f, true);
+                mediumHead.CrossFadeAlpha(0, 0.5f, true);
                 break;
         }
 
