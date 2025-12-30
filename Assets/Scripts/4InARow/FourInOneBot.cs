@@ -13,7 +13,7 @@ public class FourInOneBot
         this.botPiece = botPiece;
     }
 
-    public int ThinkMove(int[][] gameState)
+    public int ThinkMove(int[,] gameState)
     {
         return difficulty switch
         {
@@ -23,12 +23,12 @@ public class FourInOneBot
         };
     }
 
-    public int SimpleMoves(int[][] gameState)
+    public int SimpleMoves(int[,] gameState)
     {
         return 0;
     }
 
-    public int ComplexMoves(int[][] gameState)
+    public int ComplexMoves(int[,] gameState)
     {
         return SimpleMoves(gameState);
     }

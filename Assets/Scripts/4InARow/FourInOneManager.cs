@@ -8,8 +8,9 @@ public class FourInOneManager : MonoBehaviour
 
     private User turnUser; //Who has the turn?
 
-    private int userPiece; //Either a 1 or 2 (X or O)
-    private int botPiece; //Either a 1 or 2 (X or O)
+    private int userPiece; //Either a 1 or 2 (Red or Blue)
+    private int botPiece; //Either a 1 or 2 (Red or Blue)
+    private FourInOneBot bot;
 
     [SerializeField] FourInOneUIHandler uiHandler;
 
@@ -30,34 +31,44 @@ public class FourInOneManager : MonoBehaviour
     }
 
     // Call this when a user clicks a column button
-    public bool MakeMove(int column)
+    public void MakeMove(int column)
     {
-        // 1. Check if column is valid and not full
-        if (column < 0 || column >= Cols || board[0, column] != 0)
-            return false;
+        // 1. Check if column is valid and not full and it is the player's turn
+        if (column < 0 || column >= Cols || board[0, column] != 0 && turnUser != User.host)
+            return;
 
-        // 2. Find the lowest empty row (starting from the bottom)
-        for (int r = Rows - 1; r >= 0; r--)
+        if (gameMode == GameMode.vsPlayer)
         {
-            if (board[r, column] == 0)
+            //TODO: Send move to server
+            SendMoveToServer();
+        }
+        else //Playing Against A Bot
+        {
+            // 2. Find the lowest empty row (starting from the bottom)
+            for (int r = Rows - 1; r >= 0; r--)
             {
-                board[r, column] = currentPlayer;
+                if (board[r, column] == 0) //It is empty
+                {
+                    board[r, column] = userPiece; //Update the game state
+                    PlacePiece(column, userPiece); //Place the piece on the board
 
-                // 3. Check for win immediately after placing
-                if (CheckWin(r, column))
-                {
-                    Debug.Log($"Player {currentPlayer} Wins!");
+                    // 3. Check for win immediately after placing
+                    if (CheckWin(r, column))
+                    {
+                        Debug.Log($"Player {currentPlayer} Wins!");
+                    }
+                    else
+                    {
+                        turnUser = User.bot;
+                        uiHandler.SetTurnText(turnUser);
+                        Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move
+                    }
                 }
-                else
-                {
-                    currentPlayer = (currentPlayer == 1) ? 2 : 1;
-                }
-                return true;
             }
         }
-        return false;
     }
 
+    #region AI Handling Functions
     private bool CheckWin(int row, int col)
     {
         int player = board[row, col];
@@ -95,6 +106,34 @@ public class FourInOneManager : MonoBehaviour
         }
         return count;
     }
+
+    private void MakeAIMove()
+    {
+        //Selects which column to place the chip and updates the game state
+        int index = bot.ThinkMove(board); 
+        PlacePiece(index, botPiece); //Place the piece on the board
+        int row = 0;
+
+        for (int r = Rows - 1; r >= 0; r--) //Get the row just played
+        {
+            if(board[r, index] == 0)
+            {
+                row = r + 1;
+                break;
+            }
+        }
+        
+        if(CheckWin(row, index) == true)
+        {
+            //Bot has won
+        }
+        else
+        {
+            turnUser = User.host;
+            uiHandler.SetTurnText(turnUser);
+        }
+    }
+    #endregion
 
     #region Board Update
     private void PlacePiece(int colIndex, int pieceType)
