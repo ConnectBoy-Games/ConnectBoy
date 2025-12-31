@@ -73,3 +73,11 @@ public enum User : byte
     host,
     player //Other player
 }
+
+[Serializable]
+public enum BotDifficulty : byte 
+{
+    low,
+    medium,
+    high
+}
