@@ -9,15 +9,24 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Scene.unity
     guid: 6f8c297c28375d142b03eee04635a154
   - enabled: 1
-    path: Assets/Scenes/X and O.unity
-    guid: 17efe73342d6c2048bb06b5952aadef2
-  - enabled: 1
     path: Assets/Scenes/Archery.unity
     guid: 24e2a43920a058248854d5672ab5ef55
   - enabled: 1
+    path: Assets/Scenes/DotsandBoxes.unity
+    guid: a8a934b1b8fe1a94485bbe500e06d06f
+  - enabled: 1
     path: Assets/Scenes/FourInARow.unity
-    guid: 0bfa63298eaa845498da16f691c2ce1e
+    guid: d0abf716aa7a1e34db4eeb06922ddace
   - enabled: 1
     path: Assets/Scenes/Mini Ball.unity
-    guid: 632cce08c7b33b9439b02004bb80d58a
+    guid: 01fac0a5fc4135044b7d370a17484670
+  - enabled: 1
+    path: Assets/Scenes/Mini Golf.unity
+    guid: 5161d3eae2da9f049a9f30203baae274
+  - enabled: 1
+    path: Assets/Scenes/Test Scene.unity
+    guid: 907a442515bff9c40a7941dca1bf535c
+  - enabled: 1
+    path: Assets/Scenes/X and O.unity
+    guid: 17efe73342d6c2048bb06b5952aadef2
   m_configObjects: {}
