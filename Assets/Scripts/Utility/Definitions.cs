@@ -26,6 +26,15 @@ public class PlayerStats
     uint winRate { get; set; }
     uint winStreak { get; set; }
 
+    public PlayerStats()
+    {
+        gamesPlayed = 0;
+        gamesWon = 0;
+        gamesLost = 0;
+        winRate = 0;
+        winStreak = 0;
+    }
+
     public PlayerStats(string json)
     {
 
@@ -40,10 +49,21 @@ public class PlayerStats
 [Serializable]
 public class Profile
 {
-    public int uid { get; private set; }
+    public string id { get; private set; } //Matches the Unity Player ID
+    public string username { get; private set; }
     public int dpIndex { get; private set; }
     public int balance { get; private set; }
-    public string username { get; private set; }
+
+    public PlayerStats playerStats { private set; get; }
+
+    public Profile(string id, string username)
+    {
+        this.id = id;
+        this.username = username;
+        this.dpIndex = 0;
+        this.balance = 0;
+        this.playerStats = new PlayerStats();
+    }
 
     public Profile(string json)
     {

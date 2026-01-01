@@ -1,77 +1,88 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Authentication.PlayerAccounts;
+
 using Unity.Services.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 [Serializable]
 public class AccountManager
 {
     public LoginState loginState { private set; get; }
-    public PlayerStats playerStats { private set; get; }
     public Profile playerProfile { private set; get; }
 
     public async void Setup()
     {
         await UnityServices.InitializeAsync(); //Initialize Unity Services
         loginState = LoginState.unsignned;
+        SetupEvents();
+    }
+    
+    private void SetupEvents()
+    {
+        PlayerAccountService.Instance.SignedIn += () =>
+        {
+            Debug.Log("Player signed in successfully");
+            GameManager.instance.accountManager.loginState = LoginState.loggedIn;
+        };
+
+        PlayerAccountService.Instance.SignInFailed += (RequestFailedException ex) =>
+        {
+            NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
+            GameManager.instance.accountManager.loginState = LoginState.unsignned;
+        };
+
+        PlayerAccountService.Instance.SignedOut += () =>
+        {
+            GameManager.instance.accountManager.loginState = LoginState.unsignned;
+        };
+
+        /*
+        // Shows how to get a playerID
+        Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
+
+        // Shows how to get an access token
+        Debug.Log($"Access Token: {AuthenticationService.Instance.AccessToken}");
+        */
     }
 
-    public void Login()
+    #region Authentication
+    /// <summary>Return true if the player has an existing account</summary>
+    public async Task<bool> Login()
     {
         // Check if a cached player already exists by checking if the session token exists
-        // AuthenticationService.Instance.SessionTokenExists
-    }
-
-    public async void StartPlayerAccountsSignInAsync()
-    {
         if (PlayerAccountService.Instance.IsSignedIn)
         {
-            // If the player is already signed into Unity Player Accounts, proceed directly to the Unity Authentication sign-in.
-            await SignInWithUnityAuth();
+            await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
         }
-        else
+        else //Sign in the player from the browser
         {
             try
             {
-                // This will open the system browser and prompt the user to sign in to Unity Player Accounts
                 await PlayerAccountService.Instance.StartSignInAsync();
             }
-            catch (PlayerAccountsException ex)
+            catch (Exception ex)
             {
-                // Compare error code to PlayerAccountsErrorCodes
-                // Notify the player with the proper error message
-                Debug.LogException(ex);
-            }
-            catch (RequestFailedException ex)
-            {
-                // Compare error code to CommonErrorCodes
-                // Notify the player with the proper error message
-                Debug.LogException(ex);
+                NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
             }
         }
-    }
 
-    async Task SignInWithUnityAuth()
-    {
+        //TODO: Check if the account already exists
         try
         {
-            await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
-            Debug.Log("SignIn is successful.");
+            var id = AuthenticationService.Instance.PlayerId;
+
+            CloudSaveService.Instance.Data.Player.LoadAsync(id);
         }
-        catch (AuthenticationException ex)
+        catch (Exception ex)
         {
-            // Compare error code to AuthenticationErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
+            NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
         }
-        catch (RequestFailedException ex)
-        {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
+
+        return false;
     }
 
     public void LoginInGuestMode()
@@ -88,13 +99,47 @@ public class AccountManager
         PlayerAccountService.Instance.SignOut();
     }
 
+    #endregion
+
+    #region Profile
+    public async Task<bool> CreateAccount(string playerId, string username)
+    {
+        //Check if the username is in use
+        if (CheckUsername(username))
+        {
+            NotificationDisplay.instance.DisplayMessage("Username is already in use", time: 3);
+            return false;
+        }
+        else
+        {
+            try
+            {
+                Profile playerProfile = new Profile(AuthenticationService.Instance.PlayerId, username);
+                var data = new Dictionary<string, object> { { AuthenticationService.Instance.PlayerId, playerProfile } };
+
+                await CloudSaveService.Instance.Data.Player.SaveAsync(data);
+            }
+            catch (System.Exception ex)
+            {
+                NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
+            }
+        }
+        return true;
+    }
+    
+    /// <summary>Returns true if the username is in use</summary>
+    public bool CheckUsername(string name)
+    {
+        return false;
+    }
+
     public string GetPlayerName()
     {
         var uname = AuthenticationService.Instance.GetPlayerNameAsync();
         return uname.Result;
     }
 
-    public async void SetUserName(string name)
+    public async void SetUserName(string name, UnityAction callback)
     {
         try
         {
@@ -103,12 +148,19 @@ public class AccountManager
 
             var task = await AuthenticationService.Instance.UpdatePlayerNameAsync("usernameInput.text");
             //print("Username:" + task);
+            callback?.Invoke();
         }
         catch (RequestFailedException ex)
         {
             Debug.Log(ex.Message);
         }
     }
+
+    public bool CheckUsername()
+    {
+        return false;
+    }
+    #endregion
 
     private void CheckStates()
     {
@@ -122,59 +174,8 @@ public class AccountManager
         Debug.Log($"Is Expired: {AuthenticationService.Instance.IsExpired}");
     }
 
-    public bool CheckUsername()
-    {
-        return false;
-    }
-
-    public void EditUsername()
-    {
-
-    }
-
     public void DeleteAccount()
     {
 
-    }
-
-    //Template for setting up authentication event handlers if desired
-    private void SetupEvents()
-    {
-        PlayerAccountService.Instance.SignedIn += () =>
-        {
-            Debug.Log("Player signed in successfully");
-            GameManager.instance.accountManager.loginState = LoginState.loggedIn;
-
-            // Shows how to get a playerID
-            Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
-
-            // Shows how to get an access token
-            Debug.Log($"Access Token: {AuthenticationService.Instance.AccessToken}");
-        };
-
-        AuthenticationService.Instance.SignedIn += () =>
-        {
-
-        };
-
-        AuthenticationService.Instance.SignInFailed += (err) =>
-        {
-            Debug.LogError(err);
-        };
-
-        AuthenticationService.Instance.SignedOut += () =>
-        {
-            Debug.Log("Player signed out.");
-        };
-
-        AuthenticationService.Instance.Expired += () =>
-        {
-            Debug.Log("Player session could not be refreshed and expired.");
-        };
-    }
-
-    internal void LogOut()
-    {
-        throw new NotImplementedException();
     }
 }
