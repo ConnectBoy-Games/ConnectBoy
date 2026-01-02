@@ -75,7 +75,7 @@ public class AccountManager
         {
             var id = AuthenticationService.Instance.PlayerId;
 
-            CloudSaveService.Instance.Data.Player.LoadAsync(id);
+            //CloudSaveService.Instance.Data.Player.LoadAsync(id);
         }
         catch (Exception ex)
         {
@@ -117,7 +117,7 @@ public class AccountManager
                 Profile playerProfile = new Profile(AuthenticationService.Instance.PlayerId, username);
                 var data = new Dictionary<string, object> { { AuthenticationService.Instance.PlayerId, playerProfile } };
 
-                await CloudSaveService.Instance.Data.Player.SaveAsync(data);
+                //await CloudSaveService.Instance.Data.Player.SaveAsync(data);
             }
             catch (System.Exception ex)
             {
