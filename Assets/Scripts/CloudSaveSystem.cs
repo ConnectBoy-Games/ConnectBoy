@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CloudSaveSystem
 {
-    public async Task<T> RetrieveSpecificData<T>(string key)
+    public async Task<T> RetrievePlayerProfile<T>(string key)
     {
         try
         {
