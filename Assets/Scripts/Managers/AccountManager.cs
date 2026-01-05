@@ -141,18 +141,15 @@ public class AccountManager
 
     public async void SetUserName(string name, UnityAction callback)
     {
-        try
+        var temp = await CloudSaveSystem.SetUsername(name);
+        if(temp == true)
         {
-            //var uName = AuthenticationService.Instance.GetPlayerNameAsync();
-            //print(uName);
-
-            var task = await AuthenticationService.Instance.UpdatePlayerNameAsync("usernameInput.text");
-            //print("Username:" + task);
+            NotificationDisplay.instance.DisplayMessage("Username set successfully!", time: 2);
             callback?.Invoke();
         }
-        catch (RequestFailedException ex)
+        else
         {
-            Debug.Log(ex.Message);
+            NotificationDisplay.instance.DisplayMessage("Failed to set username.", NotificationType.error, 3);
         }
     }
 

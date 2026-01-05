@@ -26,6 +26,17 @@ namespace Wagr
         invalid = 0
     }
 
+    [System.Serializable]
+    public class MatchInvite 
+    { 
+        public string senderId; 
+        public string senderUsername; 
+        public int matchType;         
+        public int wagerAmount;       
+        public string matchId; 
+        public long timestamp; 
+    }
+
     /// <summary> Represents a gaming session both on the server and client</summary>
     [Serializable]
     public class Session

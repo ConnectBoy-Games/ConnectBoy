@@ -50,7 +50,7 @@ public class PlayerStats
 public class Profile
 {
     public string id { get; private set; } //Matches the Unity Player ID
-    public string username { get; private set; }
+    public string displayName { get; private set; }
     public int dpIndex { get; private set; }
     public int balance { get; private set; }
 
@@ -59,7 +59,7 @@ public class Profile
     public Profile(string id, string username)
     {
         this.id = id;
-        this.username = username;
+        this.displayName = username;
         this.dpIndex = 0;
         this.balance = 0;
         this.playerStats = new PlayerStats();
@@ -100,4 +100,25 @@ public enum BotDifficulty : byte
     low,
     medium,
     high
+}
+
+[System.Serializable]
+public class NameResponse
+{
+    public bool success;
+    public string name;
+}
+
+// Response structure matches the return object from JS
+[System.Serializable]
+public class LookupResponse
+{
+    public bool exists;
+    public string playerId;
+}
+
+[System.Serializable]
+public class LookupRequest
+{
+    public string targetName;
 }

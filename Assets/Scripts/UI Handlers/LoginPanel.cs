@@ -38,7 +38,7 @@ public class LoginPanel : MonoBehaviour
             GameManager.instance.accountManager.SetUserName(username, backAction);
         }
     }
-
+    
     public void GoToTermsOfService()
     {
         Application.OpenURL("www.google.com");
