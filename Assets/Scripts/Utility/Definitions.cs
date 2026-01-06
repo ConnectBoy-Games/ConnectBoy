@@ -20,11 +20,11 @@ public class NotificationObject
 [Serializable]
 public class PlayerStats
 {
-    uint gamesPlayed { get; set; }
-    uint gamesWon { get; set; }
-    uint gamesLost { get; set; }
-    uint winRate { get; set; }
-    uint winStreak { get; set; }
+    public uint gamesPlayed { get; private set; }
+    public uint gamesWon { get; private set; }
+    public uint gamesLost { get; private set; }
+    public uint winRate { get; private set; }
+    public uint winStreak { get; private set; }
 
     public PlayerStats()
     {

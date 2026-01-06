@@ -7,24 +7,41 @@ using Wagr;
 
 public class MenuPanel : MonoBehaviour
 {
-    [SerializeField] TMP_Text accountBalance;
+    [SerializeField] TMP_Text displayName;
+    [SerializeField] private float pollInterval = 10f; // Check every 15 seconds
+    [SerializeField] private GameObject notificationDot;
 
-    private void Start()
-    {
-        Invoke(nameof(SetBalance), 0.1f);
-    }
-
-    public void SetBalance()
-    {
-        accountBalance.text = GameManager.instance.accountManager.playerProfile.balance.ToString();
-    }
-
-    [SerializeField] private float pollInterval = 10f; // Check every 10 seconds
     private bool _isPolling = false;
     private HashSet<long> _processedInviteTimestamps = new HashSet<long>();
-
-    // Event to notify your UI
     public static event Action<MatchInvite> OnNewInviteReceived;
+
+    void OnEnable()
+    {
+        StartPolling();
+    }
+
+    void OnDisable()
+    {
+        StopPolling();
+    }
+
+    void Start()
+    {
+        Invoke(nameof(SetDisplayName), 0.1f);
+        OnNewInviteReceived += (invite) => { notificationDot.SetActive(true); };
+    }
+
+    public void SetDisplayName()
+    {
+        if(GameManager.instance.accountManager.loginState == LoginState.loggedIn)
+        {
+            displayName.text = GameManager.instance.accountManager.playerProfile.displayName;
+        }
+        else
+        {
+            displayName.text = "Guest";
+        }
+    }
 
     public void StartPolling()
     {
@@ -59,6 +76,7 @@ public class MenuPanel : MonoBehaviour
                         
                         // 3. Trigger the UI/Event
                         Debug.Log($"New Wager Invite from {invite.senderUsername}!");
+                        NotificationDisplay.instance.DisplayMessage($"New Wager Invite from {invite.senderUsername}!", NotificationType.info, 2f);
                         OnNewInviteReceived?.Invoke(invite);
                     }
                 }
@@ -67,7 +85,7 @@ public class MenuPanel : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogWarning($"Polling failed: {e.Message}");
+            NotificationDisplay.instance.DisplayMessage("Failed to poll for invites.", NotificationType.error, 2f);
         }
     }
-
 }

@@ -1,30 +1,75 @@
 using TMPro;
-using Unity.Services.Authentication;
-using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 public class ProfilePanel : MonoBehaviour
 {
-    [SerializeField] TMP_InputField displayName;
+    [SerializeField] TMP_Text displayName;
+    [SerializeField] TMP_InputField editUsernameField;
+    [SerializeField] GameObject historyPanel;
+    [SerializeField] GameObject statPanel;
+
+    [Header("Buttons")]
+    [SerializeField] Button historyButton;
+    [SerializeField] Button statButton;
+
+    [Header("Colors")]
+    [SerializeField] Color selectedColor;
+    [SerializeField] Color deselectedColor;
+
     public UnityAction backAction;
 
     private void OnEnable()
     {
-        UpdateUsernameDisplay();
+        statButton.GetComponent<Image>().color = deselectedColor;
+        historyButton.GetComponent<Image>().color = deselectedColor;
+        statPanel.SetActive(false);
+        historyPanel.SetActive(false);
+        displayName.gameObject.SetActive(true);
+        editUsernameField.gameObject.SetActive(false);
+
+        if(GameManager.instance.accountManager.loginState == LoginState.loggedIn)
+        {
+            displayName.text = GameManager.instance.accountManager.playerProfile.displayName;
+            statButton.interactable = true;
+            historyButton.interactable = true;
+        }
+        else
+        {
+            displayName.text = "Guest";
+            statButton.interactable = false;
+            historyButton.interactable = false;
+        }
     }
 
-    public void UpdateUsernameDisplay()
+    public void SetUsername()
     {
-        var uName = AuthenticationService.Instance.PlayerName;
-        displayName.text = uName;
-    }
+        var username = editUsernameField.text;
 
-    public async void SetUsername()
-    {
-        await AuthenticationService.Instance.UpdatePlayerNameAsync(displayName.name);
-        await AuthenticationService.Instance.GetPlayerNameAsync();
+        if(username.Length < 3 || username.Length > 15)
+        {
+            NotificationDisplay.instance.DisplayMessage("Username must be between 3 and 15 characters!", NotificationType.error);
+            return;
+        }
+        else if(CloudSaveSystem.IsNameTaken(username).Result == true)
+        {
+            NotificationDisplay.instance.DisplayMessage("Username is already taken!", NotificationType.error);
+            return;
+        }
+        
+        if(CloudSaveSystem.SetUsername(username).Result == true)
+        {
+            editUsernameField.gameObject.SetActive(false);
+            displayName.gameObject.SetActive(true);
+            displayName.text = username;
+            NotificationDisplay.instance.DisplayMessage("Username successfully changed!", NotificationType.info);
+        }
+        else
+        {
+            NotificationDisplay.instance.DisplayMessage("Failed to set username. Please try again.", NotificationType.error);
+            return;
+        }
     }
 
     void FixedUpdate()
@@ -35,15 +80,20 @@ public class ProfilePanel : MonoBehaviour
         }
     }
 
-    public void SignOut(bool clearSessionToken = false)
+    public void OpenHistoryPanel()
     {
-        // Sign out of Unity Authentication, with the option to clear the session token
-        AuthenticationService.Instance.SignOut(clearSessionToken);
+        historyPanel.SetActive(true);
+        statPanel.SetActive(false);
+        historyButton.GetComponent<Image>().color = selectedColor;
+        statButton.GetComponent<Image>().color = deselectedColor;
+    }
 
-        // Sign out of Unity Player Accounts
-        PlayerAccountService.Instance.SignOut();
-        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
-        GameManager.instance.accountManager.SignOut();
+    public void OpenStatPanel()
+    {
+        statPanel.SetActive(true);
+        historyPanel.SetActive(false);
+        statButton.GetComponent<Image>().color = selectedColor;
+        historyButton.GetComponent<Image>().color = deselectedColor;
     }
 
     public void GoBack()

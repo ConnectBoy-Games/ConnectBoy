@@ -1,6 +1,9 @@
 using System;
+using Unity.Services.Authentication;
+using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingsPanel : MonoBehaviour
@@ -11,7 +14,6 @@ public class SettingsPanel : MonoBehaviour
     [SerializeField] Slider volumeSlider;
     [SerializeField] Toggle sfxToggle;
     [SerializeField] Toggle vibrateToggle;
-    [SerializeField] Toggle themeToggle;
 
     void Start()
     {
@@ -37,7 +39,6 @@ public class SettingsPanel : MonoBehaviour
         volumeSlider.value = audioManager.volume;
         sfxToggle.isOn = audioManager.sfx;
         vibrateToggle.isOn = audioManager.vibrate;
-        themeToggle.interactable = false;
     }
 
     public void SetVolume()
@@ -57,13 +58,21 @@ public class SettingsPanel : MonoBehaviour
         audioManager.PlayClickSound();
     }
 
-    public void ToggleTheme()
+    public void SignOut(bool clearSessionToken = false)
     {
-        print("Not Yet Implemented: " + themeToggle.isOn);
-        audioManager.PlayClickSound();
-#if UNITY_EDITOR
-        throw new NotImplementedException();
-#endif
+        // Sign out of Unity Authentication, with the option to clear the session token
+        AuthenticationService.Instance.SignOut(clearSessionToken);
+
+        // Sign out of Unity Player Accounts
+        PlayerAccountService.Instance.SignOut();
+        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+        GameManager.instance.accountManager.SignOut();
+    }
+
+    public void OnDestroy()
+    {
+        //TODO: Actually delete the user account from backend
+        SignOut(true);        
     }
 
     public void OpenTerms()

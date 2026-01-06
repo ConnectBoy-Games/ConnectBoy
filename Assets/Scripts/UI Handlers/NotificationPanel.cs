@@ -9,6 +9,7 @@ public class NotificationPanel : MonoBehaviour
     public UnityAction backAction;
 
     [SerializeField] private GameObject notificationHolder;
+    [SerializeField] private GameObject notificationPrefab;
 
     void Start()
     {

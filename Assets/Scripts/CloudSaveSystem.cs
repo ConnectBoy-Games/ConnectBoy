@@ -19,6 +19,7 @@ public class CloudSaveSystem
             else
             {
                 Debug.Log($"There is no such key as {key}!");
+                return default;
             }
         }
         catch (CloudSaveValidationException e)
@@ -194,6 +195,6 @@ public class CloudSaveSystem
         }
     }
 
-    
+
 
 }

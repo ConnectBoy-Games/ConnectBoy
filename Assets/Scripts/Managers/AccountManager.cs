@@ -66,16 +66,21 @@ public class AccountManager
             }
             catch (Exception ex)
             {
+                Debug.LogError("Failed to sign in player with Unity Player Accounts: " + ex.Message);
                 NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
             }
         }
 
-        //TODO: Check if the account already exists
-        try
+        try //TODO: Check if the account already exists
         {
             var id = AuthenticationService.Instance.PlayerId;
+            var prof = await CloudSaveSystem.RetrieveSpecificData<Profile>(id);
 
-            //CloudSaveService.Instance.Data.Player.LoadAsync(id);
+            if(prof != default)
+            {
+                playerProfile = prof;
+                return true;
+            }
         }
         catch (Exception ex)
         {
@@ -103,8 +108,7 @@ public class AccountManager
     #region Profile
     public async Task<bool> CreateAccount(string playerId, string username)
     {
-        //Check if the username is in use
-        if (CheckUsername(username))
+        if(CloudSaveSystem.IsNameTaken(username).Result == true) //Check if the username is in use
         {
             NotificationDisplay.instance.DisplayMessage("Username is already in use", time: 3);
             return false;
@@ -113,48 +117,17 @@ public class AccountManager
         {
             try
             {
-                Profile playerProfile = new Profile(AuthenticationService.Instance.PlayerId, username);
-                var data = new Dictionary<string, object> { { AuthenticationService.Instance.PlayerId, playerProfile } };
-
-                //await CloudSaveService.Instance.Data.Player.SaveAsync(data);
+                Profile prof = new(AuthenticationService.Instance.PlayerId, username);
+                CloudSaveSystem.SaveSpecificData<Profile>(AuthenticationService.Instance.PlayerId, prof).Wait();
+                CloudSaveSystem.SetUsername(username).Wait();
             }
             catch (System.Exception ex)
             {
                 NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
+                return false;
             }
         }
         return true;
-    }
-    
-    /// <summary>Returns true if the username is in use</summary>
-    public bool CheckUsername(string name)
-    {
-        return false;
-    }
-
-    public string GetPlayerName()
-    {
-        var uname = AuthenticationService.Instance.GetPlayerNameAsync();
-        return uname.Result;
-    }
-
-    public async void SetUserName(string name, UnityAction callback)
-    {
-        var temp = await CloudSaveSystem.SetUsername(name);
-        if(temp == true)
-        {
-            NotificationDisplay.instance.DisplayMessage("Username set successfully!", time: 2);
-            callback?.Invoke();
-        }
-        else
-        {
-            NotificationDisplay.instance.DisplayMessage("Failed to set username.", NotificationType.error, 3);
-        }
-    }
-
-    public bool CheckUsername()
-    {
-        return false;
     }
     #endregion
 
