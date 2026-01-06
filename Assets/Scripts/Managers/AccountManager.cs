@@ -98,7 +98,6 @@ public class AccountManager
         // Sign out of Unity Player Accounts
         PlayerAccountService.Instance.SignOut();
     }
-
     #endregion
 
     #region Profile
