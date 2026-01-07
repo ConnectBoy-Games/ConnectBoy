@@ -6,12 +6,12 @@ namespace Wagr
     [Serializable]
     public enum GameName : byte
     {
-        xando,
-        minifootball,
-        archery,
-        dotsandboxes,
-        fourinarow,
-        minigolf
+        xando = 0,
+        minisoccer = 1,
+        archery = 2,
+        dotsandboxes = 3,
+        fourinarow = 4,
+        minigolf = 5
     }
 
     [Serializable]

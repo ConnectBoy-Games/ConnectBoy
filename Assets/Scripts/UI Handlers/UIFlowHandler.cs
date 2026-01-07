@@ -46,10 +46,10 @@ public class UIFlowHandler : MonoBehaviour
         profilePanel.SetActive(true);
     }
 
-    public void GotoGameDetail(Wagr.GameName gameName)
+    public void GotoGameDetail(int game)
     {
         gameDetailPanel.SetActive(true);
-        gameDetailPanel.GetComponent<GameDetailPanel>().SelectGame(gameName);
+        gameDetailPanel.GetComponent<GameDetailPanel>().SelectGame((Wagr.GameName)game);
     }
 
     public void GotoMainMenu()

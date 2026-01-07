@@ -22,6 +22,7 @@ public class GameDetailPanel : MonoBehaviour
 
     [Header("Game Detail UI")]
     [SerializeField] private Image gameImage;
+    [SerializeField] private Image backgroundImage;
     [SerializeField] private TMP_Text gameTitle;
     [SerializeField] private TMP_Text gameDescription;
 
@@ -35,49 +36,71 @@ public class GameDetailPanel : MonoBehaviour
     [SerializeField] private string xandoBrief;
     [SerializeField] private string archeryBrief;
     [SerializeField] private string fourinarowBrief;
-    [SerializeField] private string minifootballBrief;
+    [SerializeField] private string minisoccerBrief;
     [SerializeField] private string minigolfBrief;
     [SerializeField] private string dotsandboxesBrief;
 
     [Header("Game Images")]
-    [SerializeField] private Image xandoImage;
-    [SerializeField] private Image archeryImage;
-    [SerializeField] private Image fourinarowImage;
-    [SerializeField] private Image minifootballImage;
-    [SerializeField] private Image minigolfImage;
-    [SerializeField] private Image dotsandboxesImage;
+    [SerializeField] private Sprite xandoImage;
+    [SerializeField] private Sprite archeryImage;
+    [SerializeField] private Sprite fourinarowImage;
+    [SerializeField] private Sprite minisoccerImage;
+    [SerializeField] private Sprite minigolfImage;
+    [SerializeField] private Sprite dotsandboxesImage;
+
+    [Header("Game Color")]
+    [SerializeField] private Color xandoColor;
+    [SerializeField] private Color archeryColor;
+    [SerializeField] private Color fourinarowColor;
+    [SerializeField] private Color minisoccerColor;
+    [SerializeField] private Color minigolfColor;
+    [SerializeField] private Color dotsandboxesColor;
+
+    void OnEnable()
+    {
+        modeSelectPanel.SetActive(true);
+        setAiPanel.SetActive(false);
+        inviteFriendPanel.SetActive(false);
+        roomSelectPanel.SetActive(false);
+    }
 
     public void SelectGame(Wagr.GameName gameName)
     {
         switch (gameName)
         {
             case Wagr.GameName.xando:
-                gameImage = xandoImage;
+                gameImage.sprite = xandoImage;
+                backgroundImage.color = xandoColor;
                 gameDescription.text = xandoBrief;
                 gameTitle.text = "X And O";
                 break;
             case Wagr.GameName.dotsandboxes:
-                gameImage = dotsandboxesImage;
+                gameImage.sprite = dotsandboxesImage;
+                backgroundImage.color = dotsandboxesColor;
                 gameDescription.text = dotsandboxesBrief;
                 gameTitle.text = "Dots And Boxes";
                 break;
             case Wagr.GameName.fourinarow:
-                gameImage = fourinarowImage;
+                gameImage.sprite = fourinarowImage;
+                backgroundImage.color = fourinarowColor;
                 gameDescription.text = fourinarowBrief;
                 gameTitle.text = "Four In A Row";
                 break;
-            case Wagr.GameName.minifootball:
-                gameImage = minifootballImage;
-                gameDescription.text = minifootballBrief;
-                gameTitle.text = "Mini Football";
+            case Wagr.GameName.minisoccer:
+                gameImage.sprite = minisoccerImage;
+                backgroundImage.color = minisoccerColor;
+                gameDescription.text = minisoccerBrief;
+                gameTitle.text = "Mini Soccer";
                 break;
             case Wagr.GameName.archery:
-                gameImage = archeryImage;
+                gameImage.sprite = archeryImage;
+                backgroundImage.color = archeryColor;
                 gameDescription.text = archeryBrief;
                 gameTitle.text = "Archery";
                 break;
             case Wagr.GameName.minigolf:
-                gameImage = minigolfImage;
+                gameImage.sprite = minigolfImage;
+                backgroundImage.color = minigolfColor;
                 gameDescription.text = minigolfBrief;
                 gameTitle.text = "Mini Golf";
                 break;
@@ -101,6 +124,4 @@ public class GameDetailPanel : MonoBehaviour
                 break;
         }
     }
-
-
 }

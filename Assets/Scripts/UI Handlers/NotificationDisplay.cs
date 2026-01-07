@@ -8,6 +8,19 @@ public class NotificationDisplay : MonoBehaviour
 
     [SerializeField] private TMP_Text notificationContent;
 
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public void DisplayMessage(string text, NotificationType type = NotificationType.info, float time = -1)
     {
         gameObject.SetActive(true);
@@ -25,7 +38,7 @@ public class NotificationDisplay : MonoBehaviour
                 break;
         }
 
-        if (time != -1)
+        if (time !<= 0)
         {
             Invoke(nameof(CloseNotificationBar), time);
         }
