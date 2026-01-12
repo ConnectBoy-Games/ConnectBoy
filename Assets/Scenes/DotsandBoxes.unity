@@ -364,7 +364,7 @@ GameObject:
   - component: {fileID: 28627682}
   - component: {fileID: 28627681}
   m_Layer: 5
-  m_Name: 1 (27)
+  m_Name: 58
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -433,7 +433,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 28627682}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 58
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &28627682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,7 +497,7 @@ GameObject:
   - component: {fileID: 29769910}
   - component: {fileID: 29769909}
   m_Layer: 5
-  m_Name: 1 (26)
+  m_Name: 57
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -554,7 +566,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 29769910}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 57
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &29769910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -824,7 +848,7 @@ GameObject:
   - component: {fileID: 43341810}
   - component: {fileID: 43341809}
   m_Layer: 5
-  m_Name: 1 (20)
+  m_Name: 41
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -893,7 +917,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 43341810}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 41
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &43341810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1010,7 +1046,7 @@ GameObject:
   - component: {fileID: 49484543}
   - component: {fileID: 49484542}
   m_Layer: 5
-  m_Name: 1 (24)
+  m_Name: 49
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1079,7 +1115,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 49484543}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 49
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &49484543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1359,7 +1407,7 @@ GameObject:
   - component: {fileID: 86621857}
   - component: {fileID: 86621856}
   m_Layer: 5
-  m_Name: 1 (13)
+  m_Name: 26
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1428,7 +1476,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 86621857}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 26
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &86621857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2175,7 +2235,7 @@ GameObject:
   - component: {fileID: 234923343}
   - component: {fileID: 234923342}
   m_Layer: 5
-  m_Name: 1 (1)
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2244,7 +2304,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 234923343}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &234923343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2534,7 +2606,7 @@ GameObject:
   - component: {fileID: 329959048}
   - component: {fileID: 329959047}
   m_Layer: 5
-  m_Name: 1 (3)
+  m_Name: 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2603,7 +2675,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 329959048}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 9
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &329959048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2731,7 +2815,7 @@ GameObject:
   - component: {fileID: 369493381}
   - component: {fileID: 369493380}
   m_Layer: 5
-  m_Name: 1 (22)
+  m_Name: 47
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2800,7 +2884,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 369493381}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 47
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &369493381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2852,7 +2948,7 @@ GameObject:
   - component: {fileID: 383739836}
   - component: {fileID: 383739835}
   m_Layer: 5
-  m_Name: 1 (7)
+  m_Name: 14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2921,7 +3017,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 383739836}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 14
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &383739836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3508,7 +3616,7 @@ GameObject:
   - component: {fileID: 467529028}
   - component: {fileID: 467529027}
   m_Layer: 5
-  m_Name: 1 (11)
+  m_Name: 24
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3577,7 +3685,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 467529028}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 24
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &467529028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3629,7 +3749,7 @@ GameObject:
   - component: {fileID: 470408267}
   - component: {fileID: 470408266}
   m_Layer: 5
-  m_Name: 1 (3)
+  m_Name: 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3698,7 +3818,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 470408267}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &470408267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3750,7 +3882,7 @@ GameObject:
   - component: {fileID: 474342090}
   - component: {fileID: 474342089}
   m_Layer: 5
-  m_Name: 1 (15)
+  m_Name: 31
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3819,7 +3951,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 474342090}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 31
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &474342090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3947,7 +4091,7 @@ GameObject:
   - component: {fileID: 521196700}
   - component: {fileID: 521196699}
   m_Layer: 5
-  m_Name: 1 (28)
+  m_Name: 54
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4016,7 +4160,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 521196700}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 54
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &521196700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4114,7 +4270,7 @@ GameObject:
   - component: {fileID: 553719275}
   - component: {fileID: 553719274}
   m_Layer: 5
-  m_Name: 1 (6)
+  m_Name: 17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4183,7 +4339,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 553719275}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 17
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &553719275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4370,7 +4538,7 @@ GameObject:
   - component: {fileID: 596395333}
   - component: {fileID: 596395332}
   m_Layer: 5
-  m_Name: 1 (28)
+  m_Name: 59
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4439,7 +4607,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 596395333}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 59
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &596395333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4491,7 +4671,7 @@ GameObject:
   - component: {fileID: 636881498}
   - component: {fileID: 636881497}
   m_Layer: 5
-  m_Name: 1 (23)
+  m_Name: 48
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4560,7 +4740,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 636881498}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 48
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &636881498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4747,7 +4939,7 @@ GameObject:
   - component: {fileID: 693884962}
   - component: {fileID: 693884961}
   m_Layer: 5
-  m_Name: 1 (18)
+  m_Name: 39
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4816,7 +5008,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 693884962}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 39
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &693884962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4942,7 +5146,7 @@ GameObject:
   - component: {fileID: 721929284}
   - component: {fileID: 721929283}
   m_Layer: 5
-  m_Name: 1 (9)
+  m_Name: 16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5011,7 +5215,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 721929284}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 16
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &721929284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5197,7 +5413,7 @@ GameObject:
   - component: {fileID: 751069225}
   - component: {fileID: 751069224}
   m_Layer: 5
-  m_Name: 1 (8)
+  m_Name: 19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5266,7 +5482,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 751069225}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 19
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &751069225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5318,7 +5546,7 @@ GameObject:
   - component: {fileID: 756933038}
   - component: {fileID: 756933037}
   m_Layer: 5
-  m_Name: 1 (29)
+  m_Name: 60
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5387,7 +5615,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 756933038}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 60
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &756933038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5764,7 +6004,7 @@ GameObject:
   - component: {fileID: 892020054}
   - component: {fileID: 892020053}
   m_Layer: 5
-  m_Name: 1 (16)
+  m_Name: 35
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5833,7 +6073,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 892020054}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 35
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &892020054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7090,7 +7342,7 @@ GameObject:
   - component: {fileID: 1107256935}
   - component: {fileID: 1107256934}
   m_Layer: 5
-  m_Name: 1 (10)
+  m_Name: 21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7159,7 +7411,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1107256935}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 21
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1107256935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7498,7 +7762,7 @@ GameObject:
   - component: {fileID: 1133832604}
   - component: {fileID: 1133832603}
   m_Layer: 5
-  m_Name: 1 (25)
+  m_Name: 56
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7567,7 +7831,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1133832604}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 56
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1133832604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7894,7 +8170,7 @@ GameObject:
   - component: {fileID: 1234523863}
   - component: {fileID: 1234523862}
   m_Layer: 5
-  m_Name: 1 (23)
+  m_Name: 44
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7963,7 +8239,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1234523863}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 44
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1234523863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8251,7 +8539,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1270363808}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1270363808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8303,7 +8603,7 @@ GameObject:
   - component: {fileID: 1275763393}
   - component: {fileID: 1275763392}
   m_Layer: 5
-  m_Name: 1 (13)
+  m_Name: 29
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8372,7 +8672,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1275763393}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 29
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1275763393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8605,7 +8917,7 @@ GameObject:
   - component: {fileID: 1328144732}
   - component: {fileID: 1328144731}
   m_Layer: 5
-  m_Name: 1 (25)
+  m_Name: 51
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8674,7 +8986,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1328144732}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 51
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1328144732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8878,7 +9202,7 @@ GameObject:
   - component: {fileID: 1363792654}
   - component: {fileID: 1363792653}
   m_Layer: 5
-  m_Name: 1 (16)
+  m_Name: 32
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8947,7 +9271,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1363792654}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 32
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1363792654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9075,7 +9411,7 @@ GameObject:
   - component: {fileID: 1405405634}
   - component: {fileID: 1405405633}
   m_Layer: 5
-  m_Name: 1 (12)
+  m_Name: 28
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9144,7 +9480,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1405405634}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 28
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1405405634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9331,7 +9679,7 @@ GameObject:
   - component: {fileID: 1427848608}
   - component: {fileID: 1427848607}
   m_Layer: 5
-  m_Name: 1 (2)
+  m_Name: 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9400,7 +9748,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1427848608}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 8
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1427848608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9528,7 +9888,7 @@ GameObject:
   - component: {fileID: 1443119164}
   - component: {fileID: 1443119163}
   m_Layer: 5
-  m_Name: 1 (24)
+  m_Name: 50
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9597,7 +9957,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1443119164}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 50
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1443119164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9895,7 +10267,7 @@ GameObject:
   - component: {fileID: 1496894354}
   - component: {fileID: 1496894353}
   m_Layer: 5
-  m_Name: 1 (9)
+  m_Name: 20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9964,7 +10336,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1496894354}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 20
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1496894354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10303,7 +10687,7 @@ GameObject:
   - component: {fileID: 1534680442}
   - component: {fileID: 1534680441}
   m_Layer: 5
-  m_Name: 1 (18)
+  m_Name: 37
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10372,7 +10756,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1534680442}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 37
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1534680442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10424,7 +10820,7 @@ GameObject:
   - component: {fileID: 1543279153}
   - component: {fileID: 1543279152}
   m_Layer: 5
-  m_Name: 1 (26)
+  m_Name: 52
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10493,7 +10889,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1543279153}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 52
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1543279153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10698,7 +11106,7 @@ GameObject:
   - component: {fileID: 1621379805}
   - component: {fileID: 1621379804}
   m_Layer: 5
-  m_Name: 1 (11)
+  m_Name: 22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10767,7 +11175,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1621379805}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 22
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1621379805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10971,7 +11391,7 @@ GameObject:
   - component: {fileID: 1623755123}
   - component: {fileID: 1623755122}
   m_Layer: 5
-  m_Name: 1 (2)
+  m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11040,7 +11460,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1623755123}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1623755123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11092,7 +11524,7 @@ GameObject:
   - component: {fileID: 1632993954}
   - component: {fileID: 1632993953}
   m_Layer: 5
-  m_Name: 1 (19)
+  m_Name: 40
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11161,7 +11593,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1632993954}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 40
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1632993954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11213,7 +11657,7 @@ GameObject:
   - component: {fileID: 1646016865}
   - component: {fileID: 1646016864}
   m_Layer: 5
-  m_Name: 1 (8)
+  m_Name: 15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11282,7 +11726,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1646016865}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 15
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1646016865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11334,7 +11790,7 @@ GameObject:
   - component: {fileID: 1667375416}
   - component: {fileID: 1667375415}
   m_Layer: 5
-  m_Name: 1 (15)
+  m_Name: 34
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11403,7 +11859,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1667375416}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 34
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1667375416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11455,7 +11923,7 @@ GameObject:
   - component: {fileID: 1670536166}
   - component: {fileID: 1670536165}
   m_Layer: 5
-  m_Name: 1 (10)
+  m_Name: 23
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11524,7 +11992,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1670536166}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 23
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1670536166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11652,7 +12132,7 @@ GameObject:
   - component: {fileID: 1692367410}
   - component: {fileID: 1692367409}
   m_Layer: 5
-  m_Name: 1 (27)
+  m_Name: 53
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11721,7 +12201,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1692367410}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 53
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1692367410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12033,6 +12525,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 854cba015cfeee148bab65b177e9effa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  manager: {fileID: 1922403039}
+  botScore: {fileID: 0}
+  playerScore: {fileID: 0}
 --- !u!1 &1730948786
 GameObject:
   m_ObjectHideFlags: 0
@@ -12198,7 +12693,7 @@ GameObject:
   - component: {fileID: 1734568901}
   - component: {fileID: 1734568900}
   m_Layer: 5
-  m_Name: 1 (6)
+  m_Name: 13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12267,7 +12762,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1734568901}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 13
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1734568901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12319,7 +12826,7 @@ GameObject:
   - component: {fileID: 1749317302}
   - component: {fileID: 1749317301}
   m_Layer: 5
-  m_Name: 1 (20)
+  m_Name: 45
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12388,7 +12895,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1749317302}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 45
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1749317302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12592,7 +13111,7 @@ GameObject:
   - component: {fileID: 1766064856}
   - component: {fileID: 1766064855}
   m_Layer: 5
-  m_Name: 1 (12)
+  m_Name: 25
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12661,7 +13180,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1766064856}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 25
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1766064856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12713,7 +13244,7 @@ GameObject:
   - component: {fileID: 1797872243}
   - component: {fileID: 1797872242}
   m_Layer: 5
-  m_Name: 1 (14)
+  m_Name: 30
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12782,7 +13313,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1797872243}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 30
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1797872243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13211,7 +13754,7 @@ GameObject:
   - component: {fileID: 1853101569}
   - component: {fileID: 1853101568}
   m_Layer: 5
-  m_Name: 1 (7)
+  m_Name: 18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13280,7 +13823,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1853101569}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 18
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1853101569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13332,7 +13887,7 @@ GameObject:
   - component: {fileID: 1889253736}
   - component: {fileID: 1889253735}
   m_Layer: 5
-  m_Name: 1 (1)
+  m_Name: 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13401,7 +13956,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1889253736}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 7
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1889253736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13453,7 +14020,7 @@ GameObject:
   - component: {fileID: 1896259457}
   - component: {fileID: 1896259456}
   m_Layer: 5
-  m_Name: 1 (4)
+  m_Name: 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13522,7 +14089,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1896259457}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1896259457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13652,7 +14231,7 @@ GameObject:
   - component: {fileID: 1900768774}
   - component: {fileID: 1900768773}
   m_Layer: 5
-  m_Name: 1 (4)
+  m_Name: 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13721,7 +14300,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1900768774}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 10
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1900768774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13773,7 +14364,7 @@ GameObject:
   - component: {fileID: 1916464893}
   - component: {fileID: 1916464892}
   m_Layer: 5
-  m_Name: 1 (21)
+  m_Name: 46
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13842,7 +14433,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1916464893}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 46
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1916464893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13894,7 +14497,7 @@ GameObject:
   - component: {fileID: 1918082726}
   - component: {fileID: 1918082725}
   m_Layer: 5
-  m_Name: 1 (5)
+  m_Name: 12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13963,7 +14566,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1918082726}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 12
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1918082726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14505,6 +15120,95 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73a3012cf014b3f4f98962cfddae3f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIHandler: {fileID: 1729476689}
+  tiles:
+  - {fileID: 1753100105}
+  - {fileID: 1355126090}
+  - {fileID: 1690759572}
+  - {fileID: 25278804}
+  - {fileID: 1237020979}
+  - {fileID: 1234155295}
+  - {fileID: 1358346908}
+  - {fileID: 69835641}
+  - {fileID: 2062502760}
+  - {fileID: 1172014960}
+  - {fileID: 1037904596}
+  - {fileID: 1942073149}
+  - {fileID: 452243454}
+  - {fileID: 438066245}
+  - {fileID: 773593546}
+  - {fileID: 2049077192}
+  - {fileID: 2033137894}
+  - {fileID: 412455998}
+  - {fileID: 1387322203}
+  - {fileID: 1711070803}
+  - {fileID: 905614384}
+  - {fileID: 838824459}
+  - {fileID: 1496173271}
+  - {fileID: 1921272412}
+  - {fileID: 1430927723}
+  buttons:
+  - {fileID: 1270363808}
+  - {fileID: 234923343}
+  - {fileID: 1623755123}
+  - {fileID: 470408267}
+  - {fileID: 1896259457}
+  - {fileID: 2002042115}
+  - {fileID: 1889253736}
+  - {fileID: 1427848608}
+  - {fileID: 329959048}
+  - {fileID: 1900768774}
+  - {fileID: 1935411652}
+  - {fileID: 1918082726}
+  - {fileID: 1734568901}
+  - {fileID: 383739836}
+  - {fileID: 1646016865}
+  - {fileID: 721929284}
+  - {fileID: 553719275}
+  - {fileID: 1853101569}
+  - {fileID: 751069225}
+  - {fileID: 1496894354}
+  - {fileID: 1107256935}
+  - {fileID: 1621379805}
+  - {fileID: 1670536166}
+  - {fileID: 467529028}
+  - {fileID: 1766064856}
+  - {fileID: 86621857}
+  - {fileID: 1927367374}
+  - {fileID: 1405405634}
+  - {fileID: 1275763393}
+  - {fileID: 1797872243}
+  - {fileID: 474342090}
+  - {fileID: 1363792654}
+  - {fileID: 2043398645}
+  - {fileID: 1667375416}
+  - {fileID: 892020054}
+  - {fileID: 2123445727}
+  - {fileID: 1534680442}
+  - {fileID: 2113236321}
+  - {fileID: 693884962}
+  - {fileID: 1632993954}
+  - {fileID: 43341810}
+  - {fileID: 1986315413}
+  - {fileID: 1984417837}
+  - {fileID: 1234523863}
+  - {fileID: 1749317302}
+  - {fileID: 1916464893}
+  - {fileID: 369493381}
+  - {fileID: 636881498}
+  - {fileID: 49484543}
+  - {fileID: 1443119164}
+  - {fileID: 1328144732}
+  - {fileID: 1543279153}
+  - {fileID: 1692367410}
+  - {fileID: 521196700}
+  - {fileID: 1967927732}
+  - {fileID: 1133832604}
+  - {fileID: 29769910}
+  - {fileID: 28627682}
+  - {fileID: 596395333}
+  - {fileID: 756933038}
+  gameState: 
 --- !u!1 &1927367371
 GameObject:
   m_ObjectHideFlags: 0
@@ -14518,7 +15222,7 @@ GameObject:
   - component: {fileID: 1927367374}
   - component: {fileID: 1927367373}
   m_Layer: 5
-  m_Name: 1 (14)
+  m_Name: 27
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14587,7 +15291,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1927367374}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 27
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1927367374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14639,7 +15355,7 @@ GameObject:
   - component: {fileID: 1935411652}
   - component: {fileID: 1935411651}
   m_Layer: 5
-  m_Name: 1 (5)
+  m_Name: 11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14708,7 +15424,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1935411652}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 11
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1935411652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14958,7 +15686,7 @@ GameObject:
   - component: {fileID: 1967927732}
   - component: {fileID: 1967927731}
   m_Layer: 5
-  m_Name: 1 (29)
+  m_Name: 55
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15027,7 +15755,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1967927732}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 55
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1967927732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15163,7 +15903,7 @@ GameObject:
   - component: {fileID: 1984417837}
   - component: {fileID: 1984417836}
   m_Layer: 5
-  m_Name: 1 (22)
+  m_Name: 43
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15232,7 +15972,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1984417837}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 43
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1984417837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15360,7 +16112,7 @@ GameObject:
   - component: {fileID: 1986315413}
   - component: {fileID: 1986315412}
   m_Layer: 5
-  m_Name: 1 (21)
+  m_Name: 42
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15429,7 +16181,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1986315413}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 42
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1986315413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15481,7 +16245,7 @@ GameObject:
   - component: {fileID: 2002042115}
   - component: {fileID: 2002042114}
   m_Layer: 5
-  m_Name: 1
+  m_Name: 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15550,7 +16314,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2002042115}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 6
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2002042115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15784,7 +16560,7 @@ GameObject:
   - component: {fileID: 2043398645}
   - component: {fileID: 2043398644}
   m_Layer: 5
-  m_Name: 1 (17)
+  m_Name: 33
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15853,7 +16629,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2043398645}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 33
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2043398645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16057,7 +16845,7 @@ GameObject:
   - component: {fileID: 2113236321}
   - component: {fileID: 2113236320}
   m_Layer: 5
-  m_Name: 1 (19)
+  m_Name: 38
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16126,7 +16914,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2113236321}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 38
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2113236321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16178,7 +16978,7 @@ GameObject:
   - component: {fileID: 2123445727}
   - component: {fileID: 2123445726}
   m_Layer: 5
-  m_Name: 1 (17)
+  m_Name: 36
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16247,7 +17047,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2123445727}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1922403039}
+        m_TargetAssemblyTypeName: DotsAndBoxesManager, Assembly-CSharp
+        m_MethodName: PlayMove
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 36
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2123445727
 MonoBehaviour:
   m_ObjectHideFlags: 0
