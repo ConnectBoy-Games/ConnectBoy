@@ -8,35 +8,12 @@ public class NotificationPanel : MonoBehaviour
 {
     public UnityAction backAction;
 
-    [SerializeField] private GameObject notificationHolder;
+    [SerializeField] private Transform notificationHolder;
     [SerializeField] private GameObject notificationPrefab;
 
-    void Start()
+    void OnEnable()
     {
-
-    }
-
-    public void LoadNotifications()
-    {
-
-    }
-    
-    public async Task PollForInvites()
-    {
-        var data = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { "invites" });
-
-        if (data.TryGetValue("invites", out var item))
-        {
-            List<Wagr.MatchInvite> invites = item.Value.GetAs<List<Wagr.MatchInvite>>();
-            foreach (var inv in invites)
-            {
-                Debug.Log($"{inv.senderUsername} challenged you to a Type {inv.matchType} match!");
-                Debug.Log($"Wager: {inv.wagerAmount} coins.");
-                
-                // Trigger your UI Popup here:
-                // uiPopup.Show(inv.senderUsername, inv.wagerAmount, inv.matchId);
-            }
-        }
+        LoadNotifications();
     }
 
     void FixedUpdate()
@@ -47,6 +24,28 @@ public class NotificationPanel : MonoBehaviour
         }
     }
 
+    public void LoadNotifications()
+    {
+        ClearNotifications();
+        _ = LoadInvites();
+    }
+    
+    public async Task LoadInvites()
+    {
+        var data = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { "invites" });
+
+        if (data.TryGetValue("invites", out var item))
+        {
+            List<Wagr.MatchInvite> invites = item.Value.GetAs<List<Wagr.MatchInvite>>();
+            foreach (var inv in invites)
+            {
+                //Create Notification Box UI and set details here:
+                var notification = Instantiate(notificationPrefab, notificationHolder).GetComponent<NotificationBox>();
+                notification.SetBoxDetails(inv);
+            }
+        }
+    }
+
     public void GoBack()
     {
         backAction.Invoke();
@@ -54,11 +53,9 @@ public class NotificationPanel : MonoBehaviour
 
     public void ClearNotifications()
     {
-
-    }
-
-    public void ReloadNotifications()
-    {
-
+        foreach (GameObject child in notificationHolder)
+        {
+            Destroy(child);
+        }
     }
 }

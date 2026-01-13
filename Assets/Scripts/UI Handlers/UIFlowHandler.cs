@@ -50,6 +50,7 @@ public class UIFlowHandler : MonoBehaviour
     {
         gameDetailPanel.SetActive(true);
         gameDetailPanel.GetComponent<GameDetailPanel>().SelectGame((Wagr.GameName)game);
+        GameManager.gameSession = new(GameMode.vsBot, (Wagr.GameName)game); //Set the details of the game manager
     }
 
     public void GotoMainMenu()

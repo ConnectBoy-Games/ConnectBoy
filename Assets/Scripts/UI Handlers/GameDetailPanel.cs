@@ -7,19 +7,6 @@ public class GameDetailPanel : MonoBehaviour
 {
     public UnityAction backAction;
 
-    public void GoBack()
-    {
-        backAction();
-    }
-
-    void FixedUpdate()
-    {
-        if(Input.GetKeyUp(KeyCode.Escape))
-        {
-            backAction();
-        }
-    }
-
     [Header("Game Detail UI")]
     [SerializeField] private Image gameImage;
     [SerializeField] private Image backgroundImage;
@@ -56,6 +43,30 @@ public class GameDetailPanel : MonoBehaviour
     [SerializeField] private Color minigolfColor;
     [SerializeField] private Color dotsandboxesColor;
 
+    public void GoBack()
+    {
+        if(modeSelectPanel.activeInHierarchy)
+        {
+            backAction();
+            gameObject.SetActive(false); //Disable itself
+        }
+        else
+        {
+            modeSelectPanel.SetActive(true);
+            setAiPanel.SetActive(false);
+            inviteFriendPanel.SetActive(false);
+            roomSelectPanel.SetActive(false);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if(Input.GetKeyUp(KeyCode.Escape))
+        {
+            backAction();
+        }
+    }
+
     void OnEnable()
     {
         modeSelectPanel.SetActive(true);
@@ -73,36 +84,42 @@ public class GameDetailPanel : MonoBehaviour
                 backgroundImage.color = xandoColor;
                 gameDescription.text = xandoBrief;
                 gameTitle.text = "X And O";
+                GameManager.gameSession.gameName = Wagr.GameName.xando;
                 break;
             case Wagr.GameName.dotsandboxes:
                 gameImage.sprite = dotsandboxesImage;
                 backgroundImage.color = dotsandboxesColor;
                 gameDescription.text = dotsandboxesBrief;
                 gameTitle.text = "Dots And Boxes";
+                GameManager.gameSession.gameName = Wagr.GameName.dotsandboxes;
                 break;
             case Wagr.GameName.fourinarow:
                 gameImage.sprite = fourinarowImage;
                 backgroundImage.color = fourinarowColor;
                 gameDescription.text = fourinarowBrief;
                 gameTitle.text = "Four In A Row";
+                GameManager.gameSession.gameName = Wagr.GameName.fourinarow;
                 break;
             case Wagr.GameName.minisoccer:
                 gameImage.sprite = minisoccerImage;
                 backgroundImage.color = minisoccerColor;
                 gameDescription.text = minisoccerBrief;
                 gameTitle.text = "Mini Soccer";
+                GameManager.gameSession.gameName = Wagr.GameName.minisoccer;
                 break;
             case Wagr.GameName.archery:
                 gameImage.sprite = archeryImage;
                 backgroundImage.color = archeryColor;
                 gameDescription.text = archeryBrief;
                 gameTitle.text = "Archery";
+                GameManager.gameSession.gameName = Wagr.GameName.archery;
                 break;
             case Wagr.GameName.minigolf:
                 gameImage.sprite = minigolfImage;
                 backgroundImage.color = minigolfColor;
                 gameDescription.text = minigolfBrief;
                 gameTitle.text = "Mini Golf";
+                GameManager.gameSession.gameName = Wagr.GameName.minigolf;
                 break;
         }
     }
@@ -115,12 +132,15 @@ public class GameDetailPanel : MonoBehaviour
         {
             case 0: //Bot Mode
                 setAiPanel.SetActive(true);
+                GameManager.gameSession.gameMode = GameMode.vsBot;
                 break;
             case 1: //Invite Mode
                 inviteFriendPanel.SetActive(true);
+                GameManager.gameSession.gameMode = GameMode.vsPlayer;
                 break;
             case 2: //Room Mode
                 roomSelectPanel.SetActive(true);
+                GameManager.gameSession.gameMode = GameMode.vsPlayer;
                 break;
         }
     }

@@ -1,23 +1,6 @@
 using System;
 
 [Serializable]
-public class NotificationObject
-{
-    public int uid;
-    public int userId;
-    public int wager;
-    public Wagr.GameName gameName;
-    public string message;
-    public string userName;
-    public string timeText;
-
-    public NotificationObject(string Json)
-    {
-
-    }
-}
-
-[Serializable]
 public class PlayerStats
 {
     public uint gamesPlayed { get; private set; }

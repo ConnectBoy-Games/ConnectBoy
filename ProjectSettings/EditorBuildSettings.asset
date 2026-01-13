@@ -18,15 +18,15 @@ EditorBuildSettings:
     path: Assets/Scenes/FourInARow.unity
     guid: d0abf716aa7a1e34db4eeb06922ddace
   - enabled: 1
-    path: Assets/Scenes/Mini Ball.unity
+    path: Assets/Scenes/MiniSoccer.unity
     guid: 01fac0a5fc4135044b7d370a17484670
   - enabled: 1
-    path: Assets/Scenes/Mini Golf.unity
+    path: Assets/Scenes/MiniGolf.unity
     guid: 5161d3eae2da9f049a9f30203baae274
   - enabled: 1
     path: Assets/Scenes/Test Scene.unity
     guid: 907a442515bff9c40a7941dca1bf535c
   - enabled: 1
-    path: Assets/Scenes/X and O.unity
+    path: Assets/Scenes/XAndO.unity
     guid: 17efe73342d6c2048bb06b5952aadef2
   m_configObjects: {}

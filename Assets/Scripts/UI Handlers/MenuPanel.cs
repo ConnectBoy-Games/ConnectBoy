@@ -8,7 +8,7 @@ using Wagr;
 public class MenuPanel : MonoBehaviour
 {
     [SerializeField] TMP_Text displayName;
-    [SerializeField] private float pollInterval = 10f; // Check every 15 seconds
+    [SerializeField] private float pollInterval = 15f; // Check every 15 seconds
     [SerializeField] private GameObject notificationDot;
 
     private bool _isPolling = false;
@@ -45,7 +45,7 @@ public class MenuPanel : MonoBehaviour
 
     public void StartPolling()
     {
-        if (_isPolling) return;
+        if (_isPolling || GameManager.instance.accountManager.loginState != LoginState.loggedIn) return;
         _isPolling = true;
         InvokeRepeating(nameof(PollForInvites), 1f, pollInterval);
     }

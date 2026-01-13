@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip invalidSound;
     [SerializeField] private AudioClip acceptedSound;
     [SerializeField] private AudioClip clickSound;
+    [SerializeField] private AudioClip wobbleSound;
 
     void Awake()
     {
@@ -22,8 +23,6 @@ public class AudioManager : MonoBehaviour
         vibrate = PlayerPrefs.GetInt("vibrate", 1) == 1;
         volume = PlayerPrefs.GetFloat("volume", 1);
     }
-
-
 
     public void SetSfx(bool value)
     {
@@ -43,8 +42,6 @@ public class AudioManager : MonoBehaviour
         volume = value;
     }
 
-
-
     public void PlayClickSound()
     {
         if (sfx) m_AudioSource.PlayOneShot(clickSound);
@@ -59,9 +56,14 @@ public class AudioManager : MonoBehaviour
     {
         if (sfx) m_AudioSource.PlayOneShot(invalidSound);
     }
-
+    
     public void PlayAcceptSound()
     {
         if (sfx) m_AudioSource.PlayOneShot(acceptedSound);
+    }
+
+    public void PlayWobbleSound()
+    {
+        if (sfx) m_AudioSource.PlayOneShot(wobbleSound);
     }
 }

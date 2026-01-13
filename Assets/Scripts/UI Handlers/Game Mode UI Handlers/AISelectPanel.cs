@@ -5,16 +5,6 @@ using UnityEngine.UI;
 
 public class AISelectPanel : MonoBehaviour
 {
-    public Wagr.GameName gameName;
-
-    void OnEnable()
-    {
-        easyHead.canvasRenderer.SetAlpha(0);
-        mediumHead.canvasRenderer.SetAlpha(0);
-        hardHead.canvasRenderer.SetAlpha(0);
-        SetDificulty();
-    }
-
     [SerializeField] private Slider difficultySlider;
     [SerializeField] private Image sliderHandle;
     [SerializeField] private Image sliderBackground;
@@ -26,6 +16,14 @@ public class AISelectPanel : MonoBehaviour
     [SerializeField] private Image easyHead;
     [SerializeField] private Image mediumHead;
     [SerializeField] private Image hardHead;
+    
+    void OnEnable()
+    {
+        easyHead.canvasRenderer.SetAlpha(0);
+        mediumHead.canvasRenderer.SetAlpha(0);
+        hardHead.canvasRenderer.SetAlpha(0);
+        SetDificulty();
+    }
 
     public void SetDificulty()
     {
@@ -38,18 +36,21 @@ public class AISelectPanel : MonoBehaviour
                 easyHead.CrossFadeAlpha(1, 1, true);
                 mediumHead.CrossFadeAlpha(0, 1, true);
                 hardHead.CrossFadeAlpha(0, 1, true);
+                GameManager.gameSession.botDifficulty = BotDifficulty.low;
                 break;
             case 1: //Medium mode
                 difficultyText.text = "Medium";
                 mediumHead.CrossFadeAlpha(1, 1, true);
                 easyHead.CrossFadeAlpha(0, 1, true);
                 hardHead.CrossFadeAlpha(0, 1, true);
+                GameManager.gameSession.botDifficulty = BotDifficulty.medium;
                 break;
             case 2: //Hard mode
                 difficultyText.text = "Hard";
                 hardHead.CrossFadeAlpha(1, 1, true);
                 easyHead.CrossFadeAlpha(0, 1, true);
                 mediumHead.CrossFadeAlpha(0, 1, true);
+                GameManager.gameSession.botDifficulty = BotDifficulty.high;
                 break;
         }
 
@@ -61,7 +62,7 @@ public class AISelectPanel : MonoBehaviour
 
     public void PlayGame()
     {
-        //TODO: Go to actual game levl and set the scene accordingly
-        SceneManager.LoadSceneAsync(gameName.ToString(), LoadSceneMode.Single);
+        //Load the actual game level and set the scene accordingly
+        GameManager.instance.GoToSelectedGame();
     }
 }

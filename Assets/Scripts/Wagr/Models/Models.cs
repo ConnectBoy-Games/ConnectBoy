@@ -41,27 +41,42 @@ namespace Wagr
     [Serializable]
     public class Session
     {
-        public string sessionId { get; private set; }
+        public string matchId { get; private set; }
         public string serverUrl { get; private set; }
         public int wager { get; private set; }
-        public string hostId { get; private set; }
+        public string hostId { get; private set; } //Always refers to the current player
         public string hostName { get; private set; }
-        public string friendId { get; private set; }
+        public string friendId { get; private set; } //Refers to the other player
         public string friendName { get; private set; }
 
         private int hostScore;
         private int friendScore;
 
-        public Session()
-        {
+        public GameMode gameMode;
+        public GameName gameName;
+        public BotDifficulty botDifficulty;
 
+        //For creating Server based modes
+        public Session(string matchId, int wager, string hostId, string friendId)
+        {
+            this.matchId = matchId;
+            this.wager = wager;
+            this.hostId = hostId;
+            this.friendId = friendId;
+        }
+        
+        //For creating AI game modes 
+        public Session(GameMode mode, GameName name)
+        {
+            gameMode = mode;
+            gameName = name;
         }
 
         public Session(string json)
         {
             var sesh = JsonConvert.DeserializeObject<Session>(json);
 
-            sessionId = sesh.sessionId;
+            matchId = sesh.matchId;
             serverUrl = sesh.serverUrl;
             wager = sesh.wager;
             hostId = sesh.hostId;

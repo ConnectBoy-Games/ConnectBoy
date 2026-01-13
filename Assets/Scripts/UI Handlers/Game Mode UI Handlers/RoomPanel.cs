@@ -1,15 +1,14 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class RoomPanel : MonoBehaviour
 {
-    private int wagerRoom = -1;
-    Tuple<int, int> room;
-
     [SerializeField] private List<Button> roomListing;
     [SerializeField] private Button playButton;
+
+    private int wagerRoom = -1;
 
     void OnEnable()
     {
@@ -28,5 +27,11 @@ public class RoomPanel : MonoBehaviour
     {
         wagerRoom = amount;
         playButton.interactable = true;
+    }
+
+    public void EnterRoom()
+    {
+        //Load the actual game level and set the scene accordingly
+        GameManager.instance.GoToSelectedGame();
     }
 }
