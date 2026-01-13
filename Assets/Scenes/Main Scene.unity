@@ -13209,11 +13209,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af9f52070d560984190b01768ae6e464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  errorSound: {fileID: 0}
-  invalidSound: {fileID: 0}
-  acceptedSound: {fileID: 0}
-  clickSound: {fileID: 0}
-  wobbleSound: {fileID: 0}
+  errorSound: {fileID: 8300000, guid: c895d6319a8affc4483dde3f3acd1666, type: 3}
+  invalidSound: {fileID: 8300000, guid: b945a14915d9e9f4196b70cc89a263fa, type: 3}
+  acceptedSound: {fileID: 8300000, guid: 172991bd1dbf85a47aee90b26c2ab36b, type: 3}
+  clickSound: {fileID: 8300000, guid: a9165c589a455b441ab5dff0b2d6ab5e, type: 3}
+  wobbleSound: {fileID: 8300000, guid: 2f4ded3ea01a4944681bf530df92ae6b, type: 3}
 --- !u!1 &1103269785
 GameObject:
   m_ObjectHideFlags: 0
@@ -18866,8 +18866,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2522177535
-  m_fontColor: {r: 1, g: 0.37254903, b: 0.33333334, a: 0.5882353}
+    rgba: 4287205476
+  m_fontColor: {r: 0.39267942, g: 0.566, b: 0.5389187, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
