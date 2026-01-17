@@ -5,12 +5,14 @@ using Unity.Services.Authentication;
 using Unity.Services.Authentication.PlayerAccounts;
 
 using Unity.Services.Core;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 [Serializable]
 public class AccountManager
 {
+    public UnityAction<bool> onProfileLoaded;
     public LoginState loginState { private set; get; }
     public Profile playerProfile { private set; get; }
 
@@ -23,10 +25,16 @@ public class AccountManager
     
     private void SetupEvents()
     {
-        PlayerAccountService.Instance.SignedIn += () =>
+        PlayerAccountService.Instance.SignedIn += async () =>
         {
-            Debug.Log("Player signed in successfully");
+            //Sign in to authentication service with the access token from player accounts
+            await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
+
             GameManager.instance.accountManager.loginState = LoginState.loggedIn;
+
+            //Load the player profile
+            var loaded  = await GameManager.instance.accountManager.LoadProfile();
+            onProfileLoaded?.Invoke(loaded);
         };
 
         PlayerAccountService.Instance.SignInFailed += (RequestFailedException ex) =>
@@ -51,18 +59,25 @@ public class AccountManager
 
     #region Authentication
     /// <summary>Return true if the player has an existing account</summary>
-    public async Task<bool> Login()
+    public async Task Login()
     {
         // Check if a cached player already exists by checking if the session token exists
-        if (PlayerAccountService.Instance.IsSignedIn)
+        if (AuthenticationService.Instance.SessionTokenExists)
         {
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
+        else if (PlayerAccountService.Instance.IsSignedIn)
+        {
+            Debug.Log("Signing in player with cached session token");
             await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
         }
         else //Sign in the player from the browser
         {
             try
             {
+                Debug.Log("Signing in player from the browser");
                 await PlayerAccountService.Instance.StartSignInAsync();
+                //await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
             }
             catch (Exception ex)
             {
@@ -70,24 +85,19 @@ public class AccountManager
                 NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
             }
         }
+    }
 
-        try //TODO: Check if the account already exists
-        {
-            var id = AuthenticationService.Instance.PlayerId;
-            var prof = await CloudSaveSystem.RetrieveSpecificData<Profile>(id);
+    public async Task<bool> LoadProfile()
+    {
+        var id = AuthenticationService.Instance.PlayerId;
+        playerProfile = await CloudSaveSystem.RetrieveSpecificData<Profile>(id);
 
-            if(prof != default)
-            {
-                playerProfile = prof;
-                return true;
-            }
-        }
-        catch (Exception ex)
+        if (playerProfile == default)
         {
-            NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     public void LoginInGuestMode()

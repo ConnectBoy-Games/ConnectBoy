@@ -1,4 +1,6 @@
 using TMPro;
+using System;
+using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,19 +10,29 @@ public class LoginPanel : MonoBehaviour
     public UnityAction backAction;
 
     [SerializeField] GameObject loginButton;
+    [SerializeField] GameObject continueButton;
     [SerializeField] GameObject usernamePanel;
     [SerializeField] TMP_InputField usernameInput;
 
-    public void Login()
+    public async void Login()
     {
-        if (GameManager.instance.accountManager.Login().Result == false) //First time user (Or user with no profile)
+        await GameManager.instance.accountManager.Login();
+
+        GameManager.instance.accountManager.onProfileLoaded += OnProfileLoaded;
+    }
+
+    public void OnProfileLoaded(bool profileExists)
+    {
+        Debug.Log("Profile exists: " + profileExists);
+        if (profileExists == false)
         {
             loginButton.SetActive(false);
             usernamePanel.SetActive(true);
         }
         else
         {
-            backAction.Invoke();
+            loginButton.SetActive(false);
+            continueButton.SetActive(true);
         }
     }
 
@@ -28,6 +40,12 @@ public class LoginPanel : MonoBehaviour
     {
         GameManager.instance.accountManager.LoginInGuestMode();
         backAction.Invoke();
+    }
+
+
+    public void ContinueButton()
+    {
+        backAction?.Invoke();
     }
 
     public async void CreateAccount()
@@ -55,6 +73,6 @@ public class LoginPanel : MonoBehaviour
     
     public void GoToTermsOfService()
     {
-        Application.OpenURL("www.google.com");
+        Application.OpenURL("https://www.google.com");
     }
 }

@@ -77,6 +77,6 @@ public class SettingsPanel : MonoBehaviour
 
     public void OpenTerms()
     {
-        Application.OpenURL("www.google.com");
+        Application.OpenURL("https://www.google.com");
     }
 }

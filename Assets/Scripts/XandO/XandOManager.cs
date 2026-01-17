@@ -1,12 +1,14 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.Services.Core;
 using UnityEngine;
 
 public class XandOManager : MonoBehaviour
 {
     //Internal Variables
     public static Wagr.Session gameSession;
-    public static GameMode gameMode;
+    public static GameMode gameMode = GameMode.vsPlayer;
 
     private User turnUser; //Who has the turn?
 
@@ -23,8 +25,13 @@ public class XandOManager : MonoBehaviour
     private string[] gameState = new string[9];
     private XandOBot bot;
 
-    void Start()
+    SessionHandler sessionHandler;
+
+    async void Start()
     {
+        await UnityServices.InitializeAsync();
+        sessionHandler = new SessionHandler();
+
         ClearBoard();
 
         if (gameMode == GameMode.vsBot)
@@ -44,12 +51,11 @@ public class XandOManager : MonoBehaviour
         }
     }
 
-    void Update()
+    async void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            var temp = JsonConvert.SerializeObject(gameState, Formatting.Indented);
-            Debug.Log(temp);
+            var result = await sessionHandler.CreateSession();
         }
     }
 

@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Wagr
 {
@@ -92,4 +93,12 @@ namespace Wagr
             return JsonConvert.SerializeObject(this);
         }
     }
+
+    [System.Serializable]
+    public class SessionData
+    {
+        public string sessionId;
+        public List<string> participantIds;
+    }
+
 }
