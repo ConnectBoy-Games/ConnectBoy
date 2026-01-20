@@ -42,7 +42,6 @@ public class LoginPanel : MonoBehaviour
         backAction.Invoke();
     }
 
-
     public void ContinueButton()
     {
         backAction?.Invoke();
@@ -58,10 +57,13 @@ public class LoginPanel : MonoBehaviour
             return;
         }
         
-        var task = await GameManager.instance.accountManager.CreateAccount(AuthenticationService.Instance.PlayerId, username);
+        await GameManager.instance.accountManager.CreateAccount(AuthenticationService.Instance.PlayerId, username);
+        GameManager.instance.accountManager.onAccountCreated += OnCreatedAccount;
+    }
 
-        //Account was created succesfully
-        if(task == true)
+    public void OnCreatedAccount(bool result)
+    {
+        if(result == true) //Account was created succesfully
         {
             backAction?.Invoke();
         }
@@ -73,6 +75,6 @@ public class LoginPanel : MonoBehaviour
     
     public void GoToTermsOfService()
     {
-        Application.OpenURL("https://www.google.com");
+        Application.OpenURL("https://connectboy-games.web.app/terms.html");
     }
 }

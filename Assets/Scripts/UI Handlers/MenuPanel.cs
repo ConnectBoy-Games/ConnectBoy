@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Services.CloudSave;
 using UnityEngine;
+using UnityEngine.UI;
 using Wagr;
 
 public class MenuPanel : MonoBehaviour
 {
+    [SerializeField] Button notificationButton;
     [SerializeField] TMP_Text displayName;
     [SerializeField] private float pollInterval = 15f; // Check every 15 seconds
     [SerializeField] private GameObject notificationDot;
@@ -18,6 +20,16 @@ public class MenuPanel : MonoBehaviour
     void OnEnable()
     {
         StartPolling();
+
+        if (GameManager.instance.accountManager.loginState == LoginState.loggedIn)
+        {
+            displayName.text = GameManager.instance.accountManager.playerProfile.displayName;
+        }
+        else
+        {
+            displayName.text = "Guest";
+            notificationButton.interactable = false;
+        }
     }
 
     void OnDisable()
@@ -27,20 +39,7 @@ public class MenuPanel : MonoBehaviour
 
     void Start()
     {
-        Invoke(nameof(SetDisplayName), 0.1f);
         OnNewInviteReceived += (invite) => { notificationDot.SetActive(true); };
-    }
-
-    public void SetDisplayName()
-    {
-        if(GameManager.instance.accountManager.loginState == LoginState.loggedIn)
-        {
-            displayName.text = GameManager.instance.accountManager.playerProfile.displayName;
-        }
-        else
-        {
-            displayName.text = "Guest";
-        }
     }
 
     public void StartPolling()

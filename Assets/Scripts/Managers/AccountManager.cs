@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Authentication.PlayerAccounts;
 
 using Unity.Services.Core;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,13 +11,14 @@ using UnityEngine.Events;
 public class AccountManager
 {
     public UnityAction<bool> onProfileLoaded;
+    public UnityAction<bool> onAccountCreated;
     public LoginState loginState { private set; get; }
     public Profile playerProfile { private set; get; }
 
     public async void Setup()
     {
         await UnityServices.InitializeAsync(); //Initialize Unity Services
-        loginState = LoginState.unsignned;
+        loginState = LoginState.unsigned;
         SetupEvents();
     }
     
@@ -29,7 +28,10 @@ public class AccountManager
         {
             //Sign in to authentication service with the access token from player accounts
             await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
+        };
 
+        AuthenticationService.Instance.SignedIn += async () =>
+        {
             GameManager.instance.accountManager.loginState = LoginState.loggedIn;
 
             //Load the player profile
@@ -39,13 +41,15 @@ public class AccountManager
 
         PlayerAccountService.Instance.SignInFailed += (RequestFailedException ex) =>
         {
+            Debug.Log("Player signin failed!");
             NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
-            GameManager.instance.accountManager.loginState = LoginState.unsignned;
+            GameManager.instance.accountManager.loginState = LoginState.unsigned;
         };
 
         PlayerAccountService.Instance.SignedOut += () =>
         {
-            GameManager.instance.accountManager.loginState = LoginState.unsignned;
+            Debug.Log("Player signed out!");
+            GameManager.instance.accountManager.loginState = LoginState.unsigned;
         };
 
         /*
@@ -68,16 +72,13 @@ public class AccountManager
         }
         else if (PlayerAccountService.Instance.IsSignedIn)
         {
-            Debug.Log("Signing in player with cached session token");
             await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
         }
         else //Sign in the player from the browser
         {
             try
             {
-                Debug.Log("Signing in player from the browser");
                 await PlayerAccountService.Instance.StartSignInAsync();
-                //await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
             }
             catch (Exception ex)
             {
@@ -116,28 +117,31 @@ public class AccountManager
     #endregion
 
     #region Profile
-    public async Task<bool> CreateAccount(string playerId, string username)
+    public async Task CreateAccount(string playerId, string username)
     {
-        if(CloudSaveSystem.IsNameTaken(username).Result == true) //Check if the username is in use
+        var isNameTaken = await CloudSaveSystem.IsNameTaken(username);
+
+        if (isNameTaken == true) //Check if the username is in use
         {
+            Debug.Log("Username is taken!");
             NotificationDisplay.instance.DisplayMessage("Username is already in use", time: 3);
-            return false;
         }
         else
         {
             try
             {
                 Profile prof = new(AuthenticationService.Instance.PlayerId, username);
-                CloudSaveSystem.SaveSpecificData<Profile>(AuthenticationService.Instance.PlayerId, prof).Wait();
-                CloudSaveSystem.SetUsername(username).Wait();
+
+                await CloudSaveSystem.SaveSpecificData<Profile>(AuthenticationService.Instance.PlayerId, prof);
+                await CloudSaveSystem.SetUsername(username);
+                onAccountCreated?.Invoke(true);
             }
             catch (System.Exception ex)
             {
+                onAccountCreated?.Invoke(false);
                 NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
-                return false;
             }
         }
-        return true;
     }
     #endregion
 
@@ -155,6 +159,6 @@ public class AccountManager
 
     public void DeleteAccount()
     {
-
+        Application.OpenURL(PlayerAccountService.Instance.AccountPortalUrl);
     }
 }

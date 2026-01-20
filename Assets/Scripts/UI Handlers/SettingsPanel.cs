@@ -75,8 +75,13 @@ public class SettingsPanel : MonoBehaviour
         SignOut(true);        
     }
 
+    public void DeleteAccount()
+    {
+        Application.OpenURL(PlayerAccountService.Instance.AccountPortalUrl);
+    }
+
     public void OpenTerms()
     {
-        Application.OpenURL("https://www.google.com");
+        Application.OpenURL("https://connectboy-games.web.app/terms.html");
     }
 }

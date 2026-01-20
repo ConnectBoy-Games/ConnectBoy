@@ -3,6 +3,7 @@ using Unity.Services.CloudCode;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class CloudSaveSystem
 {
@@ -14,7 +15,7 @@ public class CloudSaveSystem
 
             if (results.TryGetValue(key, out var item))
             {
-                return item.Value.GetAs<T>();
+                return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(item, Formatting.Indented));
             }
             else
             {
@@ -194,7 +195,5 @@ public class CloudSaveSystem
             Debug.LogError($"Failed to send invite: {ex.Message}");
         }
     }
-
-
 
 }

@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 
 [Serializable]
 public class PlayerStats
@@ -39,6 +40,15 @@ public class Profile
 
     public PlayerStats playerStats { private set; get; }
 
+    public Profile(string id, string displayName, int dpIndex = 0, int balance = 0, PlayerStats playerStats = default) 
+    {
+        this.id = id;
+        this.displayName = displayName;
+        this.dpIndex = dpIndex;
+        this.balance = balance;
+        this.playerStats = playerStats;
+    }
+
     public Profile(string id, string username)
     {
         this.id = id;
@@ -57,7 +67,7 @@ public class Profile
 [Serializable]
 public enum LoginState : byte
 {
-    unsignned = 0,
+    unsigned = 0,
     guestMode,
     loggedIn
 }
