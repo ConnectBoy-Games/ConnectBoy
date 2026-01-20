@@ -24,6 +24,7 @@ public class NotificationDisplay : MonoBehaviour
     public void DisplayMessage(string text, NotificationType type = NotificationType.info, float time = -1)
     {
         gameObject.SetActive(true);
+        LoadScreen.instance.HideScreen(); //Disable the load screen to show the notification
         notificationContent.text = text;
         switch (type)
         {

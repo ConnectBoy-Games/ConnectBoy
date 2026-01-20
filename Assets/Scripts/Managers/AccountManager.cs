@@ -62,7 +62,7 @@ public class AccountManager
     }
 
     #region Authentication
-    /// <summary>Return true if the player has an existing account</summary>
+    
     public async Task Login()
     {
         // Check if a cached player already exists by checking if the session token exists
