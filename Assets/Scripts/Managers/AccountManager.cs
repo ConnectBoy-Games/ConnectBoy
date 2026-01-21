@@ -93,6 +93,8 @@ public class AccountManager
         var id = AuthenticationService.Instance.PlayerId;
         playerProfile = await CloudSaveSystem.RetrieveSpecificData<Profile>(id);
 
+        Debug.Log($"Loaded profile for {playerProfile.ToString()}");
+
         if (playerProfile == default)
         {
             return false;

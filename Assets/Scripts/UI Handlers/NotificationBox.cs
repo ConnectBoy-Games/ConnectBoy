@@ -6,7 +6,6 @@ public class NotificationBox : MonoBehaviour
 {
     public Wagr.MatchInvite notification;
 
-
     [SerializeField] private TMP_Text userText;
     [SerializeField] private TMP_Text timeText;
     [SerializeField] private TMP_Text inviteText;

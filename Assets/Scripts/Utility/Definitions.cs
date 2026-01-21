@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 [Serializable]
@@ -10,6 +11,16 @@ public class PlayerStats
     public uint winRate { get; private set; }
     public uint winStreak { get; private set; }
 
+    [JsonConstructor]
+    public  PlayerStats(uint gamesPlayed, uint gamesWon, uint gamesLost, uint winRate, uint winStreak)
+    {
+        this.gamesPlayed = gamesPlayed;
+        this.gamesWon = gamesWon;
+        this.gamesLost = gamesLost;
+        this.winRate = winRate;
+        this.winStreak = winStreak;
+    }
+
     public PlayerStats()
     {
         gamesPlayed = 0;
@@ -19,14 +30,14 @@ public class PlayerStats
         winStreak = 0;
     }
 
-    public PlayerStats(string json)
+    public PlayerStats(object json)
     {
-
-    }
-
-    public void ToJson()
-    {
-
+        Dictionary<string, object> _object = (Dictionary<string, object>)json;
+        gamesPlayed = Convert.ToUInt32(_object["gamesPlayed"]);
+        gamesWon = Convert.ToUInt32(_object["gamesWon"]);
+        gamesLost = Convert.ToUInt32(_object["gamesLost"]);
+        winRate = Convert.ToUInt32(_object["winRate"]);
+        winStreak = Convert.ToUInt32(_object["winStreak"]);
     }
 }
 
@@ -40,6 +51,7 @@ public class Profile
 
     public PlayerStats playerStats { private set; get; }
 
+    [JsonConstructor]
     public Profile(string id, string displayName, int dpIndex = 0, int balance = 0, PlayerStats playerStats = default) 
     {
         this.id = id;
@@ -58,9 +70,15 @@ public class Profile
         this.playerStats = new PlayerStats();
     }
 
-    public Profile(string json)
+    public Profile(object json)
     {
+        Dictionary<string, object> _object = (Dictionary<string, object>)json;
 
+        id = _object["id"].ToString();
+        displayName = _object["displayName"].ToString();
+        dpIndex = Convert.ToInt32(_object["dpIndex"]);
+        balance = Convert.ToInt32(_object["balance"]);
+        playerStats = new PlayerStats(_object["playerStats"]);
     }
 }
 

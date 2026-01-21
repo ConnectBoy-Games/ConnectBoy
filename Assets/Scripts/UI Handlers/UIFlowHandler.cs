@@ -10,10 +10,16 @@ public class UIFlowHandler : MonoBehaviour
     [SerializeField] private GameObject gamesPanel;
     [SerializeField] private GameObject loginPanel;
 
+    [SerializeField] private GameObject notificationDisplay;
+    [SerializeField] private GameObject loadScreenDisplay;
+
     void Awake()
     {
+        notificationDisplay.SetActive(true);
+        loadScreenDisplay.SetActive(true);
+
         /*
-        if(GameManager.instance.accountManager.loginState == LoginState.unsignned)
+        if(GameManager.instance.accountManager.loginState == LoginState.unsigned)
         {
             menuPanel.SetActive(false);
             gamesPanel.SetActive(false);
@@ -43,6 +49,14 @@ public class UIFlowHandler : MonoBehaviour
 
     public void GotoProfile()
     {
+        if(GameManager.instance.accountManager.loginState != LoginState.loggedIn)
+        {
+            GameManager.instance.GetComponent<AudioManager>().PlayClickSound();
+            DisableAll();
+            loginPanel.SetActive(true);
+            return;
+        }
+
         profilePanel.SetActive(true);
     }
 

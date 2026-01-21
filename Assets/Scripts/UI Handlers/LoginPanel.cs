@@ -1,5 +1,6 @@
 using TMPro;
 using Unity.Services.Authentication;
+using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,10 +13,16 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] GameObject usernamePanel;
     [SerializeField] TMP_InputField usernameInput;
 
-    public void OnEnable()
+    public async void OnEnable()
     {
+        await UnityServices.InitializeAsync(); //Initialize Unity Services
+
         //Try logging in the moment the login page is shown
-        Login();
+        // Check if a cached player already exists by checking if the session token exists
+        if (AuthenticationService.Instance.SessionTokenExists)
+        {
+            Invoke(nameof(Login), 1f);
+        }
     }
 
     public async void Login()

@@ -15,7 +15,8 @@ public class CloudSaveSystem
 
             if (results.TryGetValue(key, out var item))
             {
-                return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(item, Formatting.Indented));
+                string json = item.Value.GetAsString();
+                return JsonConvert.DeserializeObject<T>(json);
             }
             else
             {

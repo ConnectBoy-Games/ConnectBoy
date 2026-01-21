@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     public void GoToSelectedGame()
     {
         string gameName = "";
-        switch(GameManager.gameSession.gameName)
+        switch(gameSession.gameName)
         {
             case Wagr.GameName.xando:
                 gameName = "XAndO";

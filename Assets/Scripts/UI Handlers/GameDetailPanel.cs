@@ -43,9 +43,13 @@ public class GameDetailPanel : MonoBehaviour
     [SerializeField] private Color minigolfColor;
     [SerializeField] private Color dotsandboxesColor;
 
+    [Header("Mode Buttons")]
+    [SerializeField] private Button friendButton;
+    [SerializeField] private Button roomButton;
+
     public void GoBack()
     {
-        if(modeSelectPanel.activeInHierarchy)
+        if (modeSelectPanel.activeInHierarchy)
         {
             backAction();
             gameObject.SetActive(false); //Disable itself
@@ -61,7 +65,7 @@ public class GameDetailPanel : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(Input.GetKeyUp(KeyCode.Escape))
+        if (Input.GetKeyUp(KeyCode.Escape))
         {
             backAction();
         }
@@ -69,14 +73,19 @@ public class GameDetailPanel : MonoBehaviour
 
     void OnEnable()
     {
-        modeSelectPanel.SetActive(true);
         setAiPanel.SetActive(false);
         inviteFriendPanel.SetActive(false);
         roomSelectPanel.SetActive(false);
+
+        modeSelectPanel.SetActive(true);
+        //Enable/Disable mode buttons based on login state
+        //friendButton.interactable = GameManager.instance.accountManager.loginState == LoginState.loggedIn;
+        roomButton.interactable = GameManager.instance.accountManager.loginState == LoginState.loggedIn;
     }
 
     public void SelectGame(Wagr.GameName gameName)
     {
+        GameManager.gameSession = new Wagr.Session(GameMode.vsBot, gameName); //Create/Reset game session
         switch (gameName)
         {
             case Wagr.GameName.xando:
@@ -84,42 +93,36 @@ public class GameDetailPanel : MonoBehaviour
                 backgroundImage.color = xandoColor;
                 gameDescription.text = xandoBrief;
                 gameTitle.text = "X And O";
-                GameManager.gameSession.gameName = Wagr.GameName.xando;
                 break;
             case Wagr.GameName.dotsandboxes:
                 gameImage.sprite = dotsandboxesImage;
                 backgroundImage.color = dotsandboxesColor;
                 gameDescription.text = dotsandboxesBrief;
                 gameTitle.text = "Dots And Boxes";
-                GameManager.gameSession.gameName = Wagr.GameName.dotsandboxes;
                 break;
             case Wagr.GameName.fourinarow:
                 gameImage.sprite = fourinarowImage;
                 backgroundImage.color = fourinarowColor;
                 gameDescription.text = fourinarowBrief;
                 gameTitle.text = "Four In A Row";
-                GameManager.gameSession.gameName = Wagr.GameName.fourinarow;
                 break;
             case Wagr.GameName.minisoccer:
                 gameImage.sprite = minisoccerImage;
                 backgroundImage.color = minisoccerColor;
                 gameDescription.text = minisoccerBrief;
                 gameTitle.text = "Mini Soccer";
-                GameManager.gameSession.gameName = Wagr.GameName.minisoccer;
                 break;
             case Wagr.GameName.archery:
                 gameImage.sprite = archeryImage;
                 backgroundImage.color = archeryColor;
                 gameDescription.text = archeryBrief;
                 gameTitle.text = "Archery";
-                GameManager.gameSession.gameName = Wagr.GameName.archery;
                 break;
             case Wagr.GameName.minigolf:
                 gameImage.sprite = minigolfImage;
                 backgroundImage.color = minigolfColor;
                 gameDescription.text = minigolfBrief;
                 gameTitle.text = "Mini Golf";
-                GameManager.gameSession.gameName = Wagr.GameName.minigolf;
                 break;
         }
     }
