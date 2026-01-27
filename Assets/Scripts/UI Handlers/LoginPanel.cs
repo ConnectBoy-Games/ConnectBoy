@@ -63,7 +63,7 @@ public class LoginPanel : MonoBehaviour
         }
 
         LoadScreen.instance.ShowScreen(); //Show the load screen
-        await GameManager.instance.accountManager.CreateAccount(AuthenticationService.Instance.PlayerId, username);
+        await GameManager.instance.accountManager.CreateAccount(username);
         GameManager.instance.accountManager.onAccountCreated += OnCreatedAccount;
     }
 

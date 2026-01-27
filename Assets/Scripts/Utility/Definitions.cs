@@ -49,16 +49,13 @@ public class Profile
     public int dpIndex { get; private set; }
     public int balance { get; private set; }
 
-    public PlayerStats playerStats { private set; get; }
-
     [JsonConstructor]
-    public Profile(string id, string displayName, int dpIndex = 0, int balance = 0, PlayerStats playerStats = default) 
+    public Profile(string id, string displayName, int dpIndex = 0, int balance = 0) 
     {
         this.id = id;
         this.displayName = displayName;
         this.dpIndex = dpIndex;
         this.balance = balance;
-        this.playerStats = playerStats;
     }
 
     public Profile(string id, string username)
@@ -67,7 +64,6 @@ public class Profile
         this.displayName = username;
         this.dpIndex = 0;
         this.balance = 0;
-        this.playerStats = new PlayerStats();
     }
 
     public Profile(object json)
@@ -78,7 +74,6 @@ public class Profile
         displayName = _object["displayName"].ToString();
         dpIndex = Convert.ToInt32(_object["dpIndex"]);
         balance = Convert.ToInt32(_object["balance"]);
-        playerStats = new PlayerStats(_object["playerStats"]);
     }
 }
 

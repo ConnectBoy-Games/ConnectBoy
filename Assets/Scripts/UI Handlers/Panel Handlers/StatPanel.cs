@@ -11,7 +11,7 @@ public class StatPanel : MonoBehaviour
 
     public void OnEnable()
     {
-        PlayerStats stats = GameManager.instance.accountManager.playerProfile.playerStats;
+        PlayerStats stats = GameManager.instance.accountManager.playerStats;
         gamesPlayedText.text = stats.gamesPlayed.ToString();
         gamesWonText.text = stats.gamesWon.ToString();
         gamesLostText.text = stats.gamesLost.ToString();

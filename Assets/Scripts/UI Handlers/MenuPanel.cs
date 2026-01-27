@@ -25,8 +25,8 @@ public class MenuPanel : MonoBehaviour
 
         if (GameManager.instance.accountManager.loginState == LoginState.loggedIn)
         {
-            displayName.text = GameManager.instance.accountManager.playerProfile.displayName;
-            displayImage.sprite = GameManager.instance.faceManager.GetFace(GameManager.instance.accountManager.playerProfile.dpIndex); //Load the player's image
+            displayName.text = GameManager.instance.accountManager.playerProfile.Name;
+            displayImage.sprite = GameManager.instance.faceManager.GetFace(GameManager.instance.accountManager.playerProfile.DpIndex); //Load the player's image
         }
         else
         {

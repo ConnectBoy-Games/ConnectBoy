@@ -1,6 +1,5 @@
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Wagr
 {
@@ -15,27 +14,36 @@ namespace Wagr
         minigolf = 5
     }
 
+    /// <summary>Represents a player in the game and on the server</summary>
     [Serializable]
-    public enum ChatType : byte
+    public class Player
     {
-        invalid = 0
-    }
+        /// <summary>The player's Unity ID</summary>
+        public string Id { get; set; }
 
-    [Serializable]
-    public enum ActionType : byte
-    {
-        invalid = 0
+        /// <summary>The player's display name</summary>
+        public string Name { get; set; }
+
+        /// <summary>The player's profile image index</summary>
+        public int DpIndex { get; set; }
+
+        public Player(string id, string name, int dpIndex = -1)
+        {
+            Id = id;
+            Name = name;
+            DpIndex = dpIndex;
+        }
     }
 
     [System.Serializable]
-    public class MatchInvite 
-    { 
-        public string senderId; 
-        public string senderUsername; 
-        public int matchType;         
-        public int wagerAmount;       
-        public Guid matchId; 
-        public long timestamp; 
+    public class MatchInvite
+    {
+        public string senderId;
+        public string senderUsername;
+        public int matchType;
+        public int wagerAmount;
+        public Guid matchId;
+        public long timestamp;
     }
 
     /// <summary> Represents a gaming session both on the server and client</summary>
@@ -65,7 +73,7 @@ namespace Wagr
             this.hostId = hostId;
             this.friendId = friendId;
         }
-        
+
         //For creating AI game modes 
         public Session(GameMode mode, GameName name)
         {
@@ -93,12 +101,4 @@ namespace Wagr
             return JsonConvert.SerializeObject(this);
         }
     }
-
-    [System.Serializable]
-    public class SessionData
-    {
-        public string sessionId;
-        public List<string> participantIds;
-    }
-
 }

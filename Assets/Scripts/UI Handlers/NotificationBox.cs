@@ -70,7 +70,7 @@ public class NotificationBox : MonoBehaviour
     public void GoToGame()
     {
         //Set the game session
-        GameManager.gameSession = new Wagr.Session(notification.matchId, notification.wagerAmount, GameManager.instance.accountManager.playerProfile.id, notification.senderId);
+        GameManager.gameSession = new Wagr.Session(notification.matchId, notification.wagerAmount, GameManager.instance.accountManager.playerProfile.Id, notification.senderId);
         
         //Load the actual game level and set the scene accordingly
         GameManager.instance.GoToSelectedGame();

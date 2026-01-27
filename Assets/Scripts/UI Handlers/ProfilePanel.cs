@@ -31,7 +31,7 @@ public class ProfilePanel : MonoBehaviour
 
         if(GameManager.instance.accountManager.loginState == LoginState.loggedIn)
         {
-            displayName.text = GameManager.instance.accountManager.playerProfile.displayName;
+            displayName.text = GameManager.instance.accountManager.playerProfile.Name;
             statButton.interactable = true;
             historyButton.interactable = true;
         }

@@ -6,14 +6,17 @@ using Unity.Services.Authentication.PlayerAccounts;
 using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Events;
+using Wagr;
 
 [Serializable]
 public class AccountManager
 {
     public UnityAction<bool> onProfileLoaded;
     public UnityAction<bool> onAccountCreated;
+
     public LoginState loginState { private set; get; }
-    public Profile playerProfile { private set; get; }
+    public Player playerProfile { private set; get; }
+    public PlayerStats playerStats { private set; get; }
 
     public async void Setup()
     {
@@ -21,7 +24,7 @@ public class AccountManager
         loginState = LoginState.unsigned;
         SetupEvents();
     }
-    
+
     private void SetupEvents()
     {
         PlayerAccountService.Instance.SignedIn += async () =>
@@ -34,8 +37,7 @@ public class AccountManager
         {
             GameManager.instance.accountManager.loginState = LoginState.loggedIn;
 
-            //Load the player profile
-            var loaded  = await GameManager.instance.accountManager.LoadProfile();
+            var loaded = await GameManager.instance.accountManager.LoadProfile(); //Load the player profile
             onProfileLoaded?.Invoke(loaded);
         };
 
@@ -62,7 +64,7 @@ public class AccountManager
     }
 
     #region Authentication
-    
+
     public async Task Login()
     {
         // Check if a cached player already exists by checking if the session token exists
@@ -91,9 +93,7 @@ public class AccountManager
     public async Task<bool> LoadProfile()
     {
         var id = AuthenticationService.Instance.PlayerId;
-        playerProfile = await CloudSaveSystem.RetrieveSpecificData<Profile>(id);
-
-        Debug.Log($"Loaded profile for {playerProfile.ToString()}");
+        playerProfile = await CloudSaveSystem.RetrieveSpecificData<Player>(id);
 
         if (playerProfile == default)
         {
@@ -119,26 +119,26 @@ public class AccountManager
     #endregion
 
     #region Profile
-    public async Task CreateAccount(string playerId, string username)
+    public async Task CreateAccount(string username)
     {
-        var isNameTaken = await CloudSaveSystem.IsNameTaken(username);
-
-        if (isNameTaken == true) //Check if the username is in use
+        if (await CloudSaveSystem.IsNameTaken(username)) //Check if the username is in use
         {
-            Debug.Log("Username is taken!");
-            NotificationDisplay.instance.DisplayMessage("Username is already in use", time: 3);
+            NotificationDisplay.instance.DisplayMessage("Username is already in use", NotificationType.warning, 5f);
         }
         else
         {
             try
             {
-                Profile prof = new(AuthenticationService.Instance.PlayerId, username);
+                Player player = new(AuthenticationService.Instance.PlayerId, username);
+                PlayerStats stats = new();
 
-                await CloudSaveSystem.SaveSpecificData<Profile>(AuthenticationService.Instance.PlayerId, prof);
+                await CloudSaveSystem.SaveSpecificData(AuthenticationService.Instance.PlayerId, player);
+                await CloudSaveSystem.SaveSpecificData("stats", stats);
                 await CloudSaveSystem.SetUsername(username);
+
                 onAccountCreated?.Invoke(true);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 onAccountCreated?.Invoke(false);
                 NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);

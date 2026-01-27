@@ -8,6 +8,7 @@ public class InviteDisplay : MonoBehaviour
     public void ShowInvite(Guid id)
     {
         gameSessionId = id;
+        this.gameObject.SetActive(true);
     }
 
     public void AcceptGame()

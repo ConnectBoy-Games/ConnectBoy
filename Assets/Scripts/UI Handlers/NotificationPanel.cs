@@ -53,9 +53,9 @@ public class NotificationPanel : MonoBehaviour
 
     public void ClearNotifications()
     {
-        foreach (GameObject child in notificationHolder)
+        foreach (Transform child in notificationHolder)
         {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
     }
 }

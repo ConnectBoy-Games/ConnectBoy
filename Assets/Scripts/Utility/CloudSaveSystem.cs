@@ -99,7 +99,7 @@ public class CloudSaveSystem
             Debug.Log($"Attempting to claim name: {username}...");
 
             //var args = new SetNameRequest { requestedName = username };
-            Dictionary<string, object> args = new Dictionary<string, object>
+            Dictionary<string, object> args = new()
             {
                 { "requestedName", username }
             };
