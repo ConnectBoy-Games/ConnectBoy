@@ -34,7 +34,7 @@ namespace Wagr
         public string senderUsername; 
         public int matchType;         
         public int wagerAmount;       
-        public string matchId; 
+        public Guid matchId; 
         public long timestamp; 
     }
 
@@ -42,7 +42,7 @@ namespace Wagr
     [Serializable]
     public class Session
     {
-        public string matchId { get; private set; }
+        public Guid sessionId { get; private set; }
         public string serverUrl { get; private set; }
         public int wager { get; private set; }
         public string hostId { get; private set; } //Always refers to the current player
@@ -58,9 +58,9 @@ namespace Wagr
         public BotDifficulty botDifficulty;
 
         //For creating Server based modes
-        public Session(string matchId, int wager, string hostId, string friendId)
+        public Session(Guid matchId, int wager, string hostId, string friendId)
         {
-            this.matchId = matchId;
+            this.sessionId = matchId;
             this.wager = wager;
             this.hostId = hostId;
             this.friendId = friendId;
@@ -77,7 +77,7 @@ namespace Wagr
         {
             var sesh = JsonConvert.DeserializeObject<Session>(json);
 
-            matchId = sesh.matchId;
+            sessionId = sesh.sessionId;
             serverUrl = sesh.serverUrl;
             wager = sesh.wager;
             hostId = sesh.hostId;

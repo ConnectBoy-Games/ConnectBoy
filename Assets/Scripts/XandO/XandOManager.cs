@@ -53,10 +53,6 @@ public class XandOManager : MonoBehaviour
 
     async void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            var result = await sessionHandler.CreateSession();
-        }
     }
 
     public void MakeMove(int index)

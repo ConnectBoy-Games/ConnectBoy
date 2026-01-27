@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     public AudioManager audioManager;
     public AccountManager accountManager;
+    public FaceManager faceManager;
 
     void Awake() //Singleton Manager
     {

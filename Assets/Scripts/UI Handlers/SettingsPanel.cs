@@ -72,7 +72,7 @@ public class SettingsPanel : MonoBehaviour
     public void OnDestroy()
     {
         //TODO: Actually delete the user account from backend
-        SignOut(true);        
+        //SignOut(true);        
     }
 
     public void DeleteAccount()

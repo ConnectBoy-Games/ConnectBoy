@@ -10,8 +10,10 @@ public class MenuPanel : MonoBehaviour
 {
     [SerializeField] Button notificationButton;
     [SerializeField] TMP_Text displayName;
-    [SerializeField] private float pollInterval = 15f; // Check every 15 seconds
     [SerializeField] private GameObject notificationDot;
+    [SerializeField] private Image displayImage;
+
+    [SerializeField] private float pollInterval = 15f; // Check every 15 seconds
 
     private bool _isPolling = false;
     private HashSet<long> _processedInviteTimestamps = new HashSet<long>();
@@ -24,11 +26,13 @@ public class MenuPanel : MonoBehaviour
         if (GameManager.instance.accountManager.loginState == LoginState.loggedIn)
         {
             displayName.text = GameManager.instance.accountManager.playerProfile.displayName;
+            displayImage.sprite = GameManager.instance.faceManager.GetFace(GameManager.instance.accountManager.playerProfile.dpIndex); //Load the player's image
         }
         else
         {
             displayName.text = "Guest";
             notificationButton.interactable = false;
+            displayImage.sprite = GameManager.instance.faceManager.GetFace(-1); //Load the default image
         }
     }
 

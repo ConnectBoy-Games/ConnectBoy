@@ -1,9 +1,11 @@
-using Unity.Services.CloudSave;
-using Unity.Services.CloudCode;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
 using Newtonsoft.Json;
+using Unity.Services.CloudCode;
+using Unity.Services.CloudSave;
+using UnityEngine;
+using UnityEngine.Networking;
 
 public class CloudSaveSystem
 {
@@ -197,4 +199,51 @@ public class CloudSaveSystem
         }
     }
 
+}
+
+public static class NetworkRetryHelper
+{
+    private const int MaxRetries = 3;
+    private const int InitialDelayMs = 1000;
+
+    public static async Task<UnityWebRequest> ExecuteWithRetry(Func<UnityWebRequest> requestFactory)
+    {
+        int retryCount = 0;
+
+        while (true)
+        {
+            UnityWebRequest request = requestFactory();
+            var operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
+
+            // Success! Return the request so the caller can handle the data
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                return request;
+            }
+
+            // Check if the error is "Retryable" (Network errors or 5xx Server errors)
+            bool isRetryable = request.result == UnityWebRequest.Result.ConnectionError ||
+                               request.result == UnityWebRequest.Result.ProtocolError && request.responseCode >= 500;
+
+            if (isRetryable && retryCount < MaxRetries)
+            {
+                retryCount++;
+                // Exponential delay: 1s, 2s, 4s...
+                int delay = InitialDelayMs * (int)Math.Pow(2, retryCount - 1);
+
+                Debug.LogWarning($"Request failed ({request.error}). Retrying in {delay}ms... (Attempt {retryCount}/{MaxRetries})");
+
+                await Task.Delay(delay);
+                request.Dispose(); // Clear the failed request before trying again
+            }
+            else
+            {
+                // Not retryable (like 401 Unauthorized or 404) or out of retries
+                return request;
+            }
+        }
+    }
 }

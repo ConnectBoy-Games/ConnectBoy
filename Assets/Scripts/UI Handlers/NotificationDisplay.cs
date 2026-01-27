@@ -29,7 +29,7 @@ public class NotificationDisplay : MonoBehaviour
         switch (type)
         {
             case NotificationType.info:
-                notificationContent.color = Color.white;
+                notificationContent.color = Color.green;
                 break;
             case NotificationType.warning:
                 notificationContent.color = Color.yellow;
@@ -39,7 +39,7 @@ public class NotificationDisplay : MonoBehaviour
                 break;
         }
 
-        if (time !<= 0)
+        if (time > 0)
         {
             Invoke(nameof(CloseNotificationBar), time);
         }
