@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Wagr;
 
 public class NotificationBox : MonoBehaviour
 {
@@ -30,12 +31,12 @@ public class NotificationBox : MonoBehaviour
         string gameName = "";
         userText.text = notification.senderUsername;
         timeText.text = System.DateTimeOffset.FromUnixTimeSeconds(notification.timestamp).ToLocalTime().ToString("g");
-    
+
         //Set Background Color (Randomly)
         backgroundImage.color = colors[Random.Range(0, colors.Length)];
 
         //Set the game image
-        switch((Wagr.GameName)notification.matchType)
+        switch ((Wagr.GameName)notification.matchType)
         {
             case Wagr.GameName.xando:
                 xandoImage.SetActive(true);
@@ -67,12 +68,27 @@ public class NotificationBox : MonoBehaviour
         inviteText.text = "Invites you to play a Game of " + gameName + " with a Wager of " + "<color = green>" + notification.wagerAmount + "</color>";
     }
 
-    public void GoToGame()
+    public void OpenPrompt()
     {
+        InviteDisplay.instance.ShowInvite();
+        InviteDisplay.instance.acceptInvite = GoToGame;
+        InviteDisplay.instance.rejectInvite = DeclineInvite;
+    }
+
+    public async void GoToGame()
+    {
+        LoadScreen.instance.ShowScreen();
+        Player hostPlayer = await CloudSaveSystem.RetrieveSpecificData<Player>(notification.senderId);
+
         //Set the game session
-        GameManager.gameSession = new Wagr.Session(notification.matchId, notification.wagerAmount, GameManager.instance.accountManager.playerProfile.Id, notification.senderId);
-        
+        GameManager.gameSession = new Session(notification.matchId, notification.wagerAmount, hostPlayer, GameManager.instance.accountManager.playerProfile);
+
         //Load the actual game level and set the scene accordingly
         GameManager.instance.GoToSelectedGame();
+    }
+
+    public void DeclineInvite()
+    {
+        Destroy(gameObject);
     }
 }

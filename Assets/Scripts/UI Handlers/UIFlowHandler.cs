@@ -12,11 +12,13 @@ public class UIFlowHandler : MonoBehaviour
 
     [SerializeField] private GameObject notificationDisplay;
     [SerializeField] private GameObject loadScreenDisplay;
+    [SerializeField] private GameObject inviteDisplay;
 
     void Awake()
     {
         notificationDisplay.SetActive(true);
         loadScreenDisplay.SetActive(true);
+        inviteDisplay.SetActive(true);
 
         /*
         if(GameManager.instance.accountManager.loginState == LoginState.unsigned)

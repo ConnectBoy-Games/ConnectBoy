@@ -1,24 +1,49 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InviteDisplay : MonoBehaviour
 {
-    private static Guid gameSessionId;
+    /// <summary> A single instance of the Invite Display Bar</summary>
+    public static InviteDisplay instance;
 
-    public void ShowInvite(Guid id)
+    public UnityAction acceptInvite;
+    public UnityAction rejectInvite;
+
+    void Awake()
     {
-        gameSessionId = id;
-        this.gameObject.SetActive(true);
+        if (instance == null)
+        {
+            instance = this;
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void ShowInvite()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void CloseInvite()
+    {
+        acceptInvite = CloseInvite;
+        rejectInvite = CloseInvite;
+        gameObject.SetActive(false);
     }
 
     public void AcceptGame()
     {
-        //TODO: Proceed to the game scene
-       
+        acceptInvite?.Invoke();
+        gameObject.SetActive(false);
     }
 
     public void RejectGame()
     {
+        rejectInvite?.Invoke();
         gameObject.SetActive(false);
     }
 }

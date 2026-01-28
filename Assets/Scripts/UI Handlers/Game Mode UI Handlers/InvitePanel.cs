@@ -19,7 +19,7 @@ public class InvitePanel : MonoBehaviour
     {
         //Check the Wager value
         var wager = int.Parse(wagerField.text);
-        var username = usernameField.text;
+        var username = usernameField.text; //Username of the player to invite
 
         if (wager < 100)
         {
@@ -32,31 +32,28 @@ public class InvitePanel : MonoBehaviour
             return;
         }
 
+        playButton.interactable = false; //Disable the Play button to avoid multiple clicks
+
         //TODO: Create match and get the match Id from the Server
         CreateSessionRequest request = new CreateSessionRequest
         {
-            Name = GameManager.gameSession.gameName.ToString(),
-            HostName = "Matthew" //Temporary placeholder until we get the actual username
+            Name = "Game",
+            GameName = GameManager.gameSession.gameName,
+            Wager = wager,
+            HostPlayer = GameManager.instance.accountManager.playerProfile,
         };
 
-        var t = await SessionHandler.CreateSession(request);
-        if(t != null)
+        var session = await SessionHandler.CreateSession(request);
+        if(session != null)
         {
-            //Loaclly store the session details
-            GameManager.gameSession = new Wagr.Session(t.SessionId, wager, t.HostPlayerId, "-1");
+            //Locally store the session details
+            GameManager.gameSession = new Wagr.Session(session.SessionId, wager, GameManager.instance.accountManager.playerProfile, null);
         }
-        Debug.Log("Session Id: " + t.SessionId.ToString());
-
-
-        /*
-        /Confirm if username is valid and then allow the player in
+        
         if (CloudSaveSystem.IsNameTaken(username).Result == true)
         {
-            playButton.interactable = false; //Disable the Play button to avoid multiple clicks
-
-
             //Send out the notification invite after getting the session ID
-            CloudSaveSystem.SendMatchInvite(username, (int)GameManager.gameSession.gameName, wager, "0").Wait();
+            await CloudSaveSystem.SendMatchInvite(username, (int)GameManager.gameSession.gameName, wager, session.SessionId.ToString());
 
             //Load the actual game level and set the scene accordingly
             GameManager.instance.GoToSelectedGame();
@@ -66,6 +63,7 @@ public class InvitePanel : MonoBehaviour
             NotificationDisplay.instance.DisplayMessage("Error finding the specified player!", NotificationType.error);
             playButton.interactable = true;
         }
-        */
+
+        playButton.interactable = true;
     }
 }

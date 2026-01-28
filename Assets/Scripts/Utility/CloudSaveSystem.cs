@@ -176,7 +176,7 @@ public class CloudSaveSystem
         
         if (string.IsNullOrEmpty(targetId))
         {
-            Debug.LogError("User not found!");
+            NotificationDisplay.instance.DisplayMessage("User not found!", NotificationType.error);
             return;
         }
 
@@ -196,6 +196,7 @@ public class CloudSaveSystem
         catch (CloudCodeException ex)
         {
             Debug.LogError($"Failed to send invite: {ex.Message}");
+            NotificationDisplay.instance.DisplayMessage("Failed to send invit: " + ex.Message, NotificationType.error);
         }
     }
 

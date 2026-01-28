@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Services.CloudSave;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,14 +13,12 @@ public class NotificationPanel : MonoBehaviour
     void OnEnable()
     {
         LoadNotifications();
+        InviteDisplay.instance.gameObject.SetActive(false);
     }
 
     void FixedUpdate()
     {
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            backAction.Invoke();
-        }
+        if (Input.GetKeyUp(KeyCode.Escape)) GoBack();
     }
 
     public void LoadNotifications()
@@ -29,26 +26,28 @@ public class NotificationPanel : MonoBehaviour
         ClearNotifications();
         _ = LoadInvites();
     }
-    
+
     public async Task LoadInvites()
     {
-        var data = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { "invites" });
+        var data = await CloudSaveSystem.RetrieveSpecificData<List<Wagr.MatchInvite>>("invites");
 
-        if (data.TryGetValue("invites", out var item))
+        foreach (var inv in data) //Create Notification Box UI and set details here:
         {
-            List<Wagr.MatchInvite> invites = item.Value.GetAs<List<Wagr.MatchInvite>>();
-            foreach (var inv in invites)
-            {
-                //Create Notification Box UI and set details here:
-                var notification = Instantiate(notificationPrefab, notificationHolder).GetComponent<NotificationBox>();
-                notification.SetBoxDetails(inv);
-            }
+            var notification = Instantiate(notificationPrefab, notificationHolder).GetComponent<NotificationBox>();
+            notification.SetBoxDetails(inv);
         }
     }
 
     public void GoBack()
     {
-        backAction.Invoke();
+        if (InviteDisplay.instance.gameObject.activeSelf)
+        {
+            InviteDisplay.instance.CloseInvite();
+        }
+        else
+        {
+            backAction.Invoke();
+        }
     }
 
     public void ClearNotifications()
