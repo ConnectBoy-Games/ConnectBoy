@@ -3,14 +3,12 @@
 public class XandOBot
 {
     private BotDifficulty difficulty;
-    private string userPiece;
-    private string botPiece;
+    private string userPiece; //The player's piece
 
-    public XandOBot(BotDifficulty difficulty, string userPiece, string botPiece)
+    public XandOBot(BotDifficulty difficulty, string userPiece)
     {
         this.difficulty = difficulty;
-        this.userPiece = userPiece;
-        this.botPiece = botPiece;   
+        this.userPiece = userPiece; 
     }
 
     public int ThinkMove(string[] gameState)
@@ -25,7 +23,7 @@ public class XandOBot
 
     public int SimpleMoves(string[] gameState)
     {
-        if (gameState[4] == "f")
+        if (gameState[4] == "f") //f means the box is empty
         {
             return 4;
         }
@@ -95,7 +93,7 @@ public class XandOBot
             {
                 return i;
             }
-            //else Game is a draw
+            //Else Game is a draw
         }
 
         return 0;

@@ -12,9 +12,15 @@ public class XandOUIHandler : MonoBehaviour
     [SerializeField] GameObject defeatPanel;
     [SerializeField] GameObject forfeitPanel;
 
-    [Header("Game Updates")]
-    [SerializeField] TMP_Text playerScore;
-    [SerializeField] TMP_Text friendScore;
+    [SerializeField] GameObject chatButton;
+
+    void Start()
+    {
+        if (GameManager.gameSession.gameMode == GameMode.vsBot) //Disable the Chat Button if we are playing with a bot
+        {
+            chatButton.SetActive(false);
+        }
+    }
 
     void FixedUpdate()
     {
@@ -28,11 +34,11 @@ public class XandOUIHandler : MonoBehaviour
     {
         if (victoryPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
         {
-            GoToHome();
+            //GoToHome();
         }
         else if (chatPanel.activeInHierarchy)
         {
-            DisableChatPanel();
+            chatPanel.SetActive(false);
         }
         else
         {
@@ -40,22 +46,11 @@ public class XandOUIHandler : MonoBehaviour
         }
     }
 
-    private void GoToHome()
+    public void GoToHome()
     {
         SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
     }
 
-    public void EnableChatPanel()
-    {
-        chatPanel.SetActive(true);
-    }
-
-    public void DisableChatPanel()
-    {
-        chatPanel.SetActive(false);
-    }
-
-    #region UI Updates
     public void SetTurnText(User turnUser, string text = null)
     {
         if (text == null)
@@ -83,10 +78,4 @@ public class XandOUIHandler : MonoBehaviour
     {
         victoryPanel.SetActive(true);
     }
-
-    #endregion
-
-    #region Server Connecting Functions
-
-    #endregion
 }

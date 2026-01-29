@@ -1,19 +1,15 @@
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Unity.Services.Core;
 using UnityEngine;
 
 public class XandOManager : MonoBehaviour
 {
-    //Internal Variables
-    public static Wagr.Session gameSession;
-    public static GameMode gameMode = GameMode.vsPlayer;
-
+    private XandOBot bot; //X And O bot
     private User turnUser; //Who has the turn?
 
-    private string userPiece; //Either a 1 or 0 (X or O)
-    private string botPiece; //Either a 1 or 0 (X or O)
+    private string userPiece; // (x or o)
+    private string botPiece; // (x or o)
+
+    private string[] gameState = new string[9];
 
     [SerializeField] XandOUIHandler uiHandler;
 
@@ -21,28 +17,20 @@ public class XandOManager : MonoBehaviour
     [SerializeField] private GameObject imageX; //0
     [SerializeField] private GameObject imageO; //1
     [SerializeField] private List<GameObject> buttons = new();
+    [SerializeField] private List<GameObject> winLines = new();
 
-    private string[] gameState = new string[9];
-    private XandOBot bot;
-
-    SessionHandler sessionHandler;
-
-    async void Start()
+    public void Start()
     {
-        await UnityServices.InitializeAsync();
-        sessionHandler = new SessionHandler();
-
         ClearBoard();
 
-        if (gameMode == GameMode.vsBot)
+        if (GameManager.gameSession.gameMode == GameMode.vsBot)
         {
             userPiece = (Random.Range(0, 2) == 1) ? "x" : "o"; //Set who has which piece
             botPiece = (userPiece == "x") ? "o" : "x"; //Set the alternative piece
-
             turnUser = (User)Random.Range(0, 2); //Set who has the turn
-            uiHandler.SetTurnText(turnUser);
 
-            bot = new XandOBot(BotDifficulty.medium, userPiece, botPiece);
+            uiHandler.SetTurnText(turnUser);
+            bot = new XandOBot(BotDifficulty.medium, userPiece);
 
             if (turnUser == User.bot)
             {
@@ -51,32 +39,40 @@ public class XandOManager : MonoBehaviour
         }
     }
 
-    async void Update()
-    {
-    }
-
+    //For allowing the player to make a move
     public void MakeMove(int index)
     {
         if (gameState[index] == "f" && turnUser == User.host) //Valid move
         {
-            if (gameMode == GameMode.vsPlayer)
-            {
-                //TODO: Send move to server
-                SendMoveToServer();
-            }
-            else //Playing Against A Bot
+            if (GameManager.gameSession.gameMode == GameMode.vsBot)
             {
                 gameState[index] = userPiece; //Update the game state
                 PlacePiece(index, userPiece); //Place the piece on the board
-                turnUser = User.bot;
-                uiHandler.SetTurnText(turnUser);
+                turnUser = User.bot; //Hand over the turn
+                uiHandler.SetTurnText(turnUser); //Display the turn text
                 CheckBoardState(); //Check if there is a win
+
                 Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move
+            }
+            else //Playing Against A Bot
+            {
+                //TODO: Send move to server
+                //SendMoveToServer();
             }
         }
     }
 
-    #region Board Update
+    private void MakeAIMove()
+    {
+        int index = bot.ThinkMove(gameState); //Let the bot think a move
+        gameState[index] = botPiece; //Update the game state
+        PlacePiece(index, botPiece); //Place the bot piece on the board
+        turnUser = User.host; //Hand over the turn
+        uiHandler.SetTurnText(turnUser); //Display the turn text
+        CheckBoardState(); //Check if there is a win
+    }
+
+    #region Board UI Update
     private void PlacePiece(int index, string type)
     {
         switch (type)
@@ -90,32 +86,41 @@ public class XandOManager : MonoBehaviour
         }
     }
 
+    private void ActivateWinLine(int index)
+    {
+        winLines[index].gameObject.SetActive(true);
+    }
+
     private void ClearBoard()
     {
         foreach (GameObject button in buttons)
         {
-            for (int i = 0; i < button.transform.childCount; i++)
+            foreach (Transform piece in button.transform)
             {
-                Destroy(button.transform.GetChild(i).gameObject);
+                Destroy(piece.gameObject);
             }
         }
+
         gameState = new string[9];
         System.Array.Fill(gameState, "f");
     }
     #endregion
 
-    #region AI Handling Functions
+    #region Board Check
     private void CheckBoardState()
     {
         var win = CheckWinState(userPiece); //Check if player has won
+
         if (win != -1)
         {
+            ActivateWinLine(win);
             uiHandler.DisplayWinScreen("You Have Won");
         }
 
         win = CheckWinState(botPiece); //Check if bot has won
         if (win != -1)
         {
+            ActivateWinLine(win);
             uiHandler.DisplayWinScreen("Bot Has Won");
         }
 
@@ -123,51 +128,49 @@ public class XandOManager : MonoBehaviour
         for (int i = 0; i < 9; i++)
         {
             if (gameState[i] == "f") //There's an empty space
-            {
                 return; //Game should keep on going (There's still free space)
-            }
         }
 
         //Game is a draw
         uiHandler.SetTurnText(turnUser, "Draw!!!");
-        Invoke(nameof(ClearBoard), 2f);
+        Invoke(nameof(ClearBoard), 1f);
     }
 
-    /// <summary>Returns true if there is a win on the board</summary>
-    private int CheckWinState(string playerId)
+    /// <summary>Returns the direction of the win or -1 if there is no win</summary>
+    private int CheckWinState(string piece)
     {
         //Check Columns
-        if (gameState[0] == playerId && gameState[1] == playerId && gameState[2] == playerId)
+        if (gameState[0] == piece && gameState[1] == piece && gameState[2] == piece)
         {
             return 1;
         }
-        else if (gameState[3] == playerId && gameState[4] == playerId && gameState[5] == playerId)
+        else if (gameState[3] == piece && gameState[4] == piece && gameState[5] == piece)
         {
             return 2;
         }
-        else if (gameState[6] == playerId && gameState[7] == playerId && gameState[8] == playerId)
+        else if (gameState[6] == piece && gameState[7] == piece && gameState[8] == piece)
         {
             return 3;
         }
         //Check Rows
-        else if (gameState[0] == playerId && gameState[3] == playerId && gameState[6] == playerId)
+        else if (gameState[0] == piece && gameState[3] == piece && gameState[6] == piece)
         {
             return 4;
         }
-        else if (gameState[1] == playerId && gameState[4] == playerId && gameState[7] == playerId)
+        else if (gameState[1] == piece && gameState[4] == piece && gameState[7] == piece)
         {
             return 5;
         }
-        else if (gameState[2] == playerId && gameState[5] == playerId && gameState[8] == playerId)
+        else if (gameState[2] == piece && gameState[5] == piece && gameState[8] == piece)
         {
             return 6;
         }
         //Check Diagonals
-        else if (gameState[0] == playerId && gameState[4] == playerId && gameState[8] == playerId)
+        else if (gameState[0] == piece && gameState[4] == piece && gameState[8] == piece)
         {
             return 7;
         }
-        else if (gameState[6] == playerId && gameState[4] == playerId && gameState[2] == playerId)
+        else if (gameState[6] == piece && gameState[4] == piece && gameState[2] == piece)
         {
             return 8;
         }
@@ -175,33 +178,6 @@ public class XandOManager : MonoBehaviour
         {
             return -1;
         }
-    }
-
-    private void MakeAIMove()
-    {
-        int index = bot.ThinkMove(gameState);
-        gameState[index] = botPiece;
-        PlacePiece(index, botPiece); //Place the piece on the board
-        turnUser = User.host;
-        uiHandler.SetTurnText(turnUser);
-        CheckBoardState(); //Check if there is a win
-    }
-    #endregion
-
-    #region Server Connecting Functions
-    public void ConnectToServer()
-    {
-
-    }
-
-    public void SendMoveToServer()
-    {
-
-    }
-
-    public void SendChatToServer()
-    {
-
     }
     #endregion
 }
