@@ -11,14 +11,37 @@ public class SettingsPanel : MonoBehaviour
     private AudioManager audioManager;
     public UnityAction backAction;
 
+    [Header("Audio Settings")]
     [SerializeField] Slider volumeSlider;
     [SerializeField] Toggle sfxToggle;
     [SerializeField] Toggle vibrateToggle;
 
+    [Header("Account Buttons")]
+    [SerializeField] GameObject logoutButton;
+    [SerializeField] GameObject deleteButton;
+
+    [Header("Prompt Menu")]
+    [SerializeField] GameObject promptMenu;
+    [SerializeField] Button promptButton;
+
     void Start()
     {
         audioManager = GameManager.instance.audioManager;
-        Invoke(nameof(SetDefaultUI), 0.2f); //Delay setting the default UI
+        Invoke(nameof(SetDefaultUI), 0.1f); //Delay setting the default UI
+    }
+
+    void OnEnable()
+    {
+        if(GameManager.instance.accountManager.loginState != LoginState.loggedIn)
+        {
+            logoutButton.SetActive(false);
+            deleteButton.SetActive(false);
+        }
+        else
+        {
+            logoutButton.SetActive(true);
+            deleteButton.SetActive(true);
+        }
     }
 
     void FixedUpdate()
@@ -31,7 +54,14 @@ public class SettingsPanel : MonoBehaviour
 
     public void GoBack()
     {
-        backAction.Invoke();
+        if(promptMenu.activeInHierarchy)
+        {
+            promptMenu.SetActive(false); 
+        }
+        else
+        {
+            backAction.Invoke();
+        }
     }
 
     public void SetDefaultUI()
@@ -58,8 +88,24 @@ public class SettingsPanel : MonoBehaviour
         audioManager.PlayClickSound();
     }
 
-    public void SignOut(bool clearSessionToken = false)
+    public void LogOutButtonClicked()
     {
+        promptMenu.SetActive(true);
+        promptButton.onClick.RemoveAllListeners();
+        promptButton.onClick.AddListener(SignOut);
+    }
+
+    public void DeleteButtonClicked()
+    {
+        promptMenu.SetActive(true);
+        promptButton.onClick.RemoveAllListeners();
+        promptButton.onClick.AddListener(DeleteAccount);
+    }
+
+    public void SignOut()
+    {
+        bool clearSessionToken = true;
+
         // Sign out of Unity Authentication, with the option to clear the session token
         AuthenticationService.Instance.SignOut(clearSessionToken);
 
@@ -67,12 +113,6 @@ public class SettingsPanel : MonoBehaviour
         PlayerAccountService.Instance.SignOut();
         SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
         GameManager.instance.accountManager.SignOut();
-    }
-
-    public void OnDestroy()
-    {
-        //TODO: Actually delete the user account from backend
-        //SignOut(true);        
     }
 
     public void DeleteAccount()
