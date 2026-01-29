@@ -80,35 +80,34 @@ public class Profile
 [Serializable]
 public enum LoginState : byte
 {
-    unsigned = 0,
-    guestMode,
-    loggedIn
+    unsigned = 0, guestMode, loggedIn
 }
 
 [Serializable]
 public enum GameMode : byte
 {
-    vsBot,
-    vsPlayer
+    vsBot = 0, vsPlayer = 1
+}
+
+[Serializable]
+public enum GameRole : byte
+{
+    host = 0, friend = 1
 }
 
 [Serializable]
 public enum User : byte 
 {
-    bot,
-    host,
-    player //Other player
+    bot = 0, host = 1, player = 2 //Other player
 }
 
 [Serializable]
 public enum BotDifficulty : byte 
 {
-    low,
-    medium,
-    high
+    low, medium, high
 }
 
-[System.Serializable]
+[Serializable]
 public class NameResponse
 {
     public bool success;

@@ -199,7 +199,6 @@ public class CloudSaveSystem
             NotificationDisplay.instance.DisplayMessage("Failed to send invit: " + ex.Message, NotificationType.error);
         }
     }
-
 }
 
 public static class NetworkRetryHelper

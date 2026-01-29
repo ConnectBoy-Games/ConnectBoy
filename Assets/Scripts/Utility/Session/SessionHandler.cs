@@ -1,8 +1,16 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Wagr;
 
 public class SessionHandler
 {
-    private static string _baseUrl = "http://localhost:5001/api/sessions"; //TODO: Expand services to handle multiple servers with different base URLs
+    //TODO: Expand services to handle multiple servers with different base URLs
+
+#if UNITY_EDITOR 
+    private static string _baseUrl = "http://localhost:5001/api/sessions"; 
+#else
+    private static string _baseUrl = "http://connectboy1.runasp.net/api/Sessions";
+#endif
 
     /// <summary>Creates a game session on the server</summary>
     /// <param name="sessionRequest">Details the parameters for the game session</param>
@@ -15,10 +23,36 @@ public class SessionHandler
     /// <summary>Join an already created game session</summary>
     /// <param name="sessionId">The id of the game session</param>
     /// <returns>True if the connection was succesful</returns>
-    public static async Task<bool> JoinSession(string sessionId, JoinSessionRequest joinRequest)
+    public static async Task<JoinSessionResponse> JoinSession(string sessionId, JoinSessionRequest joinRequest)
     {
         //The URL matches our .NET route: {sessionId}/join
-        return await new WebPoster().PostRequestAsync<string, bool>($"{_baseUrl}/{sessionId}/join", joinRequest);
+        return await new WebPoster().PostRequestAsync<JoinSessionRequest, JoinSessionResponse>($"{_baseUrl}/{sessionId}/join", joinRequest);
+    }
+
+    /// <summary>Get the session details</summary>
+    /// <param name="sessionId">The id of the game session</param>
+    /// <returns>The details of the game session</returns>
+    public static async Task<SessionDetails> CheckSessionStatus(string sessionId)
+    {
+        return await new WebPoster().GetRequestAsync<SessionDetails>($"{_baseUrl}/{sessionId}/");
+    }
+
+    /// <summary>Sends a message to the session and the get all the other unchecked messages</summary>
+    /// <param name="sessionId">The session id</param>
+    /// <param name="chat">The Chat Message Send object</param>
+    /// <returns>A lis of messages since the last one sent</returns>
+    public static async Task<List<ChatMessageReturn>> SendSessionChat(string sessionId, ChatMessageSend chat)
+    {
+        return await new WebPoster().PostRequestAsync<ChatMessageSend, List<ChatMessageReturn>>($"{_baseUrl}/{sessionId}/chat", chat);
+    }
+
+    /// <summary>Returns a list of messages from the last message specified by id</summary>
+    /// <param name="sessionId">The session id</param>
+    /// <param name="id">The id of the last message loaded by the client</param>
+    /// <returns>A list of Chat message return</returns>
+    public static async Task<List<ChatMessageReturn>> GetSessionChat(string sessionId, int id)
+    {
+        return await new WebPoster().GetRequestAsync<List<ChatMessageReturn>>($"{_baseUrl}/{sessionId}/chat/{id}");
     }
 
     public static async Task DestroySession(string sessionId)

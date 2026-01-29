@@ -16,3 +16,8 @@ public class StartDotsRequest { public int Rows { get; set; } = 1; public int Co
 
 public class MakeMoveRequest { public string PlayerId { get; set; } public object Move { get; set; } }
 
+
+
+public class ChatMessageSend { public string Message { get; set; } public string Username { get; set; } public int lastChatId { get; set; } }
+public class ChatMessageReturn { public string Message { get; set; } public string Username { get; set; } public int chatId { get; set; } }
+

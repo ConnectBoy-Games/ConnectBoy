@@ -63,9 +63,10 @@ namespace Wagr
         public BotDifficulty botDifficulty;
 
         //For creating Server based modes
-        public Session(Guid matchId, int wager, Player host, Player other)
+        public Session(Guid matchId, GameName name, int wager, Player host, Player other)
         {
             sessionId = matchId;
+            gameName = name;
             this.wager = wager;
             this.host = this.host;
             this.other = this.other;
