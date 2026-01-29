@@ -13,6 +13,12 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip acceptedSound;
     [SerializeField] private AudioClip clickSound;
     [SerializeField] private AudioClip wobbleSound;
+    [SerializeField] private AudioClip victorySound;
+    [SerializeField] private AudioClip drawSound;
+    [SerializeField] private AudioClip defeatSound;
+    [SerializeField] private AudioClip placeSound;
+    [SerializeField] private AudioClip notificationSound;
+    [SerializeField] private AudioClip chatSendSound;
 
     void Awake()
     {
@@ -65,5 +71,35 @@ public class AudioManager : MonoBehaviour
     public void PlayWobbleSound()
     {
         if (sfx) m_AudioSource.PlayOneShot(wobbleSound);
+    }
+
+    public void PlayDrawSound()
+    {
+        if (sfx) m_AudioSource.PlayOneShot(drawSound);
+    }
+
+    public void PlayNotificationSound()
+    {
+        if (sfx) m_AudioSource.PlayOneShot(notificationSound);
+    }
+
+    public void PlayDefeatSound()
+    {
+        if (sfx) m_AudioSource.PlayOneShot(defeatSound);
+    }
+
+    public void PlayVictorySound()
+    {
+        if (sfx) m_AudioSource.PlayOneShot(victorySound);
+    }
+
+    public void PlayChatSend()
+    {
+        if (sfx) m_AudioSource.PlayOneShot(chatSendSound);
+    }
+
+    public void PlayPlaceSound()
+    {
+        if (sfx) m_AudioSource.PlayOneShot(placeSound);
     }
 }

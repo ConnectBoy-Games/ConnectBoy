@@ -75,6 +75,7 @@ public class XandOManager : MonoBehaviour
     #region Board UI Update
     private void PlacePiece(int index, string type)
     {
+        GameManager.instance.GetComponent<AudioManager>().PlayPlaceSound();
         switch (type)
         {
             case "x": //X
@@ -114,6 +115,7 @@ public class XandOManager : MonoBehaviour
         if (win != -1)
         {
             ActivateWinLine(win);
+            GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
             uiHandler.DisplayWinScreen("You Have Won");
         }
 
@@ -121,6 +123,7 @@ public class XandOManager : MonoBehaviour
         if (win != -1)
         {
             ActivateWinLine(win);
+            GameManager.instance.GetComponent<AudioManager>().PlayDefeatSound();
             uiHandler.DisplayWinScreen("Bot Has Won");
         }
 
@@ -133,6 +136,7 @@ public class XandOManager : MonoBehaviour
 
         //Game is a draw
         uiHandler.SetTurnText(turnUser, "Draw!!!");
+        GameManager.instance.GetComponent<AudioManager>().PlayDrawSound();
         Invoke(nameof(ClearBoard), 1f);
     }
 

@@ -26,15 +26,19 @@ public class NotificationDisplay : MonoBehaviour
         gameObject.SetActive(true);
         LoadScreen.instance.HideScreen(); //Disable the load screen to show the notification
         notificationContent.text = text;
+
         switch (type)
         {
             case NotificationType.info:
                 notificationContent.color = Color.green;
+                GameManager.instance.GetComponent<AudioManager>().PlayNotificationSound();
                 break;
             case NotificationType.warning:
+                GameManager.instance.GetComponent<AudioManager>().PlayErrorSound();
                 notificationContent.color = Color.yellow;
                 break;
             case NotificationType.error:
+                GameManager.instance.GetComponent<AudioManager>().PlayErrorSound();
                 notificationContent.color = Color.red;
                 break;
         }
@@ -49,6 +53,7 @@ public class NotificationDisplay : MonoBehaviour
     {
         gameObject.SetActive(false);
         notificationContent.text = "";
+        GameManager.instance.GetComponent<AudioManager>().PlayClickSound();
     }
 }
 
