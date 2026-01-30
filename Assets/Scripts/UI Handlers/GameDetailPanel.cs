@@ -85,7 +85,7 @@ public class GameDetailPanel : MonoBehaviour
 
     public void SelectGame(Wagr.GameName gameName)
     {
-        GameManager.gameSession = new Wagr.Session(GameMode.vsBot, gameName); //Create/Reset game session
+        GameManager.gameSession = new Wagr.Session(gameName); //Create/Reset game session (A game vs a bot)
         switch (gameName)
         {
             case Wagr.GameName.xando:

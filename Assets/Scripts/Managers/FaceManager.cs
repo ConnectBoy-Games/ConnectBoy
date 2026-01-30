@@ -7,6 +7,8 @@ public class FaceManager
     [SerializeField] private Sprite[] faces;
     [SerializeField] private Sprite def; //Default Sprite face
 
+    public int Count() => faces.Length;
+
     public Sprite GetFace(int index)
     {
         if(index == -1)

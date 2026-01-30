@@ -42,7 +42,7 @@ namespace Wagr
         public string senderUsername;
         public int matchType;
         public int wagerAmount;
-        public Guid matchId;
+        public string matchId;
         public long timestamp;
     }
 
@@ -55,28 +55,31 @@ namespace Wagr
         public Player host { get; private set; } //Always refers to the player that created the game session
         public Player other { get; private set; } //Refers to the other player
 
-        private int hostScore;
-        private int friendScore;
-
         public GameMode gameMode;
         public GameName gameName;
-        public BotDifficulty botDifficulty;
+        public GameRole gameRole;
+
+        public BotDifficulty botDifficulty = BotDifficulty.low;
 
         //For creating Server based modes
-        public Session(Guid matchId, GameName name, int wager, Player host, Player other)
+        public Session(Guid matchId, GameName name, int wager, Player host, Player other, GameRole role)
         {
             sessionId = matchId;
             gameName = name;
+            gameRole = role;
+            gameMode = GameMode.vsPlayer;
+
             this.wager = wager;
-            this.host = this.host;
-            this.other = this.other;
+            this.host = host;
+            this.other = other;
         }
 
         //For creating AI game modes 
-        public Session(GameMode mode, GameName name)
+        public Session(GameName name)
         {
-            gameMode = mode;
             gameName = name;
+            gameMode = GameMode.vsBot;
+            gameRole = GameRole.host;
         }
 
         public Session(string json)
@@ -89,13 +92,6 @@ namespace Wagr
             host = sesh.host;
             other = sesh.other;
             other = sesh.other;
-            hostScore = sesh.hostScore;
-            friendScore = sesh.friendScore;
-        }
-
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(this);
         }
     }
 }

@@ -47,7 +47,7 @@ public class InvitePanel : MonoBehaviour
         if(session != null)
         {
             //Locally store the session details
-            GameManager.gameSession = new Wagr.Session(session.SessionId, wager, GameManager.instance.accountManager.playerProfile, null);
+            GameManager.gameSession = new Wagr.Session(session.SessionId, request.GameName, wager, GameManager.instance.accountManager.playerProfile, null, GameRole.host);
         }
         
         if (CloudSaveSystem.IsNameTaken(username).Result == true)

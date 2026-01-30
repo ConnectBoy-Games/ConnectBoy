@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,7 +6,7 @@ using Wagr;
 
 public class NotificationBox : MonoBehaviour
 {
-    public Wagr.MatchInvite notification;
+    public MatchInvite notification;
 
     [SerializeField] private TMP_Text userText;
     [SerializeField] private TMP_Text timeText;
@@ -23,17 +24,17 @@ public class NotificationBox : MonoBehaviour
     [SerializeField] Image backgroundImage;
     [SerializeField] Color[] colors;
 
-    public void SetBoxDetails(Wagr.MatchInvite invite)
+    public void SetBoxDetails(MatchInvite invite)
     {
         notification = invite;
 
         //Set the title and time text
         string gameName = "";
         userText.text = notification.senderUsername;
-        timeText.text = System.DateTimeOffset.FromUnixTimeSeconds(notification.timestamp).ToLocalTime().ToString("g");
+        //timeText.text = System.DateTimeOffset.FromUnixTimeSeconds(notification.timestamp).ToLocalTime().ToString("g");
 
         //Set Background Color (Randomly)
-        backgroundImage.color = colors[Random.Range(0, colors.Length)];
+        backgroundImage.color = colors[UnityEngine.Random.Range(0, colors.Length)];
 
         //Set the game image
         switch ((Wagr.GameName)notification.matchType)
@@ -65,7 +66,7 @@ public class NotificationBox : MonoBehaviour
         }
 
         ///Set the message text
-        inviteText.text = "Invites you to play a Game of " + gameName + " with a Wager of " + "<color = green>" + notification.wagerAmount + "</color>";
+        inviteText.text = "Invites you to play a Game of " + gameName + " with a Wager of " + "<color=green>" + notification.wagerAmount + "</color>";
     }
 
     public void OpenPrompt()
@@ -78,13 +79,36 @@ public class NotificationBox : MonoBehaviour
     public async void GoToGame()
     {
         LoadScreen.instance.ShowScreen();
-        Player hostPlayer = await CloudSaveSystem.RetrieveSpecificData<Player>(notification.senderId);
+        try
+        {
+            //Get the host player
+            Player hostPlayer = await CloudSaveSystem.RetrieveSpecificData<Player>(notification.senderId);
 
-        //Set the game session
-        GameManager.gameSession = new Session(notification.matchId, notification.wagerAmount, hostPlayer, GameManager.instance.accountManager.playerProfile);
+            //Set the current player as the other player
+            JoinSessionRequest joinRequest = new JoinSessionRequest
+            {
+                OtherPlayer = GameManager.instance.accountManager.playerProfile
+            };
 
-        //Load the actual game level and set the scene accordingly
-        GameManager.instance.GoToSelectedGame();
+            //Try to join the game session
+            var joined = await SessionHandler.JoinSession(notification.matchId, joinRequest);
+
+            if(joined.Status == false) //Failed to join
+            {
+                NotificationDisplay.instance.DisplayMessage("Error joining game");
+                return;
+            }
+
+            //Set the local game session reference to match
+            GameManager.gameSession = new Session(Guid.Parse(notification.matchId), (GameName)notification.matchType, notification.wagerAmount, hostPlayer, GameManager.instance.accountManager.playerProfile, GameRole.friend);
+
+            //Load the actual game level and set the scene accordingly
+            GameManager.instance.GoToSelectedGame();
+        }
+        catch (System.Exception ex)
+        {
+            NotificationDisplay.instance.DisplayMessage("Error joining game: " + ex.Message, NotificationType.error);
+        }
     }
 
     public void DeclineInvite()

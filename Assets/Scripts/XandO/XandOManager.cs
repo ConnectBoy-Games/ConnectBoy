@@ -8,8 +8,9 @@ public class XandOManager : MonoBehaviour
 
     private string userPiece; // (x or o)
     private string botPiece; // (x or o)
+    private bool isGameOver = false;
 
-    private string[] gameState = new string[9];
+    private XAndOState state;
 
     [SerializeField] XandOUIHandler uiHandler;
 
@@ -21,6 +22,10 @@ public class XandOManager : MonoBehaviour
 
     public void Start()
     {
+        state.Board = new string[9];
+        System.Array.Fill(state.Board, "f");
+
+        isGameOver = false;
         ClearBoard();
 
         if (GameManager.gameSession.gameMode == GameMode.vsBot)
@@ -40,13 +45,13 @@ public class XandOManager : MonoBehaviour
     }
 
     //For allowing the player to make a move
-    public void MakeMove(int index)
+    public async void MakeMove(int index)
     {
-        if (gameState[index] == "f" && turnUser == User.host) //Valid move
+        if (state.Board[index] == "f" && turnUser == User.host && !isGameOver) //Valid move
         {
             if (GameManager.gameSession.gameMode == GameMode.vsBot)
             {
-                gameState[index] = userPiece; //Update the game state
+                state.Board[index] = userPiece; //Update the game state
                 PlacePiece(index, userPiece); //Place the piece on the board
                 turnUser = User.bot; //Hand over the turn
                 uiHandler.SetTurnText(turnUser); //Display the turn text
@@ -56,16 +61,27 @@ public class XandOManager : MonoBehaviour
             }
             else //Playing Against A Bot
             {
-                //TODO: Send move to server
-                //SendMoveToServer();
+                XAndOMove move = new XAndOMove
+                {
+                    val = index
+                };
+
+                //Send move to server
+                var result = await SessionHandler.MakeMove(GameManager.gameSession.sessionId.ToString(), move);
+                result.State = Newtonsoft.Json.JsonConvert.DeserializeObject<XAndOState>(result.State.ToString());
+
+                turnUser = User.bot; //Hand over the turn
+                uiHandler.SetTurnText(turnUser); //Display the turn text
             }
         }
     }
 
     private void MakeAIMove()
     {
-        int index = bot.ThinkMove(gameState); //Let the bot think a move
-        gameState[index] = botPiece; //Update the game state
+        if (isGameOver) return;
+
+        int index = bot.ThinkMove(state.Board); //Let the bot think a move
+        state.Board[index] = botPiece; //Update the game state
         PlacePiece(index, botPiece); //Place the bot piece on the board
         turnUser = User.host; //Hand over the turn
         uiHandler.SetTurnText(turnUser); //Display the turn text
@@ -102,8 +118,8 @@ public class XandOManager : MonoBehaviour
             }
         }
 
-        gameState = new string[9];
-        System.Array.Fill(gameState, "f");
+        state.Board = new string[9];
+        System.Array.Fill(state.Board, "f");
     }
     #endregion
 
@@ -114,6 +130,7 @@ public class XandOManager : MonoBehaviour
 
         if (win != -1)
         {
+            isGameOver = true;
             ActivateWinLine(win);
             GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
             uiHandler.DisplayWinScreen("You Have Won");
@@ -122,6 +139,7 @@ public class XandOManager : MonoBehaviour
         win = CheckWinState(botPiece); //Check if bot has won
         if (win != -1)
         {
+            isGameOver = true;
             ActivateWinLine(win);
             GameManager.instance.GetComponent<AudioManager>().PlayDefeatSound();
             uiHandler.DisplayWinScreen("Bot Has Won");
@@ -130,7 +148,7 @@ public class XandOManager : MonoBehaviour
         //No one has won yet
         for (int i = 0; i < 9; i++)
         {
-            if (gameState[i] == "f") //There's an empty space
+            if (state.Board[i] == "f") //There's an empty space
                 return; //Game should keep on going (There's still free space)
         }
 
@@ -144,37 +162,37 @@ public class XandOManager : MonoBehaviour
     private int CheckWinState(string piece)
     {
         //Check Columns
-        if (gameState[0] == piece && gameState[1] == piece && gameState[2] == piece)
+        if (state.Board[0] == piece && state.Board[1] == piece && state.Board[2] == piece)
         {
             return 1;
         }
-        else if (gameState[3] == piece && gameState[4] == piece && gameState[5] == piece)
+        else if (state.Board[3] == piece && state.Board[4] == piece && state.Board[5] == piece)
         {
             return 2;
         }
-        else if (gameState[6] == piece && gameState[7] == piece && gameState[8] == piece)
+        else if (state.Board[6] == piece && state.Board[7] == piece && state.Board[8] == piece)
         {
             return 3;
         }
         //Check Rows
-        else if (gameState[0] == piece && gameState[3] == piece && gameState[6] == piece)
+        else if (state.Board[0] == piece && state.Board[3] == piece && state.Board[6] == piece)
         {
             return 4;
         }
-        else if (gameState[1] == piece && gameState[4] == piece && gameState[7] == piece)
+        else if (state.Board[1] == piece && state.Board[4] == piece && state.Board[7] == piece)
         {
             return 5;
         }
-        else if (gameState[2] == piece && gameState[5] == piece && gameState[8] == piece)
+        else if (state.Board[2] == piece && state.Board[5] == piece && state.Board[8] == piece)
         {
             return 6;
         }
         //Check Diagonals
-        else if (gameState[0] == piece && gameState[4] == piece && gameState[8] == piece)
+        else if (state.Board[0] == piece && state.Board[4] == piece && state.Board[8] == piece)
         {
             return 7;
         }
-        else if (gameState[6] == piece && gameState[4] == piece && gameState[2] == piece)
+        else if (state.Board[6] == piece && state.Board[4] == piece && state.Board[2] == piece)
         {
             return 8;
         }

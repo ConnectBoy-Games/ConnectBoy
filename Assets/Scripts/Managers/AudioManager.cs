@@ -93,7 +93,7 @@ public class AudioManager : MonoBehaviour
         if (sfx) m_AudioSource.PlayOneShot(victorySound);
     }
 
-    public void PlayChatSend()
+    public void PlayChatSendSound()
     {
         if (sfx) m_AudioSource.PlayOneShot(chatSendSound);
     }

@@ -1,7 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Unity.Services.Authentication;
+using Unity.Services.CloudCode;
 using UnityEngine;
 using UnityEngine.Events;
+using Wagr;
 
 public class NotificationPanel : MonoBehaviour
 {
@@ -9,11 +14,12 @@ public class NotificationPanel : MonoBehaviour
 
     [SerializeField] private Transform notificationHolder;
     [SerializeField] private GameObject notificationPrefab;
+    [SerializeField] private InviteDisplay inviteDisplay;
 
     void OnEnable()
     {
         LoadNotifications();
-        InviteDisplay.instance.gameObject.SetActive(false);
+        inviteDisplay.gameObject.SetActive(false);
     }
 
     void FixedUpdate()
@@ -29,20 +35,42 @@ public class NotificationPanel : MonoBehaviour
 
     public async Task LoadInvites()
     {
-        var data = await CloudSaveSystem.RetrieveSpecificData<List<Wagr.MatchInvite>>("invites");
-
-        foreach (var inv in data) //Create Notification Box UI and set details here:
+        var id = AuthenticationService.Instance.PlayerId;
+        try
         {
-            var notification = Instantiate(notificationPrefab, notificationHolder).GetComponent<NotificationBox>();
-            notification.SetBoxDetails(inv);
+            var args = new Dictionary<string, object>
+            {
+                { "playerId", id },
+            };
+
+            // Call the Cloud Code function
+            var result = await CloudCodeService.Instance.CallEndpointAsync<CloudInvitesGetProxy>("GetInvites", args);
+
+            if (result.success)
+            {
+                MatchInvite[] invites = JsonConvert.DeserializeObject<MatchInvite[]>(result.data.ToString());
+
+                foreach (var inv in invites) //Create Notification Box UI and set details here:
+                {
+                    var notification = Instantiate(notificationPrefab, notificationHolder).GetComponent<NotificationBox>();
+                    notification.SetBoxDetails(inv);
+                }
+            }
         }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to get profile: {e.Message}");
+            NotificationDisplay.instance.DisplayMessage($"Could not fetch public data: {e.Message}", NotificationType.error);
+        }
+
+        //var data = await CloudSaveSystem.RetrieveSpecificData<List<Wagr.MatchInvite>>("invites");
     }
 
     public void GoBack()
     {
-        if (InviteDisplay.instance.gameObject.activeSelf)
+        if (inviteDisplay.gameObject.activeSelf)
         {
-            InviteDisplay.instance.CloseInvite();
+            inviteDisplay.CloseInvite();
         }
         else
         {

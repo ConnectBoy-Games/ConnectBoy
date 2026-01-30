@@ -64,7 +64,7 @@ public class XandOUIHandler : MonoBehaviour
                     turnText.text = "Your Move";
                     break;
                 case User.player:
-                    turnText.text = "Player's Move";
+                    turnText.text = "Friend's Move";
                     break;
             }
         }

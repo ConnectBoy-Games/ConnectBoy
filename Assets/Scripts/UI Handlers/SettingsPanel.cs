@@ -111,8 +111,11 @@ public class SettingsPanel : MonoBehaviour
 
         // Sign out of Unity Player Accounts
         PlayerAccountService.Instance.SignOut();
-        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+
         GameManager.instance.accountManager.SignOut();
+
+        //Reload the Main Menu
+        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
     }
 
     public void DeleteAccount()

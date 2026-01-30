@@ -24,18 +24,21 @@ public class ChatManager : MonoBehaviour
     public async void SendChat()
     {
         string chat = chatField.text;
+        if (chat == "") return;
 
-        ChatMessageSend chatMessage = new ChatMessageSend
+        chatField.text = ""; //Clear the chat input field
+
+        ChatMessage chatMessage = new ChatMessage
         {
-            lastChatId = this.lastChatId,
+            chatId = this.lastChatId,
             Message = chat,
             Username = GameManager.instance.accountManager.playerProfile.Name
         };
 
         var chats = await SessionHandler.SendSessionChat(GameManager.gameSession.sessionId.ToString(), chatMessage);
+        GameManager.instance.GetComponent<AudioManager>().PlayChatSendSound();
         UpdateUI(chats);
 
-        chatField.text = ""; //Clear the chat input field
     }
 
     public async void LoadChats()
@@ -44,9 +47,9 @@ public class ChatManager : MonoBehaviour
         UpdateUI(chats);
     }
 
-    public void UpdateUI(List<ChatMessageReturn> chats)
+    public void UpdateUI(List<ChatMessage> chats)
     {
-        foreach (ChatMessageReturn chatMessage in chats)
+        foreach (ChatMessage chatMessage in chats)
         {
             var chat = Instantiate(chatPrefab, chatHolder).GetComponent<ChatBox>(); //Add the chat textbox to the UI
             chat.SetUI(chatMessage.Username, chatMessage.Message); //Set the UI details of the chat message

@@ -21,10 +21,12 @@ public class LoadScreen : MonoBehaviour
     public void ShowScreen()
     {
         gameObject.SetActive(true);
+        GameManager.instance.GetComponent<AudioManager>().PlayWobbleSound();
     }
 
     public void HideScreen()
     {
         gameObject.SetActive(false);
+        GameManager.instance.GetComponent<AudioManager>().PlayClickSound();
     }
 }

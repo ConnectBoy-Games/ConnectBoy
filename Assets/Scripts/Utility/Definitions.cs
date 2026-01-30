@@ -92,7 +92,10 @@ public enum GameMode : byte
 [Serializable]
 public enum GameRole : byte
 {
-    host = 0, friend = 1
+    /// <summary>This client is the game host</summary>
+    host = 0, 
+    /// <summary>This client is not the game host</summary>
+    friend = 1
 }
 
 [Serializable]
@@ -114,16 +117,36 @@ public class NameResponse
     public string name;
 }
 
-// Response structure matches the return object from JS
-[System.Serializable]
+[Serializable]
 public class LookupResponse
 {
     public bool exists;
     public string playerId;
 }
 
-[System.Serializable]
+[Serializable]
 public class LookupRequest
 {
     public string targetName;
+}
+
+[Serializable]
+public class CloudCodeResponse
+{
+    public bool success;
+    public string access;
+}
+
+[Serializable]
+public class CloudProfileGetProxy
+{
+    public Wagr.Player data;
+    public bool success;
+}
+
+[Serializable]
+public class CloudInvitesGetProxy
+{
+    public bool success;
+    public object data;
 }

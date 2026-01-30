@@ -43,7 +43,11 @@ public class MenuPanel : MonoBehaviour
 
     void Start()
     {
-        OnNewInviteReceived += (invite) => { notificationDot.SetActive(true); };
+        OnNewInviteReceived += (invite) =>
+        {
+            notificationDot.SetActive(true);
+            GameManager.instance.GetComponent<AudioManager>().PlayNotificationSound();
+        };
     }
 
     public void StartPolling()
@@ -76,7 +80,7 @@ public class MenuPanel : MonoBehaviour
                     if (!_processedInviteTimestamps.Contains(invite.timestamp))
                     {
                         _processedInviteTimestamps.Add(invite.timestamp);
-                        
+
                         // 3. Trigger the UI/Event
                         Debug.Log($"New Wager Invite from {invite.senderUsername}!");
                         NotificationDisplay.instance.DisplayMessage($"New Wager Invite from {invite.senderUsername}!", NotificationType.info, 2f);

@@ -3,13 +3,16 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class LoginPanel : MonoBehaviour
 {
+    public static int dpIndex = 0;
+    
     public UnityAction backAction;
 
     [SerializeField] GameObject loginButton;
-    [SerializeField] GameObject continueButton;
+    [SerializeField] GameObject guestButton;
     [SerializeField] GameObject usernamePanel;
     [SerializeField] TMP_InputField usernameInput;
 
@@ -25,6 +28,19 @@ public class LoginPanel : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            GoBack();
+        }
+    }
+
+    void GoBack()
+    {
+        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+    }
+
     public async void Login()
     {
         LoadScreen.instance.ShowScreen(); //Show the load screen
@@ -38,10 +54,12 @@ public class LoginPanel : MonoBehaviour
         if (profileExists == false)
         {
             loginButton.SetActive(false);
+            guestButton.SetActive(false);
             usernamePanel.SetActive(true);
         }
         else
         {
+            GameManager.instance.GetComponent<AudioManager>().PlayAcceptSound();
             backAction?.Invoke();
         }
     }
@@ -56,14 +74,14 @@ public class LoginPanel : MonoBehaviour
     {
         var username = usernameInput.text;
 
-        if (username.Length < 3 || username.Length > 15)
+        if (username.Length < 3 || username.Length > 10)
         {
             NotificationDisplay.instance.DisplayMessage("Username must be between 3 and 15 characters!", NotificationType.error);
             return;
         }
 
         LoadScreen.instance.ShowScreen(); //Show the load screen
-        await GameManager.instance.accountManager.CreateAccount(username);
+        await GameManager.instance.accountManager.CreateAccount(username, dpIndex);
         GameManager.instance.accountManager.onAccountCreated += OnCreatedAccount;
     }
 

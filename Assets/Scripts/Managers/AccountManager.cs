@@ -1,8 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Unity.Services.Authentication;
 using Unity.Services.Authentication.PlayerAccounts;
-
+using Unity.Services.CloudCode;
+using Unity.Services.CloudSave;
+using Unity.Services.CloudSave.Models;
+using Unity.Services.CloudSave.Models.Data.Player;
 using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Events;
@@ -93,14 +98,30 @@ public class AccountManager
     public async Task<bool> LoadProfile()
     {
         var id = AuthenticationService.Instance.PlayerId;
-        playerProfile = await CloudSaveSystem.RetrieveSpecificData<Player>(id);
-
-        if (playerProfile == default)
+        try
         {
-            return false;
+            var args = new Dictionary<string, object>
+            {
+                { "targetId", id },
+                { "key", id }
+            };
+
+            // Call the Cloud Code function
+            var response = await CloudCodeService.Instance.CallEndpointAsync<CloudProfileGetProxy>("GetProfile", args);
+
+            if (response.success)
+            {
+                playerProfile = response.data;
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to get profile: {e.Message}");
+            NotificationDisplay.instance.DisplayMessage($"Could not fetch public data: {e.Message}", NotificationType.error);
         }
 
-        return true;
+        return false;
     }
 
     public void LoginInGuestMode()
@@ -119,20 +140,21 @@ public class AccountManager
     #endregion
 
     #region Profile
-    public async Task CreateAccount(string username)
+    public async Task CreateAccount(string username, int dpIndex)
     {
         if (await CloudSaveSystem.IsNameTaken(username)) //Check if the username is in use
         {
             NotificationDisplay.instance.DisplayMessage("Username is already in use", NotificationType.warning, 5f);
+            return;
         }
         else
         {
             try
             {
-                Player player = new(AuthenticationService.Instance.PlayerId, username);
+                Player player = new(AuthenticationService.Instance.PlayerId, username, dpIndex);
                 PlayerStats stats = new();
 
-                await CloudSaveSystem.SaveSpecificData(AuthenticationService.Instance.PlayerId, player);
+                await CloudSaveSystem.SetProfile(AuthenticationService.Instance.PlayerId, player);
                 await CloudSaveSystem.SaveSpecificData("stats", stats);
                 await CloudSaveSystem.SetUsername(username);
 

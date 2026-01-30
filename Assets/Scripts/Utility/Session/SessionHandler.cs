@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Wagr;
 
 public class SessionHandler
 {
     //TODO: Expand services to handle multiple servers with different base URLs
 
 #if UNITY_EDITOR 
-    private static string _baseUrl = "http://localhost:5001/api/sessions"; 
+    private static string _baseUrl = "http://localhost:5001/api/sessions";
 #else
     private static string _baseUrl = "http://connectboy1.runasp.net/api/Sessions";
 #endif
@@ -41,18 +40,27 @@ public class SessionHandler
     /// <param name="sessionId">The session id</param>
     /// <param name="chat">The Chat Message Send object</param>
     /// <returns>A lis of messages since the last one sent</returns>
-    public static async Task<List<ChatMessageReturn>> SendSessionChat(string sessionId, ChatMessageSend chat)
+    public static async Task<List<ChatMessage>> SendSessionChat(string sessionId, ChatMessage chat)
     {
-        return await new WebPoster().PostRequestAsync<ChatMessageSend, List<ChatMessageReturn>>($"{_baseUrl}/{sessionId}/chat", chat);
+        return await new WebPoster().PostRequestAsync<ChatMessage, List<ChatMessage>>($"{_baseUrl}/{sessionId}/chat", chat);
     }
 
     /// <summary>Returns a list of messages from the last message specified by id</summary>
     /// <param name="sessionId">The session id</param>
     /// <param name="id">The id of the last message loaded by the client</param>
     /// <returns>A list of Chat message return</returns>
-    public static async Task<List<ChatMessageReturn>> GetSessionChat(string sessionId, int id)
+    public static async Task<List<ChatMessage>> GetSessionChat(string sessionId, int id)
     {
-        return await new WebPoster().GetRequestAsync<List<ChatMessageReturn>>($"{_baseUrl}/{sessionId}/chat/{id}");
+        return await new WebPoster().GetRequestAsync<List<ChatMessage>>($"{_baseUrl}/{sessionId}/chat/{id}");
+    }
+
+    /// <summary>Sends a move based on the game type</summary>
+    /// <param name="sessionId">The session id</param>
+    /// <param name="move">The move data of the specific game type</param>
+    /// <returns>A game result object that shows the result of the action</returns>
+    public static async Task<GameResult> MakeMove(string sessionId, object move)
+    {
+        return await new WebPoster().PostRequestAsync<MakeMoveRequest, GameResult>($"{_baseUrl}/{sessionId}/game/move", move);
     }
 
     public static async Task DestroySession(string sessionId)

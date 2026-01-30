@@ -96,9 +96,6 @@ public class CloudSaveSystem
     {
         try
         {
-            Debug.Log($"Attempting to claim name: {username}...");
-
-            //var args = new SetNameRequest { requestedName = username };
             Dictionary<string, object> args = new()
             {
                 { "requestedName", username }
@@ -109,21 +106,42 @@ public class CloudSaveSystem
 
             if (response.success)
             {
-                Debug.Log($"Success! Your name is now: {response.name}");
                 return true;
             }
         }
         catch (CloudCodeException ex)
         {
-            // This catches the "throw new Error" from the JS script
-            if (ex.Message.Contains("already taken"))
+            NotificationDisplay.instance.DisplayMessage($"Cloud Code Error: {ex.Message}", NotificationType.error);
+        }
+        return false;
+    }
+
+    public static async Task<bool> SetProfile(string id, Wagr.Player player)
+    {
+        try
+        {
+            // 1. Prepare the arguments
+            // The keys here must match the "params" used in your JavaScript code
+            var arguments = new Dictionary<string, object>
             {
-                Debug.LogError("Name is unavailable. Please try another.");
-            }
-            else
-            {
-                Debug.LogError($"Cloud Code Error: {ex.Message}");
-            }
+                { "Id", player.Id },
+                { "Name", player.Name },
+                { "DpIndex", player.DpIndex }
+            };
+
+            // 2. Call the function
+            // We expect the Cloud Code to return an object we can parse
+            var result = await CloudCodeService.Instance.CallEndpointAsync<CloudCodeResponse>("SetProfile", arguments);
+
+            return result.success;
+        }
+        catch (CloudCodeException e)
+        {
+            NotificationDisplay.instance.DisplayMessage($"Cloud Code call failed: {e.Message} \n Code: {e.ErrorCode}", NotificationType.error);
+        }
+        catch (Exception e)
+        {
+            NotificationDisplay.instance.DisplayMessage($"An unexpected error occurred: {e.Message}", NotificationType.error);
         }
         return false;
     }
