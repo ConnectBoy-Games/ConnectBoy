@@ -65,7 +65,7 @@ public class FourInOneUIHandler : MonoBehaviour
                 case User.bot:
                     turnText.text = "Bot's Move";
                     break;
-                case User.host:
+                case User.client:
                     turnText.text = "Your Move";
                     break;
                 case User.player:

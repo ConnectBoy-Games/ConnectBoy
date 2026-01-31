@@ -34,7 +34,7 @@ public class FourInOneManager : MonoBehaviour
     public void MakeMove(int column)
     {
         // 1. Check if column is valid and not full and it is the player's turn
-        if (column < 0 || column >= Cols || board[0, column] != 0 && turnUser != User.host)
+        if (column < 0 || column >= Cols || board[0, column] != 0 && turnUser != User.client)
             return;
 
         if (gameMode == GameMode.vsPlayer)
@@ -129,7 +129,7 @@ public class FourInOneManager : MonoBehaviour
         }
         else
         {
-            turnUser = User.host;
+            turnUser = User.client;
             uiHandler.SetTurnText(turnUser);
         }
     }

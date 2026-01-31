@@ -69,29 +69,28 @@ public class AccountManager
     }
 
     #region Authentication
-
     public async Task Login()
     {
         // Check if a cached player already exists by checking if the session token exists
-        if (AuthenticationService.Instance.SessionTokenExists)
+        try
         {
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        }
-        else if (PlayerAccountService.Instance.IsSignedIn)
-        {
-            await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
-        }
-        else //Sign in the player from the browser
-        {
-            try
+            if (AuthenticationService.Instance.SessionTokenExists)
+            {
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            }
+            else if (PlayerAccountService.Instance.IsSignedIn)
+            {
+                await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
+            }
+            else //Sign in the player from the browser
             {
                 await PlayerAccountService.Instance.StartSignInAsync();
             }
-            catch (Exception ex)
-            {
-                Debug.LogError("Failed to sign in player with Unity Player Accounts: " + ex.Message);
-                NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
-            }
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError("Failed to sign in player with Unity Player Accounts: " + ex.Message);
+            NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
         }
     }
 
@@ -114,13 +113,16 @@ public class AccountManager
                 playerProfile = response.data;
                 return true;
             }
+            else 
+            {
+                return false;
+            }
         }
         catch (Exception e)
         {
             Debug.LogError($"Failed to get profile: {e.Message}");
             NotificationDisplay.instance.DisplayMessage($"Could not fetch public data: {e.Message}", NotificationType.error);
         }
-
         return false;
     }
 

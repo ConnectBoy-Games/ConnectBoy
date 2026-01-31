@@ -73,7 +73,7 @@ public class DotsAndBoxesManager : MonoBehaviour
         }
         else
         {
-            turnUser = User.host;
+            turnUser = User.client;
         }
         uiHandler.SetTurnText(turnUser);
         CheckBoardState(); //Check if there is a win

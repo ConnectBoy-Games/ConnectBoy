@@ -101,7 +101,7 @@ public enum GameRole : byte
 [Serializable]
 public enum User : byte 
 {
-    bot = 0, host = 1, player = 2 //Other player
+    bot = 0, client = 1, player = 2 //Other player
 }
 
 [Serializable]
@@ -142,6 +142,8 @@ public class CloudProfileGetProxy
 {
     public Wagr.Player data;
     public bool success;
+    public string message;
+    public string error;
 }
 
 [Serializable]
@@ -149,4 +151,6 @@ public class CloudInvitesGetProxy
 {
     public bool success;
     public object data;
+    public string message;
+    public string error;
 }

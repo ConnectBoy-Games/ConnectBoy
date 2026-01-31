@@ -8,9 +8,14 @@ public class XandOUIHandler : MonoBehaviour
 
     [SerializeField] TMP_Text turnText;
     [SerializeField] GameObject chatPanel;
+    [SerializeField] GameObject forfeitPanel;
+
+    [Header("Win Or Lose Panels")]
+    [SerializeField] GameObject endPanel;
     [SerializeField] GameObject victoryPanel;
     [SerializeField] GameObject defeatPanel;
-    [SerializeField] GameObject forfeitPanel;
+    [SerializeField] TMP_Text victoryText;
+    [SerializeField] TMP_Text defeatText;
 
     [SerializeField] GameObject chatButton;
 
@@ -32,7 +37,7 @@ public class XandOUIHandler : MonoBehaviour
 
     public void GoBack()
     {
-        if (victoryPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
+        if (endPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
         {
             //GoToHome();
         }
@@ -48,24 +53,36 @@ public class XandOUIHandler : MonoBehaviour
 
     public void GoToHome()
     {
-        SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
+        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
     }
 
     public void SetTurnText(User turnUser, string text = null)
     {
         if (text == null)
         {
-            switch (turnUser)
+            if (GameManager.instance.accountManager.loginState == LoginState.loggedIn)
             {
-                case User.bot:
-                    turnText.text = "Bot's Move";
-                    break;
-                case User.host:
-                    turnText.text = "Your Move";
-                    break;
-                case User.player:
-                    turnText.text = "Friend's Move";
-                    break;
+                switch (turnUser)
+                {
+                    case User.player:
+                        turnText.text = GameManager.gameSession.gameRole == GameRole.host ? manager.det.OtherPlayer.Name + "'s turn" : manager.det.HostPlayer.Name + "'s turn";
+                        break;
+                    case User.client:
+                        turnText.text = GameManager.instance.accountManager.playerProfile.Name + "'s turn";
+                        break;
+                }
+            }
+            else
+            {
+                switch (turnUser)
+                {
+                    case User.bot:
+                        turnText.text = "Bot's Move";
+                        break;
+                    case User.client:
+                        turnText.text = "Your Move";
+                        break;
+                }
             }
         }
         else
@@ -76,6 +93,16 @@ public class XandOUIHandler : MonoBehaviour
 
     public void DisplayWinScreen(string name, int wager = -1)
     {
+        endPanel.SetActive(true);
         victoryPanel.SetActive(true);
+        victoryText.text = name + wager.ToString(); ;
+    }
+
+    public void DisplayDefeatScreen(string name, int wager = -1)
+    {
+        endPanel.SetActive(true);
+        defeatPanel.SetActive(true);
+        defeatText.text = name + wager.ToString(); ;
+
     }
 }

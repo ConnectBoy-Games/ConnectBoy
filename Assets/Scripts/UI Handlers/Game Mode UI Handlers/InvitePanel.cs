@@ -34,7 +34,6 @@ public class InvitePanel : MonoBehaviour
 
         playButton.interactable = false; //Disable the Play button to avoid multiple clicks
 
-        //TODO: Create match and get the match Id from the Server
         CreateSessionRequest request = new CreateSessionRequest
         {
             Name = "Game",
@@ -46,17 +45,18 @@ public class InvitePanel : MonoBehaviour
         var session = await SessionHandler.CreateSession(request);
         if(session != null)
         {
+            Debug.Log("Created Game Session");
             //Locally store the session details
             GameManager.gameSession = new Wagr.Session(session.SessionId, request.GameName, wager, GameManager.instance.accountManager.playerProfile, null, GameRole.host);
         }
-        
-        if (CloudSaveSystem.IsNameTaken(username).Result == true)
+
+        //Check if it is a valid user
+        var isNameTaken = await CloudSaveSystem.IsNameTaken(username);
+        if (isNameTaken)
         {
             //Send out the notification invite after getting the session ID
             await CloudSaveSystem.SendMatchInvite(username, (int)GameManager.gameSession.gameName, wager, session.SessionId.ToString());
-
-            //Load the actual game level and set the scene accordingly
-            GameManager.instance.GoToSelectedGame();
+            GoToGame();
         }
         else //Else, display a warning message that no such user exists
         {
@@ -65,5 +65,11 @@ public class InvitePanel : MonoBehaviour
         }
 
         playButton.interactable = true;
+    }
+
+    private void GoToGame()
+    {
+        //Load the actual game level and set the scene accordingly
+        GameManager.instance.GoToSelectedGame();
     }
 }

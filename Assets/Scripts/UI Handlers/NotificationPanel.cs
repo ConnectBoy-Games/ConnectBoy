@@ -54,7 +54,12 @@ public class NotificationPanel : MonoBehaviour
                 {
                     var notification = Instantiate(notificationPrefab, notificationHolder).GetComponent<NotificationBox>();
                     notification.SetBoxDetails(inv);
+                    notification.inviteDisplay = inviteDisplay;
                 }
+            }
+            else
+            {
+                NotificationDisplay.instance.DisplayMessage(result.message);
             }
         }
         catch (Exception e)
@@ -62,8 +67,6 @@ public class NotificationPanel : MonoBehaviour
             Debug.LogError($"Failed to get profile: {e.Message}");
             NotificationDisplay.instance.DisplayMessage($"Could not fetch public data: {e.Message}", NotificationType.error);
         }
-
-        //var data = await CloudSaveSystem.RetrieveSpecificData<List<Wagr.MatchInvite>>("invites");
     }
 
     public void GoBack()

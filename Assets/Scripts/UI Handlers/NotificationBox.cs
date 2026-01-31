@@ -7,6 +7,7 @@ using Wagr;
 public class NotificationBox : MonoBehaviour
 {
     public MatchInvite notification;
+    public InviteDisplay inviteDisplay;
 
     [SerializeField] private TMP_Text userText;
     [SerializeField] private TMP_Text timeText;
@@ -71,9 +72,9 @@ public class NotificationBox : MonoBehaviour
 
     public void OpenPrompt()
     {
-        InviteDisplay.instance.ShowInvite();
-        InviteDisplay.instance.acceptInvite = GoToGame;
-        InviteDisplay.instance.rejectInvite = DeclineInvite;
+        inviteDisplay.ShowInvite();
+        inviteDisplay.acceptInvite = GoToGame;
+        inviteDisplay.rejectInvite = DeclineInvite;
     }
 
     public async void GoToGame()

@@ -36,6 +36,14 @@ public class SessionHandler
         return await new WebPoster().GetRequestAsync<SessionDetails>($"{_baseUrl}/{sessionId}/");
     }
 
+    /// <summary>Gets the game state of the running game!</summary>
+    /// <param name="sessionId">The Id of the game session</param>
+    /// <returns>The game state of the running game</returns>
+    public static async Task<object> GetSessionGameState(string sessionId)
+    {
+        return new WebPoster().GetRequestAsync<object>($"{_baseUrl}/{sessionId}/game/state");
+    }
+
     /// <summary>Sends a message to the session and the get all the other unchecked messages</summary>
     /// <param name="sessionId">The session id</param>
     /// <param name="chat">The Chat Message Send object</param>
