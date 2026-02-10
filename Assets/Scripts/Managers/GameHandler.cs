@@ -62,7 +62,7 @@ public class GameHandler : MonoBehaviour
         else
         {
             InvokeRepeating(nameof(CheckStatus), 1f, 5f); //Keep checking the server if the other player has connected
-            LoadScreen.instance.ShowScreen();
+            LoadScreen.instance.ShowScreen("Waiting For Other Player To Join! \n ...");
         }
     }
 }

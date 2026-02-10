@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 
 public class LoadScreen : MonoBehaviour
 {
     /// <summary> A single instance of the Load Screen </summary>
     public static LoadScreen instance;
+    [SerializeField] TMP_Text textObject;
 
     void Awake()
     {
@@ -18,9 +20,10 @@ public class LoadScreen : MonoBehaviour
         }
     }
 
-    public void ShowScreen()
+    public void ShowScreen(string text)
     {
         gameObject.SetActive(true);
+        textObject.text = text;
         GameManager.instance.GetComponent<AudioManager>().PlayWobbleSound();
     }
 

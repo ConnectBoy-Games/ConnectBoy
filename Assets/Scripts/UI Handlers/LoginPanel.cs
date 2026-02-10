@@ -43,7 +43,7 @@ public class LoginPanel : MonoBehaviour
 
     public async void Login()
     {
-        LoadScreen.instance.ShowScreen(); //Show the load screen
+        LoadScreen.instance.ShowScreen("Logging In!"); //Show the load screen
         await GameManager.instance.accountManager.Login();
         GameManager.instance.accountManager.onProfileLoaded += OnProfileLoaded;
     }
@@ -80,7 +80,7 @@ public class LoginPanel : MonoBehaviour
             return;
         }
 
-        LoadScreen.instance.ShowScreen(); //Show the load screen
+        LoadScreen.instance.ShowScreen("Creating Acconut!"); //Show the load screen
         await GameManager.instance.accountManager.CreateAccount(username, dpIndex);
         GameManager.instance.accountManager.onAccountCreated += OnCreatedAccount;
     }

@@ -79,7 +79,7 @@ public class NotificationBox : MonoBehaviour
 
     public async void GoToGame()
     {
-        LoadScreen.instance.ShowScreen();
+        LoadScreen.instance.ShowScreen("Loading Game!");
         try
         {
             //Get the host player
