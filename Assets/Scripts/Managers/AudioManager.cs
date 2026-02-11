@@ -48,6 +48,46 @@ public class AudioManager : MonoBehaviour
         volume = value;
     }
 
+    public void PlayRandomSound()
+    {
+        switch (Random.Range(0, 10))
+        {
+            case 0:
+                PlayAcceptSound();
+                break;
+            case 1: 
+                PlayChatSendSound();
+                break;
+            case 2:
+                PlayClickSound();
+                break;
+            case 3:
+                PlayErrorSound();
+                break;
+            case 4:
+                PlayInvalidSound();
+                break;
+            case 5:
+                PlayWobbleSound();
+                break;
+            case 6:
+                PlayDrawSound();
+                break;
+            case 7:
+                PlayNotificationSound();
+                break;
+            case 8:
+                PlayDefeatSound();
+                break;
+            case 9:
+                PlayPlaceSound();
+                break;
+            default:
+                PlayVictorySound();
+                break;
+        }
+    }
+
     public void PlayClickSound()
     {
         if (sfx) m_AudioSource.PlayOneShot(clickSound);

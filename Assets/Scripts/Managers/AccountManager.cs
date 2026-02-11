@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Unity.Services.Authentication;
 using Unity.Services.Authentication.PlayerAccounts;
 using Unity.Services.CloudCode;
-using Unity.Services.CloudSave;
-using Unity.Services.CloudSave.Models;
-using Unity.Services.CloudSave.Models.Data.Player;
 using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Events;
@@ -32,9 +28,9 @@ public class AccountManager
 
     private void SetupEvents()
     {
+        //Sign in to authentication service with the access token from player accounts
         PlayerAccountService.Instance.SignedIn += async () =>
         {
-            //Sign in to authentication service with the access token from player accounts
             await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
         };
 
@@ -48,36 +44,29 @@ public class AccountManager
 
         PlayerAccountService.Instance.SignInFailed += (RequestFailedException ex) =>
         {
-            Debug.Log("Player signin failed!");
-            NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
+            Debug.Log("Player signin failed! " + ex.Message);
+            NotificationDisplay.instance.DisplayMessage("Player Sign In failed! " + ex.Message, NotificationType.error);
             GameManager.instance.accountManager.loginState = LoginState.unsigned;
         };
 
         PlayerAccountService.Instance.SignedOut += () =>
         {
-            Debug.Log("Player signed out!");
+            Debug.Log("Player Signed Out!");
+            NotificationDisplay.instance.DisplayMessage("You Have Been Signed Out!");
             GameManager.instance.accountManager.loginState = LoginState.unsigned;
         };
-
-        /*
-        // Shows how to get a playerID
-        Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
-
-        // Shows how to get an access token
-        Debug.Log($"Access Token: {AuthenticationService.Instance.AccessToken}");
-        */
     }
 
-    #region Authentication
     public async Task Login()
     {
-        // Check if a cached player already exists by checking if the session token exists
         try
         {
+            //Check if a cached player already exists and try signing in with that session token
             if (AuthenticationService.Instance.SessionTokenExists)
             {
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
             }
+            //If the player is already signed in with Player Accounts, sign them in to Authentication with the access token
             else if (PlayerAccountService.Instance.IsSignedIn)
             {
                 await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
@@ -87,7 +76,7 @@ public class AccountManager
                 await PlayerAccountService.Instance.StartSignInAsync();
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Debug.LogError("Failed to sign in player with Unity Player Accounts: " + ex.Message);
             NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
@@ -113,7 +102,7 @@ public class AccountManager
                 playerProfile = response.data;
                 return true;
             }
-            else 
+            else
             {
                 return false;
             }
@@ -139,40 +128,36 @@ public class AccountManager
         // Sign out of Unity Player Accounts
         PlayerAccountService.Instance.SignOut();
     }
-    #endregion
 
-    #region Profile
     public async Task CreateAccount(string username, int dpIndex)
     {
-        if (await CloudSaveSystem.IsNameTaken(username)) //Check if the username is in use
+        try
         {
-            NotificationDisplay.instance.DisplayMessage("Username is already in use", NotificationType.warning, 5f);
-            return;
+            Player player = new(AuthenticationService.Instance.PlayerId, username, dpIndex);
+            PlayerStats stats = new();
+
+            await CloudSaveSystem.SetProfile(AuthenticationService.Instance.PlayerId, player);
+            await CloudSaveSystem.SaveSpecificData("stats", stats);
+            await CloudSaveSystem.SetUsername(username);
+            onAccountCreated?.Invoke(true);
         }
-        else
+        catch (Exception ex)
         {
-            try
-            {
-                Player player = new(AuthenticationService.Instance.PlayerId, username, dpIndex);
-                PlayerStats stats = new();
-
-                await CloudSaveSystem.SetProfile(AuthenticationService.Instance.PlayerId, player);
-                await CloudSaveSystem.SaveSpecificData("stats", stats);
-                await CloudSaveSystem.SetUsername(username);
-
-                onAccountCreated?.Invoke(true);
-            }
-            catch (Exception ex)
-            {
-                onAccountCreated?.Invoke(false);
-                NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
-            }
+            onAccountCreated?.Invoke(false);
+            NotificationDisplay.instance.DisplayMessage(ex.Message, NotificationType.error);
         }
     }
-    #endregion
 
     private void CheckStates()
     {
+        /*
+        // Shows how to get a playerID
+        Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
+
+        // Shows how to get an access token
+        Debug.Log($"Access Token: {AuthenticationService.Instance.AccessToken}");
+        */
+
         // this is true if the access token exists, but it can be expired or refreshing
         Debug.Log($"Is SignedIn: {AuthenticationService.Instance.IsSignedIn}");
 
@@ -186,5 +171,10 @@ public class AccountManager
     public void DeleteAccount()
     {
         Application.OpenURL(PlayerAccountService.Instance.AccountPortalUrl);
+    }
+
+    public void OpenTerms()
+    {
+        Application.OpenURL("https://connectboy-games.web.app/terms.html");
     }
 }

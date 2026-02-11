@@ -1,6 +1,3 @@
-using System;
-using Unity.Services.Authentication;
-using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -32,7 +29,7 @@ public class SettingsPanel : MonoBehaviour
 
     void OnEnable()
     {
-        if(GameManager.instance.accountManager.loginState != LoginState.loggedIn)
+        if (GameManager.instance.accountManager.loginState != LoginState.loggedIn)
         {
             logoutButton.SetActive(false);
             deleteButton.SetActive(false);
@@ -54,9 +51,9 @@ public class SettingsPanel : MonoBehaviour
 
     public void GoBack()
     {
-        if(promptMenu.activeInHierarchy)
+        if (promptMenu.activeInHierarchy)
         {
-            promptMenu.SetActive(false); 
+            promptMenu.SetActive(false);
         }
         else
         {
@@ -104,27 +101,19 @@ public class SettingsPanel : MonoBehaviour
 
     public void SignOut()
     {
-        bool clearSessionToken = true;
-
-        // Sign out of Unity Authentication, with the option to clear the session token
-        AuthenticationService.Instance.SignOut(clearSessionToken);
-
-        // Sign out of Unity Player Accounts
-        PlayerAccountService.Instance.SignOut();
-
         GameManager.instance.accountManager.SignOut();
 
-        //Reload the Main Menu
+        //Go back to and Reload the Main Menu scene
         SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
     }
 
     public void DeleteAccount()
     {
-        Application.OpenURL(PlayerAccountService.Instance.AccountPortalUrl);
+        GameManager.instance.accountManager.DeleteAccount();
     }
 
     public void OpenTerms()
     {
-        Application.OpenURL("https://connectboy-games.web.app/terms.html");
+        GameManager.instance.accountManager.OpenTerms();
     }
 }
