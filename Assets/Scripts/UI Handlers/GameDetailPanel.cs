@@ -8,7 +8,6 @@ public class GameDetailPanel : MonoBehaviour
     public UnityAction backAction;
 
     [Header("Game Detail UI")]
-    [SerializeField] private Image gameImage;
     [SerializeField] private Image backgroundImage;
     [SerializeField] private TMP_Text gameTitle;
     [SerializeField] private TMP_Text gameDescription;
@@ -28,12 +27,12 @@ public class GameDetailPanel : MonoBehaviour
     [SerializeField] private string dotsandboxesBrief;
 
     [Header("Game Images")]
-    [SerializeField] private Sprite xandoImage;
-    [SerializeField] private Sprite archeryImage;
-    [SerializeField] private Sprite fourinarowImage;
-    [SerializeField] private Sprite minisoccerImage;
-    [SerializeField] private Sprite minigolfImage;
-    [SerializeField] private Sprite dotsandboxesImage;
+    [SerializeField] private Image xandoImage;
+    [SerializeField] private Image archeryImage;
+    [SerializeField] private Image fourinarowImage;
+    [SerializeField] private Image minisoccerImage;
+    [SerializeField] private Image minigolfImage;
+    [SerializeField] private Image dotsandboxesImage;
 
     [Header("Game Color")]
     [SerializeField] private Color xandoColor;
@@ -85,41 +84,42 @@ public class GameDetailPanel : MonoBehaviour
 
     public void SelectGame(Wagr.GameName gameName)
     {
+        ClearImages(); //Reset all game images before showing the selected one
         GameManager.gameSession = new Wagr.Session(gameName); //Create/Reset game session (A game vs a bot)
         switch (gameName)
         {
             case Wagr.GameName.xando:
-                gameImage.sprite = xandoImage;
+                xandoImage.gameObject.SetActive(true);
                 backgroundImage.color = xandoColor;
                 gameDescription.text = xandoBrief;
                 gameTitle.text = "X And O";
                 break;
             case Wagr.GameName.dotsandboxes:
-                gameImage.sprite = dotsandboxesImage;
+                dotsandboxesImage.gameObject.SetActive(true);
                 backgroundImage.color = dotsandboxesColor;
                 gameDescription.text = dotsandboxesBrief;
                 gameTitle.text = "Dots And Boxes";
                 break;
             case Wagr.GameName.fourinarow:
-                gameImage.sprite = fourinarowImage;
+                fourinarowImage.gameObject.SetActive(true);
                 backgroundImage.color = fourinarowColor;
                 gameDescription.text = fourinarowBrief;
                 gameTitle.text = "Four In A Row";
                 break;
             case Wagr.GameName.minisoccer:
-                gameImage.sprite = minisoccerImage;
+                minisoccerImage.gameObject.SetActive(true);
                 backgroundImage.color = minisoccerColor;
                 gameDescription.text = minisoccerBrief;
                 gameTitle.text = "Mini Soccer";
                 break;
             case Wagr.GameName.archery:
-                gameImage.sprite = archeryImage;
+                archeryImage.gameObject.SetActive(true);
                 backgroundImage.color = archeryColor;
                 gameDescription.text = archeryBrief;
                 gameTitle.text = "Archery";
                 break;
             case Wagr.GameName.minigolf:
-                gameImage.sprite = minigolfImage;
+                minigolfImage.gameObject.SetActive(true);
                 backgroundImage.color = minigolfColor;
                 gameDescription.text = minigolfBrief;
                 gameTitle.text = "Mini Golf";
@@ -146,5 +146,16 @@ public class GameDetailPanel : MonoBehaviour
                 GameManager.gameSession.gameMode = GameMode.vsPlayer;
                 break;
         }
+    }
+
+    private void ClearImages()
+    {
+        //Reset all game images 
+        xandoImage.gameObject.SetActive(false);
+        archeryImage.gameObject.SetActive(false);
+        fourinarowImage.gameObject.SetActive(false);
+        minisoccerImage.gameObject.SetActive(false);
+        minigolfImage.gameObject.SetActive(false);
+        dotsandboxesImage.gameObject.SetActive(false);
     }
 }

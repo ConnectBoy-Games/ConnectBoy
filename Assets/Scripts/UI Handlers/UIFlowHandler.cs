@@ -27,6 +27,10 @@ public class UIFlowHandler : MonoBehaviour
             gamesPanel.SetActive(false);
             loginPanel.SetActive(true);
         }
+        else
+        {
+            GotoMainMenu();
+        }
         */
     }
 

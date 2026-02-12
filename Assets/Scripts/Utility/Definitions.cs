@@ -5,11 +5,11 @@ using Newtonsoft.Json;
 [Serializable]
 public class PlayerStats
 {
-    public uint gamesPlayed { get; private set; }
-    public uint gamesWon { get; private set; }
-    public uint gamesLost { get; private set; }
-    public uint winRate { get; private set; }
-    public uint winStreak { get; private set; }
+    public uint gamesPlayed;
+    public uint gamesWon;
+    public uint gamesLost;
+    public uint winRate;
+    public uint winStreak;
 
     [JsonConstructor]
     public  PlayerStats(uint gamesPlayed, uint gamesWon, uint gamesLost, uint winRate, uint winStreak)

@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class LoginPanel : MonoBehaviour
 {
-    public static int dpIndex = 0;
     public UnityAction backAction;
 
     [Header("Login Flow Panels")]
@@ -107,7 +106,7 @@ public class LoginPanel : MonoBehaviour
         }
 
         LoadScreen.instance.ShowScreen("Creating Account!"); //Show the load screen
-        await GameManager.instance.accountManager.CreateAccount(username, dpIndex); //The OnCreatedAccount function will be called after this function finishes
+        await GameManager.instance.accountManager.CreateAccount(username, FaceSelect.dpIndex); //The OnCreatedAccount function will be called after this function finishes
     }
 
     /// <summary>Set the profile details for the continue panel</summary>

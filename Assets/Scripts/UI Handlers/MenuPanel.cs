@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using TMPro;
+using Unity.Services.Authentication;
+using Unity.Services.CloudCode;
 using Unity.Services.CloudSave;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,11 +11,13 @@ using Wagr;
 
 public class MenuPanel : MonoBehaviour
 {
-    [SerializeField] Button notificationButton;
+    [Header("Profile")]
     [SerializeField] TMP_Text displayName;
-    [SerializeField] private GameObject notificationDot;
     [SerializeField] private Image displayImage;
 
+    [Header("Notification")]
+    [SerializeField] Button notificationButton;
+    [SerializeField] private GameObject notificationDot;
     [SerializeField] private float pollInterval = 15f; // Check every 15 seconds
 
     private bool _isPolling = false;
@@ -53,6 +58,7 @@ public class MenuPanel : MonoBehaviour
     public void StartPolling()
     {
         if (_isPolling || GameManager.instance.accountManager.loginState != LoginState.loggedIn) return;
+
         _isPolling = true;
         InvokeRepeating(nameof(PollForInvites), 1f, pollInterval);
     }
@@ -67,14 +73,21 @@ public class MenuPanel : MonoBehaviour
     {
         try
         {
-            // 1. Load the "invites" key from the player's own data
-            var query = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { "invites" });
-
-            if (query.TryGetValue("invites", out var item))
+            // 1. Load the "invites" key from the player's public data
+            var id = AuthenticationService.Instance.PlayerId;
+            var args = new Dictionary<string, object>
             {
-                List<MatchInvite> incomingInvites = item.Value.GetAs<List<MatchInvite>>();
+                { "playerId", id },
+            };
 
-                foreach (var invite in incomingInvites)
+            // Call the Cloud Code function
+            var result = await CloudCodeService.Instance.CallEndpointAsync<CloudInvitesGetProxy>("GetInvites", args);
+
+            if (result.success)
+            {
+                MatchInvite[] invites = JsonConvert.DeserializeObject<MatchInvite[]>(result.data.ToString());
+
+                foreach (var invite in invites)
                 {
                     // 2. Check if we've already handled this specific invite
                     if (!_processedInviteTimestamps.Contains(invite.timestamp))
@@ -92,7 +105,7 @@ public class MenuPanel : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogWarning($"Polling failed: {e.Message}");
-            NotificationDisplay.instance.DisplayMessage("Failed to poll for invites.", NotificationType.error, 2f);
+            NotificationDisplay.instance.DisplayMessage("Failed to poll for invites: " + e.Message, NotificationType.error, 2f);
         }
     }
 }

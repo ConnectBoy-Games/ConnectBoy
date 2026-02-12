@@ -3,41 +3,45 @@ using UnityEngine.UI;
 
 public class FaceSelect : MonoBehaviour
 {
+    public static int dpIndex;
+
     [SerializeField] Image face;
     private FaceManager fm;
 
-    void OnEnable()
+    void Start()
     {
         fm = GameManager.instance.faceManager;
-        LoginPanel.dpIndex = Random.Range(0, fm.Count());
-        face.sprite = fm.GetFace(LoginPanel.dpIndex);
+        dpIndex = Random.Range(0, fm.Count());
+        face.sprite = fm.GetFace(dpIndex);
     }
+
+    public void UpdateUI() => face.sprite = fm.GetFace(dpIndex);
 
     public void MoveLeft()
     {
-        if(LoginPanel.dpIndex <= 0)
+        if(dpIndex <= 0)
         {
-            LoginPanel.dpIndex = 0;
+            dpIndex = 0;
         }
         else
         {
-            LoginPanel.dpIndex--;
+            dpIndex--;
         }
 
-        face.sprite = fm.GetFace(LoginPanel.dpIndex);
+        face.sprite = fm.GetFace(dpIndex);
     }
 
     public void MoveRight()
     {
-        if (LoginPanel.dpIndex >= fm.Count())
+        if (dpIndex >= fm.Count() - 1)
         {
-            LoginPanel.dpIndex = fm.Count() - 1;
+            dpIndex = fm.Count() - 1;
         }
         else
         {
-            LoginPanel.dpIndex++;
+            dpIndex++;
         }
 
-        face.sprite = fm.GetFace(LoginPanel.dpIndex);
+        face.sprite = fm.GetFace(dpIndex);
     }
 }

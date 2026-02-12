@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HistoryPanel : MonoBehaviour
@@ -29,7 +27,7 @@ public class HistoryPanel : MonoBehaviour
 
     void ClearHistory()
     {
-        foreach(Transform child in contentParent)
+        foreach (Transform child in contentParent)
         {
             Destroy(child.gameObject);
         }
