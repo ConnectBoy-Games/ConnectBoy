@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class XandOUIHandler : MonoBehaviour
+public class XandOUIHandler : MonoBehaviour, IGameUIHandler
 {
     [SerializeField] private XandOManager manager;
 

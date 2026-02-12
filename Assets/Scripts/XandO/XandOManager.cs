@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 
-public class XandOManager : MonoBehaviour
+public class XandOManager : MonoBehaviour, IGameManager
 {
     private XandOBot bot; //X And O bot
     private User turnUser; //Who has the turn?
@@ -142,7 +142,7 @@ public class XandOManager : MonoBehaviour
         winLines[index].gameObject.SetActive(true);
     }
 
-    private void ClearBoard()
+    public void ClearBoard()
     {
         foreach (GameObject button in buttons)
         {
@@ -158,7 +158,7 @@ public class XandOManager : MonoBehaviour
     #endregion
 
     #region Board Check
-    private void CheckBoardState()
+    public void CheckBoardState()
     {
         var win = CheckWinState(userPiece); //Check if player has won
 
@@ -193,7 +193,7 @@ public class XandOManager : MonoBehaviour
     }
 
     /// <summary>Returns the direction of the win or -1 if there is no win</summary>
-    private int CheckWinState(string piece)
+    public int CheckWinState(string piece)
     {
         //Check Columns
         if (localState.Board[0] == piece && localState.Board[1] == piece && localState.Board[2] == piece)
