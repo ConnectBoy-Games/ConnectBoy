@@ -27,10 +27,10 @@ public class NotificationPanel : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Escape)) GoBack();
     }
 
-    public void LoadNotifications()
+    public async void LoadNotifications()
     {
         ClearNotifications();
-        _ = LoadInvites();
+        await LoadInvites();
     }
 
     public async Task LoadInvites()

@@ -36,8 +36,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -125, y: 100}
-  m_SizeDelta: {x: 250, y: 200}
+  m_AnchoredPosition: {x: -125, y: 125}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7543701184225598583
 CanvasRenderer:
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7632b0a963e83844685f53fe147026fd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7249182ce46c5c3408dcc2f7029fc725, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.97647065, g: 0.5921569, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.37254903, b: 0.33333334, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -410,7 +410,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Accept the Invite?
+  m_text: Accept The Invite?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ed89140e25acc1b4a8b35d531caceba5, type: 2}
   m_sharedMaterial: {fileID: 3076998557652437135, guid: ed89140e25acc1b4a8b35d531caceba5, type: 2}
@@ -605,8 +605,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 125, y: 100}
-  m_SizeDelta: {x: 250, y: 200}
+  m_AnchoredPosition: {x: 125, y: 125}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7543701185017398883
 CanvasRenderer:
@@ -629,14 +629,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.37254903, b: 0.33333334, a: 1}
+  m_Color: {r: 1, g: 0.7490196, b: 0.18039216, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7632b0a963e83844685f53fe147026fd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2ce2812f1c8713641bf572d73c1fb094, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -768,7 +768,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: X
+  m_text: x
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7d3900031951a4643a20f02000b66427, type: 2}
   m_sharedMaterial: {fileID: -5427657808398937015, guid: 7d3900031951a4643a20f02000b66427, type: 2}

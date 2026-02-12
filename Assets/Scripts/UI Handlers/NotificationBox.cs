@@ -31,6 +31,7 @@ public class NotificationBox : MonoBehaviour
 
         //Set the title and time text
         string gameName = "";
+
         userText.text = notification.senderUsername;
         //timeText.text = System.DateTimeOffset.FromUnixTimeSeconds(notification.timestamp).ToLocalTime().ToString("g");
 
@@ -38,36 +39,36 @@ public class NotificationBox : MonoBehaviour
         backgroundImage.color = colors[UnityEngine.Random.Range(0, colors.Length)];
 
         //Set the game image
-        switch ((Wagr.GameName)notification.matchType)
+        switch ((GameName)notification.matchType)
         {
-            case Wagr.GameName.xando:
+            case GameName.xando:
                 xandoImage.SetActive(true);
                 gameName = "X And O";
                 break;
-            case Wagr.GameName.archery:
+            case GameName.archery:
                 archeryImage.SetActive(true);
                 gameName = "Archery";
                 break;
-            case Wagr.GameName.dotsandboxes:
+            case GameName.dotsandboxes:
                 dotsandboxesImage.SetActive(true);
                 gameName = "Dots And Boxes";
                 break;
-            case Wagr.GameName.fourinarow:
+            case GameName.fourinarow:
                 fiarImage.SetActive(true);
                 gameName = "Four In A Row";
                 break;
-            case Wagr.GameName.minigolf:
+            case GameName.minigolf:
                 minigolfImage.SetActive(true);
                 gameName = "Mini Golf";
                 break;
-            case Wagr.GameName.minisoccer:
+            case GameName.minisoccer:
                 minisoccerImage.SetActive(true);
                 gameName = "Mini Soccer";
                 break;
         }
 
         ///Set the message text
-        inviteText.text = "Invites you to play a Game of " + gameName + " with a Wager of " + "<color=green>" + notification.wagerAmount + "</color>";
+        inviteText.text = "Invites you to play a Game of " + gameName + " with a Wager of " + "<color=yellow>" + notification.wagerAmount + "</color>";
     }
 
     public void OpenPrompt()
@@ -79,13 +80,13 @@ public class NotificationBox : MonoBehaviour
 
     public async void GoToGame()
     {
-        LoadScreen.instance.ShowScreen("Loading Game!");
+        LoadScreen.instance.ShowScreen("Loading Game Session!");
         try
         {
-            //Get the host player
+            //Get the host player's details
             Player hostPlayer = await CloudSaveSystem.RetrieveSpecificData<Player>(notification.senderId);
 
-            //Set the current player as the other player
+            //Join the game session as the other player
             JoinSessionRequest joinRequest = new JoinSessionRequest
             {
                 OtherPlayer = GameManager.instance.accountManager.playerProfile
@@ -94,9 +95,9 @@ public class NotificationBox : MonoBehaviour
             //Try to join the game session
             var joined = await SessionHandler.JoinSession(notification.matchId, joinRequest);
 
-            if(joined.Status == false) //Failed to join
+            if (joined.Status == false) //Failed to join
             {
-                NotificationDisplay.instance.DisplayMessage("Error joining game");
+                NotificationDisplay.instance.DisplayMessage("Error Joining Game Session!");
                 return;
             }
 
@@ -106,8 +107,9 @@ public class NotificationBox : MonoBehaviour
             //Load the actual game level and set the scene accordingly
             GameManager.instance.GoToSelectedGame();
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
+            Debug.LogError("Error joining game: " + ex.Message);
             NotificationDisplay.instance.DisplayMessage("Error joining game: " + ex.Message, NotificationType.error);
         }
     }
