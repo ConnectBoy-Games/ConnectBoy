@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class AISelectPanel : MonoBehaviour
@@ -16,7 +15,7 @@ public class AISelectPanel : MonoBehaviour
     [SerializeField] private Image easyHead;
     [SerializeField] private Image mediumHead;
     [SerializeField] private Image hardHead;
-    
+
     void OnEnable()
     {
         easyHead.canvasRenderer.SetAlpha(0);
@@ -36,21 +35,21 @@ public class AISelectPanel : MonoBehaviour
                 easyHead.CrossFadeAlpha(1, 1, true);
                 mediumHead.CrossFadeAlpha(0, 1, true);
                 hardHead.CrossFadeAlpha(0, 1, true);
-                GameManager.gameSession.botDifficulty = BotDifficulty.low;
+                GameManager.botDifficulty = BotDifficulty.low;
                 break;
             case 1: //Medium mode
                 difficultyText.text = "Medium";
                 mediumHead.CrossFadeAlpha(1, 1, true);
                 easyHead.CrossFadeAlpha(0, 1, true);
                 hardHead.CrossFadeAlpha(0, 1, true);
-                GameManager.gameSession.botDifficulty = BotDifficulty.medium;
+                GameManager.botDifficulty = BotDifficulty.medium;
                 break;
             case 2: //Hard mode
                 difficultyText.text = "Hard";
                 hardHead.CrossFadeAlpha(1, 1, true);
                 easyHead.CrossFadeAlpha(0, 1, true);
                 mediumHead.CrossFadeAlpha(0, 1, true);
-                GameManager.gameSession.botDifficulty = BotDifficulty.high;
+                GameManager.botDifficulty = BotDifficulty.high;
                 break;
         }
 

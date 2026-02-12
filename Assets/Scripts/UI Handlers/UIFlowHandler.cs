@@ -45,32 +45,30 @@ public class UIFlowHandler : MonoBehaviour
 
     public void GoToNotification()
     {
+        GameManager.instance.GetComponent<AudioManager>().PlayClickSound();
         notificationPanel.SetActive(true);
     }
 
     public void GotoSettings()
     {
+        GameManager.instance.GetComponent<AudioManager>().PlayClickSound();
         settingsPanel.SetActive(true);
     }
 
     public void GotoProfile()
     {
-        if(GameManager.instance.accountManager.loginState != LoginState.loggedIn)
+        GameManager.instance.GetComponent<AudioManager>().PlayClickSound();
+        if(GameManager.instance.accountManager.loginState == LoginState.loggedIn)
         {
-            GameManager.instance.GetComponent<AudioManager>().PlayClickSound();
-            DisableAll();
-            loginPanel.SetActive(true);
-            return;
+            profilePanel.SetActive(true);
         }
-
-        profilePanel.SetActive(true);
     }
 
     public void GotoGameDetail(int game)
     {
         gameDetailPanel.SetActive(true);
         gameDetailPanel.GetComponent<GameDetailPanel>().SelectGame((Wagr.GameName)game);
-        GameManager.gameSession = new((Wagr.GameName)game); //Set the details of the game manager
+        GameManager.instance.GetComponent<AudioManager>().PlayClickSound();
     }
 
     public void GotoMainMenu()
@@ -78,6 +76,7 @@ public class UIFlowHandler : MonoBehaviour
         DisableAll();
         menuPanel.SetActive(true);
         gamesPanel.SetActive(true);
+        GameManager.instance.GetComponent<AudioManager>().PlayClickSound();
     }
 
     public void DisableAll()
