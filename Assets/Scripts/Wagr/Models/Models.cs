@@ -50,36 +50,30 @@ namespace Wagr
     [Serializable]
     public class Session
     {
-        public Guid sessionId { get; private set; }
-        public int wager { get; private set; }
-        public Player host { get; private set; } //Always refers to the player that created the game session
-        public Player other { get; private set; } //Refers to the other player
+        public Guid sessionId { get; set; }
+        public int wager { get; set; }
+        public Player client { get; set; } //Refers to the current client player
+        public Player other { get; set; } //Refers to the other player
 
-        public GameMode gameMode;
         public GameName gameName;
         public GameRole gameRole;
 
-        public BotDifficulty botDifficulty = BotDifficulty.low;
-
         //For creating Server based modes
-        public Session(Guid matchId, GameName name, int wager, Player host, Player other, GameRole role)
+        public Session(Guid matchId, GameName name, int wager, Player client, Player other, GameRole role)
         {
             sessionId = matchId;
             gameName = name;
             gameRole = role;
-            gameMode = GameMode.vsPlayer;
 
             this.wager = wager;
-            this.host = host;
+            this.client = client;
             this.other = other;
         }
 
-        //For creating AI game modes 
+        //For creating offline game modes 
         public Session(GameName name)
         {
             gameName = name;
-            gameMode = GameMode.vsBot;
-            gameRole = GameRole.host;
         }
 
         public Session(string json)
@@ -88,8 +82,8 @@ namespace Wagr
 
             sessionId = sesh.sessionId;
             wager = sesh.wager;
-            host = sesh.host;
-            host = sesh.host;
+            client = sesh.client;
+            client = sesh.client;
             other = sesh.other;
             other = sesh.other;
         }

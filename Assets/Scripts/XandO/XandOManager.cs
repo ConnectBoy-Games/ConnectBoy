@@ -1,145 +1,77 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Newtonsoft.Json;
+using UnityEngine;
 
 public class XandOManager : MonoBehaviour, IGameManager
 {
-    private XandOBot bot; //X And O bot
+    private XAndOState localState = new();
     private User turnUser; //Who has the turn?
+    private XandOBot bot; //X And O bot
 
     private string userPiece; // (x or o)
-    private string botPiece; // (x or o)
-    private string otherPlayerId;
+    private string otherPiece; // (x or o)
     private bool isGameOver = false;
 
-    private XAndOState localState = new();
-    public SessionDetails det;
-
+    [Header("UI Handling")]
     [SerializeField] XandOUIHandler uiHandler;
 
-    [Header("UI Handling")]
+    [Header("GameBoard Handling")]
     [SerializeField] private GameObject imageX; //0
     [SerializeField] private GameObject imageO; //1
     [SerializeField] private List<GameObject> buttons = new();
     [SerializeField] private List<GameObject> winLines = new();
 
-    public async void Start()
+    async void OnEnable() //The entry point of the Game Manager
     {
-        localState.Board = new string[9];
-        System.Array.Fill(localState.Board, "f");
-
         isGameOver = false;
         ClearBoard();
 
-        if (GameManager.gameSession.gameMode == GameMode.vsBot)
+        switch (GameManager.gameMode)
         {
-            userPiece = (Random.Range(0, 2) == 1) ? "x" : "o"; //Set who has which piece
-            botPiece = (userPiece == "x") ? "o" : "x"; //Set the alternative piece
-            turnUser = (User)Random.Range(0, 2); //Set who has the turn
+            case GameMode.vsBot:
+                //Set who gets which piece
+                userPiece = (Random.Range(0, 2) == 1) ? "x" : "o";
+                otherPiece = (userPiece == "x") ? "o" : "x"; //Set the alternative piece
 
-            uiHandler.SetTurnText(turnUser);
-            bot = new XandOBot(BotDifficulty.medium, userPiece);
+                //Set who has the turn
+                turnUser = (User)Random.Range(0, 2);
+                uiHandler.SetTurnText(turnUser);
 
-            if (turnUser == User.bot)
-            {
-                Invoke(nameof(MakeAIMove), 1f);
-            }
-        }
-        else
-        {
-            det = await SessionHandler.CheckSessionStatus(GameManager.gameSession.sessionId.ToString()); //Get the session details
+                //Set the bot difficulty
+                bot = new XandOBot(GameManager.botDifficulty, userPiece);
 
-            if(GameManager.gameSession.gameRole == GameRole.host)
-            {
-                otherPlayerId = det.OtherPlayer.Id;
-            }
-            else
-            {
-                otherPlayerId = det.HostPlayer.Id;
-            }
+                //Make an AI move if it has the turn
+                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), 1f);
+                break;
+            case GameMode.vsPlayer:
+                //Set who gets which piece
+                userPiece = (Random.Range(0, 2) == 1) ? "x" : "o";
+                otherPiece = (userPiece == "x") ? "o" : "x"; //Set the alternative piece
 
-            if (det.CurrentTurn == GameManager.instance.accountManager.playerProfile.Id) //You are the starting player
-            {
-                turnUser = User.client;
-                uiHandler.SetTurnText(User.client);
-                userPiece = "x";
-                botPiece = "o";
-            }
-            else //The other player is the starting player
-            {
-                turnUser = User.player;
-                uiHandler.SetTurnText(User.player);
-                userPiece = "o";
-                botPiece = "x";
-            }
-            Invoke(nameof(GetGameState), 5f);
-        }
-    }
+                //Set who has the turn
+                turnUser = (User)Random.Range(1, 3);
+                uiHandler.SetTurnText(turnUser);
+                break;
+            case GameMode.online:
+                var det = await SessionHandler.CheckSessionStatus(GameManager.gameSession.sessionId.ToString()); //Get the session details
 
-    //For allowing the player to make a move
-    public async void MakeMove(int index)
-    {
-        if (localState.Board[index] == "f" && turnUser == User.client && !isGameOver) //Valid move
-        {
-            if (GameManager.gameSession.gameMode == GameMode.vsBot)
-            {
-                localState.Board[index] = userPiece; //Update the game state
-                PlacePiece(index, userPiece, true); //Place the piece on the board
-                turnUser = User.bot; //Hand over the turn
-                uiHandler.SetTurnText(turnUser); //Display the turn text
-                CheckBoardState(); //Check if there is a win
-
-                Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move
-            }
-            else //Playing Against A Bot
-            {
-                XAndOMove move = new XAndOMove
+                if (det.CurrentTurn == GameManager.instance.accountManager.playerProfile.Id) //You are the starting player
                 {
-                    val = index
-                };
-
-                //Send move to server
-                var result = await SessionHandler.MakeMove(GameManager.gameSession.sessionId.ToString(), move);
-                var tempState = JsonConvert.DeserializeObject<XAndOState>(JsonConvert.SerializeObject(result.State));
-
-                ProcessState(tempState); //Process the game state
-                turnUser = User.player; //Hand over the turn
-                uiHandler.SetTurnText(turnUser); //Display the turn text
-            }
-        }
-    }
-
-    private void MakeAIMove()
-    {
-        if (isGameOver) return;
-
-        int index = bot.ThinkMove(localState.Board); //Let the bot think a move
-        localState.Board[index] = botPiece; //Update the game state
-        PlacePiece(index, botPiece, true); //Place the bot piece on the board
-        turnUser = User.client; //Hand over the turn
-        uiHandler.SetTurnText(turnUser); //Display the turn text
-        CheckBoardState(); //Check if there is a win
-    }
-
-    #region Board UI Update
-    private void PlacePiece(int index, string type, bool sound = false)
-    {
-        if (sound) GameManager.instance.GetComponent<AudioManager>().PlayPlaceSound();
-
-        switch (type)
-        {
-            case "x": //X
-                Instantiate(imageX, buttons[index].transform);
-                break;
-            case "o": //O
-                Instantiate(imageO, buttons[index].transform);
+                    turnUser = User.client;
+                    uiHandler.SetTurnText(User.client);
+                    userPiece = "x";
+                    otherPiece = "o";
+                }
+                else //The other player is the starting player
+                {
+                    turnUser = User.player;
+                    uiHandler.SetTurnText(User.player);
+                    userPiece = "o";
+                    otherPiece = "x";
+                }
+                Invoke(nameof(GetGameState), 5f);
                 break;
         }
-    }
-
-    private void ActivateWinLine(int index)
-    {
-        winLines[index].gameObject.SetActive(true);
     }
 
     public void ClearBoard()
@@ -155,28 +87,124 @@ public class XandOManager : MonoBehaviour, IGameManager
         localState.Board = new string[9];
         System.Array.Fill(localState.Board, "f");
     }
-    #endregion
 
-    #region Board Check
+    public void SwitchTurns()
+    {
+        switch (GameManager.gameMode)
+        {
+            case GameMode.vsBot:
+                turnUser = (turnUser == User.bot) ? User.client : User.bot;
+                break;
+            case GameMode.vsPlayer:
+                turnUser = (turnUser == User.client) ? User.player : User.client;
+                break;
+            case GameMode.online:
+                turnUser = (turnUser == User.client) ? User.player : User.client;
+                break;
+        }
+        uiHandler.SetTurnText(turnUser); //Display the turn text
+    }
+
+    public async void MakeMove(int index)//For allowing the player to make a move
+    {
+        if (!isGameOver && localState.Board[index] == "f") //Valid move
+        {
+            if (GameManager.gameMode == GameMode.vsBot && turnUser == User.client)
+            {
+                localState.Board[index] = userPiece; //Update the game state
+                PlacePiece(index, userPiece); //Place the piece on the board
+                GameManager.instance.GetComponent<AudioManager>().PlayPlaceSound();
+
+                CheckBoardState(); //Check if there is a win
+                SwitchTurns(); //Hand over the turn
+                Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move
+            }
+            else if (GameManager.gameMode == GameMode.vsPlayer) //Local Player
+            {
+                switch (turnUser) //Player1
+                {
+                    case User.client:
+                        localState.Board[index] = userPiece; //Update the game state
+                        PlacePiece(index, userPiece); //Place the piece on the board
+                        break;
+                    case User.player:
+                        localState.Board[index] = otherPiece; //Update the game state
+                        PlacePiece(index, otherPiece); //Place the piece on the board
+                        break;
+                    default:
+                        Debug.LogError("Bot should not be active in PvP mode!");
+                        NotificationDisplay.instance.DisplayMessage("Bot should not be active in PvP mode!", NotificationType.error);
+                        break;
+                }
+
+                GameManager.instance.GetComponent<AudioManager>().PlayPlaceSound();
+                CheckBoardState(); //Check if there is a win
+                SwitchTurns(); //Hand over the turn
+            }
+            else if (GameManager.gameMode == GameMode.vsPlayer && turnUser == User.client) //Playing Online
+            {
+                XAndOMove move = new XAndOMove
+                {
+                    val = index
+                };
+
+                //Send move to server
+                var result = await SessionHandler.MakeMove(GameManager.gameSession.sessionId.ToString(), move);
+                var tempState = JsonConvert.DeserializeObject<XAndOState>(JsonConvert.SerializeObject(result.State));
+
+                ProcessState(tempState); //Process the game state
+            }
+        }
+    }
+
+    private void MakeAIMove()
+    {
+        if (isGameOver) return;
+
+        int index = bot.ThinkMove(localState.Board); //Let the bot think a move
+        localState.Board[index] = otherPiece; //Update the game state
+        PlacePiece(index, otherPiece); //Place the bot piece on the board
+        GameManager.instance.GetComponent<AudioManager>().PlayPlaceSound();
+        CheckBoardState(); //Check if there is a win
+        SwitchTurns();
+    }
+
+    private void PlacePiece(int index, string type)
+    {
+        switch (type)
+        {
+            case "x": //X
+                Instantiate(imageX, buttons[index].transform);
+                break;
+            case "o": //O
+                Instantiate(imageO, buttons[index].transform);
+                break;
+        }
+    }
+
+    private void ActivateWinLine(int index)
+    {
+        winLines[index].SetActive(true);
+    }
+
     public void CheckBoardState()
     {
         var win = CheckWinState(userPiece); //Check if player has won
-
         if (win != -1)
         {
             isGameOver = true;
             ActivateWinLine(win);
             GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
-            uiHandler.DisplayWinScreen("You Have Won ", GameManager.gameSession.wager);
+            uiHandler.DisplayWinScreen();
         }
 
-        win = CheckWinState(botPiece); //Check if bot has won
+        win = CheckWinState(otherPiece); //Check if bot or other player has won
         if (win != -1)
         {
             isGameOver = true;
             ActivateWinLine(win);
             GameManager.instance.GetComponent<AudioManager>().PlayDefeatSound();
-            uiHandler.DisplayDefeatScreen("You Have Lost ", GameManager.gameSession.wager);
+            uiHandler.DisplayDefeatScreen();
         }
 
         //No one has won yet
@@ -235,24 +263,23 @@ public class XandOManager : MonoBehaviour, IGameManager
             return -1;
         }
     }
-    #endregion
 
-    #region Server Update
     void ProcessState(XAndOState state)
     {
         ClearBoard();
+        string otherPlayerId = GameManager.gameSession.other.Id;
 
-        for(int i = 0; i < state.Board.Length; i++)
+        for (int i = 0; i < state.Board.Length; i++)
         {
             if (state.Board[i] == GameManager.instance.accountManager.playerProfile.Id)
             {
                 localState.Board[i] = userPiece;
                 PlacePiece(i, userPiece);
             }
-            else if(state.Board[i] == otherPlayerId)
+            else if (state.Board[i] == otherPlayerId)
             {
-                localState.Board[i] = botPiece;
-                PlacePiece(i, botPiece);
+                localState.Board[i] = otherPiece;
+                PlacePiece(i, otherPiece);
             }
             else
             {
@@ -272,5 +299,4 @@ public class XandOManager : MonoBehaviour, IGameManager
         ProcessState(tempState);
         Invoke(nameof(GetGameState), 5f); //Call itself again after 5 seconds
     }
-    #endregion
 }

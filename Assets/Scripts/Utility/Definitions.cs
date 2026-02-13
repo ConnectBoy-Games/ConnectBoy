@@ -86,7 +86,9 @@ public enum LoginState : byte
 [Serializable]
 public enum GameMode : byte
 {
-    vsBot = 0, vsPlayer = 1
+    vsBot = 0, 
+    vsPlayer = 1, //Offline
+    online = 2
 }
 
 [Serializable]
@@ -101,7 +103,9 @@ public enum GameRole : byte
 [Serializable]
 public enum User : byte 
 {
-    bot = 0, client = 1, player = 2 //Other player
+    bot = 0, //The other player
+    client = 1, //The client
+    player = 2 //Other player
 }
 
 [Serializable]

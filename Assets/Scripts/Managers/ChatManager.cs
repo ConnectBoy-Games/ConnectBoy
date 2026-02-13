@@ -11,6 +11,11 @@ public class ChatManager : MonoBehaviour
 
     private int lastChatId = -1;
 
+    private void Update()
+    {
+        //TODO: Make keyboard adjustmeny, dynamic
+    }
+
     private void OnEnable()
     {
         InvokeRepeating(nameof(LoadChats), 0f, 5f); //Check for new chats every 5 seconds
