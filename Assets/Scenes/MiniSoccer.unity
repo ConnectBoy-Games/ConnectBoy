@@ -579,6 +579,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 271715689}
     m_Modifications:
+    - target: {fileID: -2803441210851942876, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
+      propertyPath: piece
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 2689392078435510211, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -629,7 +633,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689392079614673126, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
       propertyPath: m_Name
-      value: Blue Player Unit (3)
+      value: Blue 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
@@ -1746,6 +1750,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 271715689}
     m_Modifications:
+    - target: {fileID: -2803441210851942876, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
+      propertyPath: piece
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2689392078435510211, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1796,7 +1804,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689392079614673126, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
       propertyPath: m_Name
-      value: Blue Player Unit
+      value: Blue 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
@@ -2623,6 +2631,7 @@ GameObject:
   - component: {fileID: 807478240}
   - component: {fileID: 807478239}
   - component: {fileID: 807478238}
+  - component: {fileID: 807478241}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -2677,6 +2686,20 @@ Transform:
   m_Father: {fileID: 218645535}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &807478241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807478237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f14b29e9e3ea69545be49337fe234818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  piece: 0
+  indicator: {fileID: 0}
 --- !u!1 &838999858
 GameObject:
   m_ObjectHideFlags: 0
@@ -3067,6 +3090,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 271715689}
     m_Modifications:
+    - target: {fileID: -2803441210851942876, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
+      propertyPath: piece
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2689392078435510211, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -3117,7 +3144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689392079614673126, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
       propertyPath: m_Name
-      value: Blue Player Unit (4)
+      value: Blue 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
@@ -3376,6 +3403,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 271715689}
     m_Modifications:
+    - target: {fileID: -2803441210851942876, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
+      propertyPath: piece
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 2689392078435510211, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -3426,7 +3457,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689392079614673126, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
       propertyPath: m_Name
-      value: Blue Player Unit (2)
+      value: Blue 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
@@ -3703,7 +3734,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689392079614673126, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
       propertyPath: m_Name
-      value: Red Player Unit (2)
+      value: Red 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5790912324983700163, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
+      propertyPath: piece
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
@@ -3777,7 +3812,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689392079614673126, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
       propertyPath: m_Name
-      value: Red Player Unit (3)
+      value: Red 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5790912324983700163, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
+      propertyPath: piece
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
@@ -4381,7 +4420,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.35
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -4502,7 +4541,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689392079614673126, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
       propertyPath: m_Name
-      value: Red Player Unit (1)
+      value: Red 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5790912324983700163, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
+      propertyPath: piece
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
@@ -4576,7 +4619,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689392079614673126, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
       propertyPath: m_Name
-      value: Red Player Unit (4)
+      value: Red 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5790912324983700163, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
+      propertyPath: piece
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
@@ -4768,8 +4815,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad0be85d494f1845815086ed64bb21d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clientPlayerHolder: {fileID: 0}
-  otherPlayerHolder: {fileID: 0}
+  uiHandler: {fileID: 1729476689}
+  playerHolder: {fileID: 0}
 --- !u!1 &1570288816
 GameObject:
   m_ObjectHideFlags: 0
@@ -5262,6 +5309,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2e2abe20b6b7d144b9a37fa85d569a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  manager: {fileID: 0}
+  turnText: {fileID: 0}
+  chatPanel: {fileID: 5286908964441076959}
+  forfeitPanel: {fileID: 0}
+  endPanel: {fileID: 0}
+  victoryPanel: {fileID: 0}
+  defeatPanel: {fileID: 0}
+  victoryText: {fileID: 0}
+  defeatText: {fileID: 0}
+  chatButton: {fileID: 736466267}
 --- !u!1 &1842095845
 GameObject:
   m_ObjectHideFlags: 0
@@ -6656,6 +6713,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 271715689}
     m_Modifications:
+    - target: {fileID: -2803441210851942876, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
+      propertyPath: piece
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2689392078435510211, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -6706,7 +6767,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689392079614673126, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
       propertyPath: m_Name
-      value: Blue Player Unit (1)
+      value: Blue 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61e6d03d1a81f6745896b01032582bfb, type: 3}
@@ -6863,7 +6924,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689392079614673126, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
       propertyPath: m_Name
-      value: Red Player Unit
+      value: Red 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5790912324983700163, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
+      propertyPath: piece
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bff9b33965e899143a9239af5a6e453c, type: 3}
