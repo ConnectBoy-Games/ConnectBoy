@@ -1,33 +1,48 @@
 using UnityEngine;
 
-public class FourInOneManager : MonoBehaviour
+public class FourInOneManager : MonoBehaviour, IGameManager
 {
-    //Internal Variables
-    public static Wagr.Session gameSession;
-    public static GameMode gameMode;
-
+    private FourInOneState localState;
     private User turnUser; //Who has the turn?
+    private FourInOneBot bot;
+
 
     private int userPiece; //Either a 1 or 2 (Red or Blue)
     private int botPiece; //Either a 1 or 2 (Red or Blue)
-    private FourInOneBot bot;
-
-    [SerializeField] FourInOneUIHandler uiHandler;
 
     //Game State Variable
     private const int Rows = 6;
     private const int Cols = 7;
     private int[,] board = new int[Rows, Cols];
     private int currentPlayer = 1;
+    
+    [Header("UI Handling")]
+    [SerializeField] FourInOneUIHandler uiHandler;
 
+    [Header("GameBoard Handling")]
     private GameObject[] columns;
     [SerializeField] GameObject redPiece, bluePiece;
 
     void Start()
     {
         ClearBoard();
+    }
 
-
+    public void SwitchTurns()
+    {
+        switch (GameManager.gameMode)
+        {
+            case GameMode.vsBot:
+                turnUser = (turnUser == User.bot) ? User.client : User.bot;
+                break;
+            case GameMode.vsPlayer:
+                turnUser = (turnUser == User.client) ? User.player : User.client;
+                break;
+            case GameMode.online:
+                turnUser = (turnUser == User.client) ? User.player : User.client;
+                break;
+        }
+        uiHandler.SetTurnText(turnUser); //Display the turn text
     }
 
     // Call this when a user clicks a column button
@@ -37,10 +52,10 @@ public class FourInOneManager : MonoBehaviour
         if (column < 0 || column >= Cols || board[0, column] != 0 && turnUser != User.client)
             return;
 
-        if (gameMode == GameMode.vsPlayer)
+        if (GameManager.gameMode == GameMode.vsPlayer)
         {
             //TODO: Send move to server
-            SendMoveToServer();
+            //SendMoveToServer();
         }
         else //Playing Against A Bot
         {
@@ -68,7 +83,6 @@ public class FourInOneManager : MonoBehaviour
         }
     }
 
-    #region AI Handling Functions
     private bool CheckWin(int row, int col)
     {
         int player = board[row, col];
@@ -133,9 +147,7 @@ public class FourInOneManager : MonoBehaviour
             uiHandler.SetTurnText(turnUser);
         }
     }
-    #endregion
 
-    #region Board Update
     private void PlacePiece(int colIndex, int pieceType)
     {
         switch (pieceType)
@@ -150,7 +162,7 @@ public class FourInOneManager : MonoBehaviour
         //TODO: Drag the component down to the right locaton
     }
 
-    private void ClearBoard()
+    public void ClearBoard()
     {
         foreach (GameObject c in columns)
         {
@@ -163,21 +175,18 @@ public class FourInOneManager : MonoBehaviour
         board = new int[Rows, Cols];
     }
 
-    #endregion
-
-    #region Server Functions
-    private void ConnectToServer()
+    public void CheckBoardState()
     {
-
-    }
-    private void SendChatToServer()
-    {
-
+        throw new System.NotImplementedException();
     }
 
-    private void SendMoveToServer()
+    public int CheckWinState(string piece)
     {
-
+        throw new System.NotImplementedException();
     }
-    #endregion
+
+    public void GetGameState()
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -2,23 +2,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DotsAndBoxesManager : MonoBehaviour
+public class DotsAndBoxesManager : MonoBehaviour, IGameManager
 {
+    private DotsAndBoxesState localState;
+    private DotsAndBoxesBot bot;
+    private User turnUser;
+
+    [Header("UI Handling")]
     [SerializeField] DotsAndBoxesUIHandler uiHandler;
+
+    [Header("GameBoard Handling")]
     [SerializeField] Image[] tiles;
     [SerializeField] Image[] buttons;
-    private DotsAndBoxesBot bot;
 
     public int playerPoint{get; private set;}
     public int botPoint{get; private set;}
-    private User turnUser;
-    private GameMode gameMode;
 
     [SerializeField] List<int> gameState;
 
     void Start()
     {
-        if (gameMode == GameMode.vsBot)
+        if (GameManager.gameMode == GameMode.vsBot)
         {
             turnUser = (User)Random.Range(0, 2); //Set who has the turn
             uiHandler.SetTurnText(turnUser);
@@ -38,6 +42,23 @@ public class DotsAndBoxesManager : MonoBehaviour
         {
             tile.CrossFadeAlpha(0, 0.1f, true); //Fadeout all the tiles
         }
+    }
+
+    public void SwitchTurns()
+    {
+        switch (GameManager.gameMode)
+        {
+            case GameMode.vsBot:
+                turnUser = (turnUser == User.bot) ? User.client : User.bot;
+                break;
+            case GameMode.vsPlayer:
+                turnUser = (turnUser == User.client) ? User.player : User.client;
+                break;
+            case GameMode.online:
+                turnUser = (turnUser == User.client) ? User.player : User.client;
+                break;
+        }
+        uiHandler.SetTurnText(turnUser); //Display the turn text
     }
 
     public void PlayMove(int move)
@@ -99,5 +120,20 @@ public class DotsAndBoxesManager : MonoBehaviour
     {
         tiles[tile - 1].CrossFadeAlpha(1, 1, true);
         tiles[tile - 1].CrossFadeColor(Color.green, 1f, true, false);
+    }
+
+    public void ClearBoard()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public int CheckWinState(string piece)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void GetGameState()
+    {
+        throw new System.NotImplementedException();
     }
 }

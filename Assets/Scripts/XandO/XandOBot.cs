@@ -1,14 +1,18 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class XandOBot
 {
     private BotDifficulty difficulty;
     private string userPiece; //The player's piece
+    private string botPiece; //The bot's piece
 
-    public XandOBot(BotDifficulty difficulty, string userPiece)
+    public XandOBot(BotDifficulty difficulty, string userPiece, string botPiece)
     {
         this.difficulty = difficulty;
         this.userPiece = userPiece; 
+        this.botPiece = botPiece;
     }
 
     public int ThinkMove(string[] gameState)
@@ -101,7 +105,92 @@ public class XandOBot
 
     public int ComplexMoves(string[] gameState)
     {
-        return SimpleMoves(gameState);
+        int bestScore = int.MinValue;
+        int move = -1;
+
+        // Loop through all spots on the board
+        for (int i = 0; i < gameState.Length; i++)
+        {
+            if (gameState[i] == "f") // Check if the spot is available
+            {
+                gameState[i] = botPiece; // Temporarily make the move
+                int score = Minimax(gameState, 0, false); // Call minimax
+                gameState[i] = "f"; // Undo the move
+
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    move = i;
+                }
+            }
+        }
+
+        if(move == -1 || move > 9) return SimpleMoves(gameState);
+
+        return move;
+    }
+    
+    private int Minimax(string[] gameState, int depth, bool isMaximizing)
+    {
+        List<string> board = gameState.ToList<string>();
+
+        string result = CheckWinner(board);
+        if (result == botPiece) return 10 - depth; // Win for bot
+        if (result == userPiece) return depth - 10; // Win for human
+        if (result == "tie") return 0; // Draw
+
+        if (isMaximizing)
+        {
+            int bestScore = int.MinValue;
+            for (int i = 0; i < board.Count; i++)
+            {
+                if (board[i] == "f")
+                {
+                    board[i] = botPiece;
+                    int score = Minimax(board.ToArray(), depth + 1, false);
+                    board[i] = "f";
+                    bestScore = System.Math.Max(score, bestScore);
+                }
+            }
+            return bestScore;
+        }
+        else
+        {
+            int bestScore = int.MaxValue;
+            for (int i = 0; i < board.Count; i++)
+            {
+                if (board[i] == "f")
+                {
+                    board[i] = userPiece;
+                    int score = Minimax(board.ToArray(), depth + 1, true);
+                    board[i] = "f";
+                    bestScore = System.Math.Min(score, bestScore);
+                }
+            }
+            return bestScore;
+        }
+    }
+
+    private string CheckWinner(List<string> b)
+    {
+        // All possible winning combinations
+        int[,] winPatterns = new int[,] {
+            {0,1,2}, {3,4,5}, {6,7,8}, // Rows
+            {0,3,6}, {1,4,7}, {2,5,8}, // Columns
+            {0,4,8}, {2,4,6}           // Diagonals
+        };
+
+        for (int i = 0; i < 8; i++)
+        {
+            if (b[winPatterns[i, 0]] != "f" &&
+                b[winPatterns[i, 0]] == b[winPatterns[i, 1]] &&
+                b[winPatterns[i, 0]] == b[winPatterns[i, 2]])
+            {
+                return b[winPatterns[i, 0]];
+            }
+        }
+
+        if (b.All(s => s != "f")) return "tie";
+        return null;
     }
 }
-

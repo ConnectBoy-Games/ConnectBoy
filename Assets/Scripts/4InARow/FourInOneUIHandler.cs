@@ -1,38 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class FourInOneUIHandler : MonoBehaviour
 {
+    [SerializeField] private FourInOneManager manager;
+
     [SerializeField] TMP_Text turnText;
     [SerializeField] GameObject chatPanel;
-    [SerializeField] GameObject victoryPanel;
-    [SerializeField] GameObject defeatPanel;
     [SerializeField] GameObject forfeitPanel;
 
-    [Header("Game Updates")]
-    [SerializeField] TMP_Text playerScore;
-    [SerializeField] TMP_Text friendScore;
+    [Header("Win Or Lose Panels")]
+    [SerializeField] GameObject endPanel;
+    [SerializeField] GameObject victoryPanel;
+    [SerializeField] GameObject defeatPanel;
+    [SerializeField] TMP_Text victoryText;
+    [SerializeField] TMP_Text defeatText;
 
-    void FixedUpdate()
+    [SerializeField] GameObject chatButton;
+
+    void Start()
     {
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            GoBack();
-        }
+        //Disable the Chat Button if we are playing with a bot
+        if (GameManager.gameMode == GameMode.vsBot) chatButton.SetActive(false);
     }
 
     public void GoBack()
     {
-        if (victoryPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
+        if (endPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
         {
-            GoToHome();
+            //GoToHome();
         }
         else if (chatPanel.activeInHierarchy)
         {
-            DisableChatPanel();
+            chatPanel.SetActive(false);
         }
         else
         {
@@ -40,52 +41,70 @@ public class FourInOneUIHandler : MonoBehaviour
         }
     }
 
-    private void GoToHome()
+    public void GoToHome()
     {
-        SceneManager.LoadScene("Main Menu", LoadSceneMode.Single);
+        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
     }
 
-    public void EnableChatPanel()
-    {
-        chatPanel.SetActive(true);
-    }
-
-    public void DisableChatPanel()
-    {
-        chatPanel.SetActive(false);
-    }
-
-    #region UI Updates
     public void SetTurnText(User turnUser, string text = null)
     {
-        if (text == null)
-        {
-            switch (turnUser)
-            {
-                case User.bot:
-                    turnText.text = "Bot's Move";
-                    break;
-                case User.client:
-                    turnText.text = "Your Move";
-                    break;
-                case User.player:
-                    turnText.text = "Player's Move";
-                    break;
-            }
-        }
-        else
+        if (text != null)
         {
             turnText.text = text;
         }
+        else
+        {
+            if (GameManager.gameMode == GameMode.online)
+            {
+                turnText.text = (turnUser == User.player) ? GameManager.gameSession.other.Name + "'s Turn" : GameManager.gameSession.client.Name + "'s Turn";
+            }
+            else if (GameManager.gameMode == GameMode.vsPlayer)
+            {
+                turnText.text = (turnUser == User.player) ? "Player 2's Turn" : "Player 1's  Turn";
+            }
+            else //Bot mode
+            {
+                turnText.text = (turnUser == User.client) ? "Your Turn" : "Bot's  Turn";
+            }
+        }
     }
 
-    public void DisplayWinScreen(string name, int wager = -1)
+    public void DisplayWinScreen(string text = "", int wager = -1)
     {
+        endPanel.SetActive(true);
         victoryPanel.SetActive(true);
+
+        if (GameManager.gameMode == GameMode.online)
+        {
+            victoryText.text = "You have won \n" + GameManager.gameSession.wager.ToString();
+        }
+        else if (GameManager.gameMode == GameMode.vsPlayer)
+        {
+            victoryText.text = text;
+        }
+        else
+        {
+            victoryText.text = "You have won!";
+        }
     }
-    #endregion
 
-    #region Server Connecting Functions
+    public void DisplayDefeatScreen(string text = "", int wager = -1)
+    {
+        endPanel.SetActive(true);
+        defeatPanel.SetActive(true);
+        //defeatText.text = name + wager.ToString(); ;
 
-    #endregion
+        if (GameManager.gameMode == GameMode.online)
+        {
+            victoryText.text = "You have lost \n" + GameManager.gameSession.wager.ToString();
+        }
+        else if (GameManager.gameMode == GameMode.vsPlayer)
+        {
+            victoryText.text = text;
+        }
+        else
+        {
+            victoryText.text = "You lost!";
+        }
+    }
 }

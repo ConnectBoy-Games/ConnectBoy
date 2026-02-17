@@ -39,7 +39,7 @@ public class XandOManager : MonoBehaviour, IGameManager
                 uiHandler.SetTurnText(turnUser);
 
                 //Set the bot difficulty
-                bot = new XandOBot(GameManager.botDifficulty, userPiece);
+                bot = new XandOBot(GameManager.botDifficulty, userPiece, otherPiece);
 
                 //Make an AI move if it has the turn
                 if (turnUser == User.bot) Invoke(nameof(MakeAIMove), 1f);
