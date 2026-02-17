@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wagr;
-
 
 public interface IGameHandler
 {
@@ -13,14 +13,108 @@ public class GameResult
 {
     public bool Success { get; set; } //Successful move or not
     public string Message { get; set; }
+    public string CurrentTurn { get; set; }
     public object State { get; set; }
     public bool KeepTurn { get; set; } // If true, the player keeps the turn (e.g., Dots & Boxes when box completed)
 }
 
-public class XAndOMove { public int val { get; set; } }
+//Game States
+public class XAndOState
+{
+    public string[] Board { get; set; }
+    public string Winner { get; set; }
+}
 
-public class XAndOState {public string[] Board { get; set; } public string CurrentTurn { get; set; } public string Winner { get; set; } }
+public class DotsAndBoxesState
+{
+    private bool[,] HorizontalEdges { get; set; } // horizontal edges: (rows+1, cols)
+    private bool[,] VerticalEdges { get; set; } // vertical edges: (rows, cols+1)
+    private string[,] Boxes { get; set; } // owner per box (rows, cols)
+    private Dictionary<string, int> Scores { get; set; }
+}
 
+public class FourInOneState
+{
+    public string[,] Board { get; set; }
+    public string Winner { get; set; }
+}
+
+public class MiniGolfGameState
+{
+    public bool isGameOver { get; set; } //Has the game finished?
+    public string CurrentTurn { get; set; } //ID of who has the current turn after the previous move
+    public string Winner { get; set; } //ID of the current winner, empty if no winner yet or tie
+
+    // The position of the ball after the shot is finished
+    public float BallPosX { get; set; }
+    public float BallPosY { get; set; }
+
+    public int stateHash { get; set; }// Checksum to verify both players calculated the same result
+}
+
+public class MiniBallState
+{
+    public MiniBallEntity[] entities { get; set; } // Positions of all 6 pieces + ball
+    public string CurrentTurn { get; set; }
+    public string Winner { get; set; }
+}
+
+public class ArcheryState { }
+
+
+//Game Moves
+public class XAndOMove
+{
+    public int val { get; set; }
+}
+public class MiniGolfMove
+{
+    public float X { get; set; }
+    public float Y { get; set; }
+}
+public class MiniBallMove
+{
+    public MiniBallPiece PieceId { get; set; } // Which piece was kicked
+    public float forceX { get; set; }
+    public float forceY { get; set; }
+}
+
+
+public class MiniBallEntity
+{
+    public static float radius;
+    public static float mass;
+
+    public MiniBallPiece Piece { get; set; } //The type of piece e.g., "Player1_Piece1", "Ball"
+    public float PosX { get; set; } //Current X position of the piece
+    public float PosY { get; set; } //Current Y position of the piece
+    public float velX { get; set; } //Current X velocity of the piece
+    public float velY { get; set; } //Current Y velocity of the piece
+}
+
+public enum MiniBallPiece : byte
+{
+    Ball = 0,
+
+    Player1_Piece1 = 1,
+    Player1_Piece2 = 2,
+    Player1_Piece3 = 3,
+    Player1_Piece4 = 4,
+    Player1_Piece5 = 5,
+
+    Player2_Piece1 = 6,
+    Player2_Piece2 = 7,
+    Player2_Piece3 = 8,
+    Player2_Piece4 = 9,
+    Player2_Piece5 = 10,
+}
+
+public class MatchReset
+{
+    public string matchId { get; set; }
+    public int newTurnNumber { get; set; }
+    public MiniBallEntity[] entities { get; set; } // The starting positions for all 7 items
+}
 
 
 
