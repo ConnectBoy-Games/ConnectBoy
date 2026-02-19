@@ -2,9 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class FourInOneUIHandler : MonoBehaviour
+public class FourInARowUIHandler : MonoBehaviour
 {
-    [SerializeField] private FourInOneManager manager;
+    [SerializeField] private FourInARowManager manager;
 
     [SerializeField] TMP_Text turnText;
     [SerializeField] GameObject chatPanel;

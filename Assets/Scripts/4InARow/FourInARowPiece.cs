@@ -1,0 +1,28 @@
+using UnityEngine;
+
+public class FourInARowPiece : MonoBehaviour
+{
+    bool move = false;
+    Vector3 targetPos;
+    Vector3 startPos;
+    float t = 0;
+    float mag = 0;
+
+    void FixedUpdate()
+    {
+        if (move)
+        {
+            t += Time.deltaTime;
+            transform.position = Vector3.Slerp(startPos, targetPos, t / (0.02f * mag));
+        }
+    }
+
+    public void PlacePiece(Vector3 pos)
+    {
+        startPos = transform.position;
+        targetPos = pos;
+        mag = (targetPos - startPos).magnitude;
+        move = true;
+        t = 0f;
+    }
+}
