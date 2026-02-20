@@ -13,7 +13,7 @@ public class DotsAndBoxesBot
         this.difficulty = difficulty;
     }
 
-    public int ThinkMove(List<string> gameState)
+    public DaBMove ThinkMove(List<int> horizontalEdges, List<int> verticalEdges, List<int> boxes)
     {
         return difficulty switch
         {
@@ -25,14 +25,14 @@ public class DotsAndBoxesBot
     }
 
     // Just pick any available edge
-    private int GetRandomMove(List<string> board)
+    private int GetRandomMove(List<int> horizontalEdges, List<int> verticalEdges, List<int> boxes)
     {
         List<int> available = GetAvailableMoves(board);
         return available[Random.Range(0, available.Count)];
     }
 
     // Take boxes if possible, otherwise avoid giving them
-    private int GetMediumMove(List<string> board)
+    private int GetMediumMove(List<int> horizontalEdges, List<int> verticalEdges, List<int> boxes)
     {
         List<int> available = GetAvailableMoves(board);
 
@@ -48,7 +48,7 @@ public class DotsAndBoxesBot
     }
 
     // Alpha-Beta Pruning
-    private int GetHardMove(List<string> board)
+    private int GetHardMove(List<int> horizontalEdges, List<int> verticalEdges, List<int> boxes)
     {
         int bestMove = -1;
         int bestValue = int.MinValue;
