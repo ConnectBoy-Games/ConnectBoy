@@ -112,7 +112,7 @@ public class FourInARowManager : MonoBehaviour, IGameManager
         int row = GetLowestRow(column);
 
         // Check if column is valid and not full and it is the player's turn
-        if (column < 0 || column >= Cols || localState.Board[0, column] != 0 && turnUser != User.client || row < 0)
+        if (column < 0 || column >= Cols || localState.Board[0, column] != 0 || turnUser != User.client || row < 0)
         {
             Handheld.Vibrate();
             return;
