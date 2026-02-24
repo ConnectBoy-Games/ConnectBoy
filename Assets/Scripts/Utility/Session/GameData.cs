@@ -27,15 +27,17 @@ public class XAndOState
 
 public class DotsAndBoxesState
 {
-    private bool[,] HorizontalEdges { get; set; } // horizontal edges: (rows+1, cols)
-    private bool[,] VerticalEdges { get; set; } // vertical edges: (rows, cols+1)
-    private string[,] Boxes { get; set; } // owner per box (rows, cols)
-    private Dictionary<string, int> Scores { get; set; }
+    public List<int> HorizontalEdges { get; set; } // horizontal edges
+    public List<int> VerticalEdges { get; set; } // vertical edges
+    public List<int> Boxes { get; set; } // owner per box
+    public int Player1Scores { get; set; }
+    public int Player2Scores { get; set; }
+
 }
 
-public class FourInOneState
+public class FourInARowState
 {
-    public string[,] Board { get; set; }
+    public int[,] Board { get; set; }
     public string Winner { get; set; }
 }
 
@@ -67,6 +69,19 @@ public class XAndOMove
 {
     public int val { get; set; }
 }
+
+public class DaBMove
+{
+    public int H { get; set; }
+    public int V { get; set; }
+}
+
+
+public class FourInARowMove
+{
+    public int col { get; set; }
+}
+
 public class MiniGolfMove
 {
     public float X { get; set; }

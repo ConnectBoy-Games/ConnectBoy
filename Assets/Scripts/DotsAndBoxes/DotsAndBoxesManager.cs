@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
 
     [Header("GameBoard Handling")]
     [SerializeField] Color tileDefault;
+    [SerializeField] Color edgeColor;
     [SerializeField] Color tilePlayer1; //The color for the first player
     [SerializeField] Color tilePlayer2; //The color for the second player
     [SerializeField] Image[] boxes;
@@ -84,7 +86,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
         uiHandler.SetTurnText(turnUser); //Display the turn text
     }
 
-    public void MakeHorizontalMove(int move)
+    public async void MakeHorizontalMove(int move)
     {
         if (isGameOver || localState.HorizontalEdges.Contains(move))
         {
@@ -98,8 +100,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             SetHorizontalButtonColor(move, turnUser);
             GameManager.instance.GetComponent<AudioManager>().PlayPlaceSound();
 
-            //Retain the turn if a box was completed
-            if (CheckHorizontalBox(move) == false)
+            if (CheckHorizontalBox(move) == false) //Retain the turn if a box was completed
             {
                 SwitchTurns();
             }
@@ -118,8 +119,24 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
         }
         else if (GameManager.gameMode == GameMode.online)
         {
+            DaBMove mov = new DaBMove
+            {
+                H = move,
+                V = -1
+            };
 
+            //Send move to server
+            var result = await SessionHandler.MakeMove(GameManager.gameSession.sessionId.ToString(), move);
+            var tempState = JsonConvert.DeserializeObject<DotsAndBoxesState>(JsonConvert.SerializeObject(result.State));
+
+            ProcessState(tempState); //Process the game state
         }
+        else
+        {
+            Handheld.Vibrate();
+        }
+
+        uiHandler.UpdateScoreUI(localState); //Update the score display
     }
 
     public bool CheckHorizontalBox(int id)
@@ -175,7 +192,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
         return (top || bottom);
     }
 
-    public void MakeVerticalMove(int move)
+    public async void MakeVerticalMove(int move)
     {
         if (isGameOver || localState.VerticalEdges.Contains(move))
         {
@@ -209,8 +226,24 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
         }
         else if (GameManager.gameMode == GameMode.online)
         {
+            DaBMove mov = new DaBMove
+            {
+                H = -1,
+                V = move
+            };
 
+            //Send move to server
+            var result = await SessionHandler.MakeMove(GameManager.gameSession.sessionId.ToString(), move);
+            var tempState = JsonConvert.DeserializeObject<DotsAndBoxesState>(JsonConvert.SerializeObject(result.State));
+
+            ProcessState(tempState); //Process the game state
         }
+        else
+        {
+            Handheld.Vibrate();
+        }
+
+        uiHandler.UpdateScoreUI(localState); //Update the score display
     }
 
     public bool CheckVerticalBox(int id)
@@ -239,6 +272,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             SetBoxColor(leftBoxId, turnUser);
             localState.Boxes.Add(leftBoxId); //Update the game state
             GameManager.instance.GetComponent<AudioManager>().PlayWobbleSound();
+
             if (turnUser == User.client)
             {
                 localState.Player1Scores++;
@@ -271,26 +305,25 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
     /// <param name="id">ID of the box to be checked</param>
     public bool CheckBox(int id)
     {
-        //Check Top
-        bool top = localState.Boxes.Contains(id);
+        if (id < 0 || id >= 25) return false;
 
-        //Check Bottom
-        bool bottom = localState.Boxes.Contains(id + 5);
+        int r = (int)(id / 5);
 
-        //Check Left
-        bool left = localState.Boxes.Contains(id + (int)(id / 5));
+        // Correct indices based on the grid mapping:
+        int left = id + r;
+        int right = left + 1;
 
-        //Check Right
-        bool right = localState.Boxes.Contains(1 + id + (int)(id / 5));
-
-        return (top && bottom && left && right);
+        return localState.HorizontalEdges.Contains(id) &&
+               localState.HorizontalEdges.Contains(id + 5) &&
+               localState.VerticalEdges.Contains(left) &&
+               localState.VerticalEdges.Contains(right);
     }
 
     public void MakeAIMove()
     {
         if (isGameOver) return;
 
-        DaBMove move = bot.ThinkMove(localState.HorizontalEdges, localState.VerticalEdges, localState.Boxes); //Let the bot think a move
+        DaBMove move = bot.ThinkMove(localState.HorizontalEdges, localState.VerticalEdges); //Let the bot think a move
         GameManager.instance.GetComponent<AudioManager>().PlayPlaceSound();
 
         if(move.H == -1) //It's a vertical move
@@ -303,6 +336,10 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             {
                 SwitchTurns();
             }
+            else
+            {
+                Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move again
+            }
         }
         else if (move.V == -1) //It's a horizontal move
         {
@@ -314,11 +351,17 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             {
                 SwitchTurns();
             }
+            else
+            {
+                Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move again
+            }
         }
         else
         {
             NotificationDisplay.instance.DisplayMessage("The DAB has run into a critical error!", NotificationType.error);
         }
+        
+        uiHandler.UpdateScoreUI(localState); //Update the score display
     }
 
     public void CheckBoardState()
@@ -330,11 +373,11 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
     {
         if (user == User.client)
         {
-            horizontalButtons[button].CrossFadeColor(tilePlayer1, 1f, true, false);
+            horizontalButtons[button].CrossFadeColor(edgeColor, 1f, true, false);
         }
         else
         {
-            horizontalButtons[button].CrossFadeColor(tilePlayer2, 1f, true, false);
+            horizontalButtons[button].CrossFadeColor(edgeColor, 1f, true, false);
         }
     }
 
@@ -342,17 +385,17 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
     {
         if (user == User.client)
         {
-            horizontalButtons[button].CrossFadeColor(tilePlayer1, 1f, true, false);
+            verticalButtons[button].CrossFadeColor(edgeColor, 1f, true, false);
         }
         else
         {
-            horizontalButtons[button].CrossFadeColor(tilePlayer2, 1f, true, false);
+            verticalButtons[button].CrossFadeColor(edgeColor, 1f, true, false);
         }
     }
 
     public void SetBoxColor(int box, User user)
     {
-        boxes[box].CrossFadeAlpha(1, 1, true);
+        boxes[box].CrossFadeAlpha(1, 0.1f, true);
 
         if (user == User.client)
         {
@@ -366,12 +409,9 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
 
     public void ClearBoard()
     {
-        localState = new();
-
-        foreach (var box in boxes)
-        {
-            box.CrossFadeAlpha(0, 0.1f, true); //Fadeout all the tiles
-        }
+        localState.HorizontalEdges = new();
+        localState.VerticalEdges = new();
+        localState.Boxes = new();
     }
 
     public int CheckWinState(string piece)
@@ -379,9 +419,25 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
         throw new System.NotImplementedException();
     }
 
-    public void GetGameState()
+    private void ProcessState(DotsAndBoxesState state)
     {
-        throw new System.NotImplementedException();
+
+    }
+
+    public async void GetGameState()
+    {
+        try
+        {
+            var result = await SessionHandler.GetSessionGameState(GameManager.gameSession.sessionId.ToString());
+            var tempState = JsonConvert.DeserializeObject<DotsAndBoxesState>(JsonConvert.SerializeObject(result));
+
+            ProcessState(tempState);
+            Invoke(nameof(GetGameState), 5f); //Call itself again after 5 seconds
+        }
+        catch (System.Exception e)
+        {
+            NotificationDisplay.instance.DisplayMessage("Error getting the game state from the server: " + e.Message, NotificationType.error);
+        }
     }
 }
 

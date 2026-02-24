@@ -46,6 +46,11 @@ public class DotsAndBoxesUIHandler : MonoBehaviour
         SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
     }
 
+    public void UpdateScoreUI(DotsAndBoxesState state)
+    {
+        ScorePanel.instance.UpdateScore(state.Player1Scores, state.Player2Scores);
+    }
+
     public void SetTurnText(User turnUser, string text = null)
     {
         if (text != null)

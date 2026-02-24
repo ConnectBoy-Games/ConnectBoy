@@ -5,130 +5,153 @@ using UnityEngine;
 public class DotsAndBoxesBot
 {
     public BotDifficulty difficulty;
-    private int gridWidth = 4; // 5x5 dots = 4x4 boxes
-    private int totalEdges = 40;
+    private const int Rows = 5;
+    private const int Cols = 5;
+    private const int TotalHorizontal = 30; // (Rows + 1) * Cols
+    private const int TotalVertical = 30;   // Rows * (Cols + 1)
 
     public DotsAndBoxesBot(BotDifficulty difficulty)
     {
         this.difficulty = difficulty;
     }
 
-    public DaBMove ThinkMove(List<int> horizontalEdges, List<int> verticalEdges, List<int> boxes)
+    /// <summary> Thinks and returns the best move for the current state.</summary>
+    /// <param name="horizontalEdges">List of Indices of horizontal edges already played.</param>
+    /// <param name="verticalEdges">List of Indices of vertical edges already played.</param>
+    /// <param name="boxes">List of box indices already claimed.</param>
+    /// <returns>A DaBMove object containing the move details.</returns>
+    public DaBMove ThinkMove(List<int> horizontalEdges, List<int> verticalEdges)
     {
         return difficulty switch
         {
-            BotDifficulty.low => GetRandomMove(gameState),
-            BotDifficulty.medium => GetMediumMove(gameState),
-            BotDifficulty.high => GetHardMove(gameState),
-            _ => GetRandomMove(gameState),
+            BotDifficulty.low => GetEasyMove(horizontalEdges, verticalEdges),
+            BotDifficulty.high => GetHardMove(horizontalEdges, verticalEdges),
+            _ => Random.Range(0, 2) == 1 ? GetEasyMove(horizontalEdges, verticalEdges) : GetHardMove(horizontalEdges, verticalEdges),
         };
     }
 
-    // Just pick any available edge
-    private int GetRandomMove(List<int> horizontalEdges, List<int> verticalEdges, List<int> boxes)
+    private DaBMove GetEasyMove(List<int> horizontalEdges, List<int> verticalEdges)
     {
-        List<int> available = GetAvailableMoves(board);
-        return available[Random.Range(0, available.Count)];
-    }
+        var availableMoves = GetAvailableMoves(horizontalEdges, verticalEdges);
+        if (availableMoves.Count == 0) return null;
 
-    // Take boxes if possible, otherwise avoid giving them
-    private int GetMediumMove(List<int> horizontalEdges, List<int> verticalEdges, List<int> boxes)
-    {
-        List<int> available = GetAvailableMoves(board);
-
-        // 1. Try to finish a box
-        foreach (int move in available)
-            if (CompletesBox(board, move)) return move;
-
-        // 2. Try to avoid giving the opponent a box (don't be the 3rd side)
-        List<int> safeMoves = available.Where(m => !CreatesThirdSide(board, m)).ToList();
-        if (safeMoves.Count > 0) return safeMoves[Random.Range(0, safeMoves.Count)];
-
-        return GetRandomMove(board);
-    }
-
-    // Alpha-Beta Pruning
-    private int GetHardMove(List<int> horizontalEdges, List<int> verticalEdges, List<int> boxes)
-    {
-        int bestMove = -1;
-        int bestValue = int.MinValue;
-        int depth = 4; // Adjust for performance
-
-        foreach (int move in GetAvailableMoves(board))
+        foreach (var move in availableMoves)
         {
-            board[move] = "O";
-            int moveValue = Minimax(board, depth, int.MinValue, int.MaxValue, false);
-            board[move] = "f";
-
-            if (moveValue > bestValue)
+            if (CompletesABox(move, horizontalEdges, verticalEdges))
             {
-                bestValue = moveValue;
-                bestMove = move;
+                return move;
             }
         }
-        return bestMove == -1 ? GetRandomMove(board) : bestMove;
+
+        return availableMoves[Random.Range(0, availableMoves.Count)];
     }
 
-    private int Minimax(List<string> board, int depth, int alpha, int beta, bool isMaximizing)
+    private DaBMove GetHardMove(List<int> horizontalEdges, List<int> verticalEdges)
     {
-        if (depth == 0 || IsBoardFull(board)) return EvaluateBoard(board);
+        var availableMoves = GetAvailableMoves(horizontalEdges, verticalEdges);
+        if (availableMoves.Count == 0) return null;
 
-        if (isMaximizing)
+        //Take any move that completes a box
+        foreach (var move in availableMoves)
         {
-            int maxEval = int.MinValue;
-            foreach (int move in GetAvailableMoves(board))
+            if (CompletesABox(move, horizontalEdges, verticalEdges))
             {
-                board[move] = "O";
-                int eval = Minimax(board, depth - 1, alpha, beta, false);
-                board[move] = "f";
-                maxEval = Mathf.Max(maxEval, eval);
-                alpha = Mathf.Max(alpha, eval);
-                if (beta <= alpha) break;
+                return move;
             }
-            return maxEval;
         }
-        else
+
+        //Avoid moves that create a third side (giving the opponent a box)
+        var safeMoves = availableMoves.Where(move => !CreatesThirdSide(move, horizontalEdges, verticalEdges)).ToList();
+        if (safeMoves.Count > 0)
         {
-            int minEval = int.MaxValue;
-            foreach (int move in GetAvailableMoves(board))
-            {
-                board[move] = "X";
-                int eval = Minimax(board, depth - 1, alpha, beta, true);
-                board[move] = "f";
-                minEval = Mathf.Min(minEval, eval);
-                beta = Mathf.Min(beta, eval);
-                if (beta <= alpha) break;
-            }
-            return minEval;
+            return safeMoves[Random.Range(0, safeMoves.Count)];
         }
+
+        //If no safe moves, just pick a random move (could be improved to find smallest chain)
+        return availableMoves[Random.Range(0, availableMoves.Count)];
     }
 
-    private bool CompletesBox(List<string> board, int move)
+    private List<DaBMove> GetAvailableMoves(List<int> horizontalEdges, List<int> verticalEdges)
     {
-        // Logic to check if placing this edge closes a 1x1 square
-        // This requires mapping edge indices to box structures
-        return false; // Implement based on your specific index mapping
-    }
+        List<DaBMove> moves = new List<DaBMove>();
 
-    private bool CreatesThirdSide(List<string> board, int move)
-    {
-        // Check if placing this edge makes any box have 3 sides filled
-        return false; // Implement based on your specific index mapping
-    }
+        for (int i = 0; i < TotalHorizontal; i++)
+        {
+            if (!horizontalEdges.Contains(i))
+                moves.Add(new DaBMove { H = i, V = -1 });
+        }
 
-    private int EvaluateBoard(List<string> board)
-    {
-        // Heuristic: Count completed boxes for Bot minus boxes for Player
-        return 0;
-    }
+        for (int i = 0; i < TotalVertical; i++)
+        {
+            if (!verticalEdges.Contains(i))
+                moves.Add(new DaBMove { H = -1, V = i });
+        }
 
-    private List<int> GetAvailableMoves(List<string> board)
-    {
-        List<int> moves = new List<int>();
-        for (int i = 0; i < board.Count; i++)
-            if (board[i] == "f") moves.Add(i);
         return moves;
     }
 
-    private bool IsBoardFull(List<string> board) => !board.Contains("f");
+    private bool CompletesABox(DaBMove move, List<int> horizontalEdges, List<int> verticalEdges)
+    {
+        if (move.H != -1) //Check if it's a horizontal edge
+        {
+            int r = move.H / Cols;
+            int c = move.H % Cols;
+
+            // Edge is the top of box (r, c)
+            if (r < Rows && SidesInBox(r, c, horizontalEdges, verticalEdges, move) == 4) return true;
+            // Edge is the bottom of box (r-1, c)
+            if (r > 0 && SidesInBox(r - 1, c, horizontalEdges, verticalEdges, move) == 4) return true;
+        }
+        else // Check if it's a vertical edge
+        {
+            int r = move.V / (Cols + 1);
+            int c = move.V % (Cols + 1);
+
+            // Edge is the left of box (r, c)
+            if (c < Cols && SidesInBox(r, c, horizontalEdges, verticalEdges, move) == 4) return true;
+            // Edge is the right of box (r, c-1)
+            if (c > 0 && SidesInBox(r, c - 1, horizontalEdges, verticalEdges, move) == 4) return true;
+        }
+
+        return false;
+    }
+
+    private bool CreatesThirdSide(DaBMove move, List<int> horizontalEdges, List<int> verticalEdges)
+    {
+        if (move.H != -1)
+        {
+            int r = move.H / Cols;
+            int c = move.H % Cols;
+
+            if (r < Rows && SidesInBox(r, c, horizontalEdges, verticalEdges, move) == 3) return true;
+            if (r > 0 && SidesInBox(r - 1, c, horizontalEdges, verticalEdges, move) == 3) return true;
+        }
+        else
+        {
+            int r = move.V / (Cols + 1);
+            int c = move.V % (Cols + 1);
+
+            if (c < Cols && SidesInBox(r, c, horizontalEdges, verticalEdges, move) == 3) return true;
+            if (c > 0 && SidesInBox(r, c - 1, horizontalEdges, verticalEdges, move) == 3) return true;
+        }
+
+        return false;
+    }
+
+    private int SidesInBox(int r, int c, List<int> hEdges, List<int> vEdges, DaBMove pendingMove)
+    {
+        int sides = 0;
+
+        int topH = r * Cols + c;
+        int bottomH = (r + 1) * Cols + c;
+        int leftV = r * (Cols + 1) + c;
+        int rightV = r * (Cols + 1) + c + 1;
+
+        if (hEdges.Contains(topH) || pendingMove.H == topH) sides++;
+        if (hEdges.Contains(bottomH) || pendingMove.H == bottomH) sides++;
+        if (vEdges.Contains(leftV) || pendingMove.V == leftV) sides++;
+        if (vEdges.Contains(rightV) || pendingMove.V == rightV) sides++;
+
+        return sides;
+    }
 }
