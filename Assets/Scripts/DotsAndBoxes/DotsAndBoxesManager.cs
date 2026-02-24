@@ -24,26 +24,19 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
 
     async void OnEnable() //The entry point of the Game Manager
     {
-        isGameOver = false;
-        ScorePanel.instance.UpdateScore(0, 0);
         ClearBoard();
 
         switch (GameManager.gameMode)
         {
             case GameMode.vsBot:
-                //Set who has the turn
-                turnUser = (User)Random.Range(1, 3);
+                turnUser = (User)Random.Range(1, 3); //Set who has the turn
                 uiHandler.SetTurnText(turnUser);
 
-                //Set the bot difficulty
-                bot = new DotsAndBoxesBot(GameManager.botDifficulty);
-
-                //Make an AI move if it has the turn
-                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), 1f);
+                bot = new DotsAndBoxesBot(GameManager.botDifficulty); //Set the bot difficulty
+                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), 1f); //Make an AI move if it has the turn
                 break;
             case GameMode.vsPlayer:
-                //Set who has the turn
-                turnUser = (User)Random.Range(2, 4);
+                turnUser = (User)Random.Range(2, 4); //Set who has the turn
                 uiHandler.SetTurnText(turnUser);
                 break;
             case GameMode.online:
@@ -71,10 +64,8 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             case GameMode.vsBot:
                 turnUser = (turnUser == User.bot) ? User.client : User.bot;
 
-                if (turnUser == User.bot) //If it is the bot's turn, allow it to make a move
-                {
-                    Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move
-                }
+                //If it is the bot's turn, allow it to make a move
+                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f));
                 break;
             case GameMode.vsPlayer:
                 turnUser = (turnUser == User.client) ? User.player : User.client;
@@ -297,7 +288,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
         return (left || right);
     }
 
-    /// <summary>Retruns true if the box is completed</summary>
+    /// <summary>Returns true if the box is completed</summary>
     /// <param name="id">ID of the box to be checked</param>
     public bool CheckBox(int id)
     {
@@ -316,7 +307,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
         DaBMove move = bot.ThinkMove(localState.HorizontalEdges, localState.VerticalEdges); //Let the bot think a move
         GameManager.instance.GetComponent<AudioManager>().PlayPlaceSound();
 
-        if(move.H == -1) //It's a vertical move
+        if (move.H == -1) //It's a vertical move
         {
             localState.VerticalEdges.Add(move.V); //Update the game state
             SetVerticalButtonColor(move.V, turnUser); //Set the color of the button clicked
@@ -350,19 +341,49 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
         {
             NotificationDisplay.instance.DisplayMessage("The DAB has run into a critical error!", NotificationType.error);
         }
-        
+
         CheckBoardState();
     }
 
     public void CheckBoardState()
     {
-        //TODO: Check for game win //Update the score display
-        if(localState.Player1Scores + localState.Player2Scores >= 25)
+        uiHandler.UpdateScoreUI(localState);
+        
+        if (localState.Player1Scores + localState.Player2Scores >= 25)
         {
             isGameOver = true;
-        }
+            GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
 
-        uiHandler.UpdateScoreUI(localState);
+            switch (GameManager.gameMode)
+            {
+                case GameMode.vsBot:
+                    if (localState.Player1Scores > localState.Player2Scores)
+                    {
+                        localState.Winner = User.client.ToString();
+                        uiHandler.DisplayWinScreen("Player 1 wins the game!");
+                    }
+                    else
+                    {
+                        localState.Winner = User.bot.ToString();
+                        uiHandler.DisplayDefeatScreen("You lost the game!");
+                    }
+                    break;
+                case GameMode.vsPlayer:
+                    if (localState.Player1Scores > localState.Player2Scores)
+                    {
+                        localState.Winner = User.client.ToString();
+                        uiHandler.DisplayWinScreen("Player 1 wins the game!");
+                    }
+                    else
+                    {
+                        localState.Winner = User.player.ToString();
+                        uiHandler.DisplayWinScreen("Player 2 wins the game!");
+                    }
+                    break;
+                case GameMode.online:
+                    break;
+            }
+        }
     }
 
     public void SetHorizontalButtonColor(int button, User user)
@@ -405,14 +426,12 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
 
     public void ClearBoard()
     {
+        isGameOver = false;
+        ScorePanel.instance.UpdateScore(0, 0);
+
         localState.HorizontalEdges = new();
         localState.VerticalEdges = new();
         localState.Boxes = new();
-    }
-
-    public int CheckWinState(string piece)
-    {
-        throw new System.NotImplementedException();
     }
 
     private void ProcessState(DotsAndBoxesState state)
@@ -436,4 +455,3 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
         }
     }
 }
-

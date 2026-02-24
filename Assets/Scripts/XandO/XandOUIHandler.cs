@@ -27,17 +27,14 @@ public class XandOUIHandler : MonoBehaviour, IGameUIHandler
 
     void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            GoBack();
-        }
+        if (Input.GetKey(KeyCode.Escape)) GoBack();
     }
 
     public void GoBack()
     {
         if (endPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
         {
-            //GoToHome();
+            GoToHome();
         }
         else if (chatPanel.activeInHierarchy)
         {
@@ -52,6 +49,16 @@ public class XandOUIHandler : MonoBehaviour, IGameUIHandler
     public void GoToHome()
     {
         SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+    }
+
+    public void Replay()
+    {
+        SceneManager.LoadScene("XAndO", LoadSceneMode.Single);
+    }
+
+    public void ForfeitGame()
+    {
+
     }
 
     public void SetTurnText(User turnUser, string text = null)

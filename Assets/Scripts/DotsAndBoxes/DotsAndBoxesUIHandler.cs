@@ -24,12 +24,17 @@ public class DotsAndBoxesUIHandler : MonoBehaviour
         //Disable the Chat Button if we are playing with a bot
         if (GameManager.gameMode == GameMode.vsBot) chatButton.SetActive(false);
     }
+    
+    void FixedUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) GoBack();
+    }
 
     public void GoBack()
     {
         if (endPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
         {
-            //GoToHome();
+            GoToHome();
         }
         else if (chatPanel.activeInHierarchy)
         {
@@ -44,6 +49,16 @@ public class DotsAndBoxesUIHandler : MonoBehaviour
     public void GoToHome()
     {
         SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+    }
+
+    public void Forfeit()
+    {
+
+    }
+
+    public void Replay()
+    {
+        SceneManager.LoadScene("DotsandBoxes", LoadSceneMode.Single);
     }
 
     public void UpdateScoreUI(DotsAndBoxesState state)
@@ -97,7 +112,6 @@ public class DotsAndBoxesUIHandler : MonoBehaviour
     {
         endPanel.SetActive(true);
         defeatPanel.SetActive(true);
-        //defeatText.text = name + wager.ToString(); ;
 
         if (GameManager.gameMode == GameMode.online)
         {

@@ -153,7 +153,7 @@ public class XandOManager : MonoBehaviour, IGameManager
             {
                 XAndOMove move = new XAndOMove
                 {
-                    Val = index
+                    val = index
                 };
 
                 //Send move to server
@@ -201,11 +201,11 @@ public class XandOManager : MonoBehaviour, IGameManager
         if (win != -1)
         {
             ActivateWinLine(win);
-            ScorePanel.instance.player1Score++;
+            localState.Player1Scores++;
             GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
-            ScorePanel.instance.UpdateScore(ScorePanel.instance.player1Score, ScorePanel.instance.player2Score);
+            ScorePanel.instance.UpdateScore(localState.Player1Scores, localState.Player2Scores);
 
-            if (ScorePanel.instance.player1Score + ScorePanel.instance.player2Score >= 3) //Playing a best of 3 rounds
+            if (localState.Player1Scores + localState.Player2Scores >= 3) //Playing a best of 3 rounds
             {
                 isGameOver = true;
             }
@@ -219,11 +219,11 @@ public class XandOManager : MonoBehaviour, IGameManager
         if (win != -1)
         {
             ActivateWinLine(win);
-            ScorePanel.instance.player2Score++;
+            localState.Player2Scores++;
             GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
-            ScorePanel.instance.UpdateScore(ScorePanel.instance.player1Score, ScorePanel.instance.player2Score);
+            ScorePanel.instance.UpdateScore(localState.Player1Scores, localState.Player2Scores);
 
-            if (ScorePanel.instance.player1Score + ScorePanel.instance.player2Score >= 3) //Playing a best of 3 rounds
+            if (localState.Player1Scores + localState.Player2Scores >= 3) //Playing a best of 3 rounds
             {
                 isGameOver = true;
             }
@@ -236,7 +236,7 @@ public class XandOManager : MonoBehaviour, IGameManager
 
         if (isGameOver)
         {
-            if (ScorePanel.instance.player1Score > ScorePanel.instance.player2Score)
+            if (localState.Player1Scores > localState.Player2Scores)
             {
                 localState.Winner = User.client.ToString();
                 uiHandler.DisplayWinScreen();
