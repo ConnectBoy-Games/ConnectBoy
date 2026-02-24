@@ -3,10 +3,8 @@ using UnityEngine;
 public class FourInARowPiece : MonoBehaviour
 {
     bool move = false;
-    Vector3 targetPos;
-    Vector3 startPos;
-    float t = 0;
-    float mag = 0;
+    Vector3 targetPos, startPos;
+    float t = 0, mag = 0;
 
     void FixedUpdate()
     {

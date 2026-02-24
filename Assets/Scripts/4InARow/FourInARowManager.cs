@@ -25,41 +25,27 @@ public class FourInARowManager : MonoBehaviour, IGameManager
 
     async void OnEnable()
     {
-        isGameOver = false;
-        ScorePanel.instance.DisableScore();
         ClearBoard();
-
-        //*Temporary for testing
-        GameManager.gameMode = GameMode.vsBot;
-        turnUser = User.client; //Player starts first by default
-        userPiece = 0; //Red piece
-        otherPiece = 1; //Blue piece
-        /*///*///End of temporary
 
         switch (GameManager.gameMode)
         {
             case GameMode.vsBot:
-                //Set who gets which piece
-                userPiece = (Random.Range(0, 2) == 1) ? 1 : 0;
+                userPiece = (Random.Range(0, 2) == 1) ? 1 : 0; //Set who gets which piece
                 otherPiece = (userPiece == 1) ? 0 : 1; //Set the alternative piece
 
-                //Set who has the turn
-                turnUser = (User)Random.Range(1, 3); //1-bot, 2-client
+                turnUser = (User)Random.Range(1, 3); //Set who has the turn //1-bot, 2-client
                 uiHandler.SetTurnText(turnUser);
 
-                //Initialize the bot with the selected difficulty
-                bot = new FourInARowBot(GameManager.botDifficulty, userPiece, otherPiece); 
-
-                //Make an AI move if it has the turn
-                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), Random.Range(0.7f, 1f));
+                //Initialize the bot with the selected difficulty. 
+                //We pass (int)User.client and (int)User.bot because the localState.Board stores these enum values.
+                bot = new FourInARowBot(GameManager.botDifficulty, (int)User.client, (int)User.bot);
+                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), Random.Range(0.7f, 1f)); //Make an AI move if it has the turn
                 break;
             case GameMode.vsPlayer:
-                //Set who gets which piece
-                userPiece = (Random.Range(0, 2) == 1) ? 1 : 0;
+                userPiece = (Random.Range(0, 2) == 1) ? 1 : 0; //Set who gets which piece
                 otherPiece = (userPiece == 1) ? 0 : 1; //Set the alternative piece
 
-                //Set who has the turn
-                turnUser = (User)Random.Range(2, 4); //2-player1, 3-player2
+                turnUser = (User)Random.Range(2, 4);  //Set who has the turn //2-player1, 3-player2
                 uiHandler.SetTurnText(turnUser);
                 break;
             case GameMode.online:
@@ -91,10 +77,8 @@ public class FourInARowManager : MonoBehaviour, IGameManager
             case GameMode.vsBot:
                 turnUser = (turnUser == User.bot) ? User.client : User.bot;
 
-                if (turnUser == User.bot) //If it is the bot's turn, allow it to make a move
-                {
-                    Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f));
-                }
+                //If it is the bot's turn, allow it to make a move
+                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f));
                 break;
             case GameMode.vsPlayer:
                 turnUser = (turnUser == User.client) ? User.player : User.client;
@@ -112,7 +96,7 @@ public class FourInARowManager : MonoBehaviour, IGameManager
         int row = GetLowestRow(column);
 
         // Check if column is valid and not full and it is the player's turn
-        if (column < 0 || column >= Cols || localState.Board[0, column] != 0 || turnUser != User.client || row < 0)
+        if (turnUser != User.client || column < 0 || column >= Cols || localState.Board[0, column] != 0 || row < 0)
         {
             Handheld.Vibrate();
             return;
@@ -168,7 +152,7 @@ public class FourInARowManager : MonoBehaviour, IGameManager
 
         int column = bot.ThinkMove(localState.Board); //Selects which column to place the chip and updates the game state
         int row = GetLowestRow(column); //Find the lowest empty row in order to update the game state (starting from the bottom)
-        
+
         if (localState.Board[row, column] == 0) //It is empty
         {
             localState.Board[row, column] = (int)turnUser; //Update the game state
@@ -261,6 +245,10 @@ public class FourInARowManager : MonoBehaviour, IGameManager
 
     public void ClearBoard()
     {
+        isGameOver = false;
+        ScorePanel.instance.DisableScore();
+        localState.Board = new int[Rows, Cols];
+
         foreach (GameObject c in columns)
         {
             foreach (Transform item in c.transform)
@@ -268,12 +256,11 @@ public class FourInARowManager : MonoBehaviour, IGameManager
                 Destroy(item.gameObject);
             }
         }
-        localState.Board = new int[Rows, Cols];
     }
 
     public void CheckBoardState(int row, int col)
     {
-        Debug.Log(turnUser.ToString() + CheckWin(row, col, turnUser));
+        if (CheckWin(row, col, turnUser)) isGameOver = true;
     }
 
     public async void GetGameState()

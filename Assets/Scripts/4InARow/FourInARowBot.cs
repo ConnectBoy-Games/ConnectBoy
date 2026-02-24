@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class FourInARowBot
 {
@@ -22,56 +21,43 @@ public class FourInARowBot
         return difficulty switch
         {
             BotDifficulty.low => SimpleMoves(gameState),
-            BotDifficulty.high => ComplexMoves(gameState),
-            _ => Random.Range(0, 2) == 1 ? SimpleMoves(gameState) : ComplexMoves(gameState),
+            BotDifficulty.medium => ComplexMoves(gameState, 4),
+            BotDifficulty.high => ComplexMoves(gameState, 6),
+            _ => SimpleMoves(gameState),
         };
     }
 
     public int SimpleMoves(int[,] gameState)
     {
+        // Low difficulty uses a shallow search depth
         return GetNextMove(gameState, 3);
     }
 
-    public int ComplexMoves(int[,] gameState)
+    public int ComplexMoves(int[,] gameState, int depth = 5)
     {
-        return GetNextMove(gameState, 5);
+        // High difficulty uses a deeper search depth
+        return GetNextMove(gameState, depth);
     }
 
     public int GetNextMove(int[,] state, int depth)
     {
-        // Difficulty: Depth 6 is "Expert", Depth 4 is "Challenging"
         int bestScore = int.MinValue;
-        int bestCol = 3; // Start with center preference
+        int bestCol = 3; // Center preference
 
-        foreach (int col in GetValidColumns(state))
-        {
-            DropPiece(state, col, botPiece);
+        // Clone the state to avoid modifying the actual game board during simulation
+        int[,] stateClone = (int[,])state.Clone();
 
-            int score = Minimax(state, depth, int.MinValue, int.MaxValue, false);
-
-            if (score > bestScore)
-            {
-                bestScore = score;
-                bestCol = col;
-            }
-        }
-        return bestCol;
-    }
-
-    private int RunMinimax(int[,] state, int depth)
-    {
-        List<int> board = new();
-        int bestScore = int.MinValue;
-        // Prioritize center columns for better pruning performance
+        // Heuristic: prioritize center columns for better pruning performance
         int[] columnOrder = { 3, 2, 4, 1, 5, 0, 6 };
-        int bestCol = 3;
 
         foreach (int col in columnOrder)
         {
-            if (board[col] != 0) continue; // Column is full
+            if (!IsValidColumn(stateClone, col)) continue;
 
-            DropPiece(state, col, botPiece);
-            int score = Minimax(state, depth, int.MinValue, int.MaxValue, false);
+            DropPiece(stateClone, col, botPiece);
+            // After our move, it's the opponent's turn (minimizing)
+            int score = Minimax(stateClone, depth - 1, int.MinValue, int.MaxValue, false);
+            RemovePiece(stateClone, col);
 
             if (score > bestScore)
             {
@@ -84,22 +70,28 @@ public class FourInARowBot
 
     private int Minimax(int[,] state, int depth, int alpha, int beta, bool maximizing)
     {
-        //bool isWin = CheckForWin(state, botPiece);
-        //bool isLoss = CheckForWin(state, userPiece);
-        //bool isFull = state. !board.Contains(0);
+        bool isWin = CheckForWin(state, botPiece);
+        bool isLoss = CheckForWin(state, userPiece);
+        bool isFull = IsBoardFull(state);
 
-        //if (isWin) return 1000000 + depth;
-        //if (isLoss) return -1000000 - depth;
-        //if (isFull) return 0;
+        if (isWin) return 1000000 + depth;
+        if (isLoss) return -1000000 - depth;
+        if (isFull) return 0;
         if (depth == 0) return EvaluateBoard(state);
+
+        int[] columnOrder = { 3, 2, 4, 1, 5, 0, 6 };
 
         if (maximizing)
         {
             int maxEval = int.MinValue;
-            foreach (int col in GetValidColumns(state))
+            foreach (int col in columnOrder)
             {
+                if (!IsValidColumn(state, col)) continue;
+
                 DropPiece(state, col, botPiece);
                 int eval = Minimax(state, depth - 1, alpha, beta, false);
+                RemovePiece(state, col);
+
                 maxEval = Mathf.Max(maxEval, eval);
                 alpha = Mathf.Max(alpha, eval);
                 if (beta <= alpha) break;
@@ -109,10 +101,14 @@ public class FourInARowBot
         else
         {
             int minEval = int.MaxValue;
-            foreach (int col in GetValidColumns(state))
+            foreach (int col in columnOrder)
             {
+                if (!IsValidColumn(state, col)) continue;
+
                 DropPiece(state, col, userPiece);
                 int eval = Minimax(state, depth - 1, alpha, beta, true);
+                RemovePiece(state, col);
+
                 minEval = Mathf.Min(minEval, eval);
                 beta = Mathf.Min(beta, eval);
                 if (beta <= alpha) break;
@@ -129,14 +125,57 @@ public class FourInARowBot
         for (int r = 0; r < ROWS; r++)
             if (state[r, 3] == botPiece) totalScore += 5;
 
-        // 2. Window-based scoring (Horizontal, Vertical, Diagonals)
-        // Check for 3-in-a-row (open) = +10, 2-in-a-row = +2
-        // If the human has 3-in-a-row (open) = -100 (high priority to block)
+        // 2. Window-based scoring
+        // Horizontal
+        for (int r = 0; r < ROWS; r++)
+            for (int c = 0; c < COLS - 3; c++)
+                totalScore += ScoreWindow(state[r, c], state[r, c + 1], state[r, c + 2], state[r, c + 3]);
+
+        // Vertical
+        for (int c = 0; c < COLS; c++)
+            for (int r = 0; r < ROWS - 3; r++)
+                totalScore += ScoreWindow(state[r, c], state[r + 1, c], state[r + 2, c], state[r + 3, c]);
+
+        // Diagonal /
+        for (int r = 3; r < ROWS; r++)
+            for (int c = 0; c < COLS - 3; c++)
+                totalScore += ScoreWindow(state[r, c], state[r - 1, c + 1], state[r - 2, c + 2], state[r - 3, c + 3]);
+
+        // Diagonal \
+        for (int r = 0; r < ROWS - 3; r++)
+            for (int c = 0; c < COLS - 3; c++)
+                totalScore += ScoreWindow(state[r, c], state[r + 1, c + 1], state[r + 2, c + 2], state[r + 3, c + 3]);
 
         return totalScore;
     }
 
-    // Helper: Drops piece into the board list
+    private int ScoreWindow(int p1, int p2, int p3, int p4)
+    {
+        int score = 0;
+        int botCount = 0;
+        int userCount = 0;
+        int emptyCount = 0;
+
+        int[] window = { p1, p2, p3, p4 };
+        foreach (int p in window)
+        {
+            if (p == botPiece) botCount++;
+            else if (p == userPiece) userCount++;
+            else if (p == 0) emptyCount++;
+        }
+
+        // Scoring for bot
+        if (botCount == 4) score += 10000;
+        else if (botCount == 3 && emptyCount == 1) score += 100;
+        else if (botCount == 2 && emptyCount == 2) score += 10;
+
+        // Scoring for user (penalties to block)
+        if (userCount == 3 && emptyCount == 1) score -= 500;
+        else if (userCount == 2 && emptyCount == 2) score -= 50;
+
+        return score;
+    }
+
     private void DropPiece(int[,] board, int col, int piece)
     {
         for (int r = ROWS - 1; r >= 0; r--)
@@ -149,79 +188,50 @@ public class FourInARowBot
         }
     }
 
-    private List<int> GetValidColumns(int[,] state)
+    private void RemovePiece(int[,] board, int col)
     {
-        List<int> valid = new List<int>();
+        for (int r = 0; r < ROWS; r++)
+        {
+            if (board[r, col] != 0)
+            {
+                board[r, col] = 0;
+                break;
+            }
+        }
+    }
 
-        // Check top row of each column
+    private bool IsValidColumn(int[,] state, int col)
+    {
+        return state[0, col] == 0;
+    }
+
+    private bool IsBoardFull(int[,] state)
+    {
         for (int c = 0; c < COLS; c++)
-            if (state[0, c] == 0) valid.Add(c);
-
-        return valid;
+            if (state[0, c] == 0) return false;
+        return true;
     }
 
-    private bool CheckWin(int[,] state, int row, int col, User turnUser)
+    private bool CheckForWin(int[,] b, int p)
     {
-        // The +1 is to count the piece just placed
-
-        //Count Horizontally
-        int hor = 1 + CountInDirection(state,row, col, 0, 1, turnUser) + CountInDirection(state, row, col, 0, -1, turnUser);
-
-        //Vertically
-        int ver = 1 + CountInDirection(state, row, col, 1, 0, turnUser) + CountInDirection(state, row, col, -1, 0, turnUser);
-
-        //Diagonal (top-left to bottom-right),
-        int diag1 = 1 + CountInDirection(state, row, col, 1, 1, turnUser) + CountInDirection(state, row, col, -1, -1, turnUser);
-
-        //Diagonal (top-right to bottom-left)
-        int diag2 = 1 + CountInDirection(state, row, col, 1, -1, turnUser) + CountInDirection(state,    row, col, -1, 1, turnUser);
-
-        if (hor >= 4 || ver >= 4 || diag1 >= 4 || diag2 >= 4)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    /// <summary>Counts the number of the same pieces in a direction and returns the count!</summary>
-    private int CountInDirection(int[,] state, int row, int col, int dr, int dc, User user)
-    {
-        //(row,col) is the starting point, (dr, dc) is the direction to move in,
-        int count = 0;
-        int r = row + dr;
-        int c = col + dc;
-
-        // Move in the direction as long as we find the same player's piece
-        while (r >= 0 && r < ROWS && c >= 0 && c < COLS && state[r, c] == (int)user)
-        {
-            count++;
-            r += dr;
-            c += dc;
-        }
-        return count;
-    }
-
-    private bool CheckForWin(List<int> b, int p)
-    {
-        // Re-use the win-checking logic from the previous turn...
-        // [Simplified for brevity - check Horizontal, Vertical, Diagonals]
         // Horizontal
         for (int r = 0; r < ROWS; r++)
             for (int c = 0; c < COLS - 3; c++)
-                if (b[r * COLS + c] == p && b[r * COLS + c + 1] == p && b[r * COLS + c + 2] == p && b[r * COLS + c + 3] == p) return true;
+                if (b[r, c] == p && b[r, c + 1] == p && b[r, c + 2] == p && b[r, c + 3] == p) return true;
         // Vertical
         for (int r = 0; r < ROWS - 3; r++)
             for (int c = 0; c < COLS; c++)
-                if (b[r * COLS + c] == p && b[(r + 1) * COLS + c] == p && b[(r + 2) * COLS + c] == p && b[(r + 3) * COLS + c] == p) return true;
+                if (b[r, c] == p && b[r + 1, c] == p && b[r + 2, c] == p && b[r + 3, c] == p) return true;
         // Diagonal /
         for (int r = 3; r < ROWS; r++)
             for (int c = 0; c < COLS - 3; c++)
-                if (b[r * COLS + c] == p && b[(r - 1) * COLS + c + 1] == p && b[(r - 2) * COLS + c + 2] == p && b[(r - 3) * COLS + c + 3] == p) return true;
+                if (b[r, c] == p && b[r - 1, c + 1] == p && b[r - 2, c + 2] == p && b[r - 3, c + 3] == p) return true;
         // Diagonal \
         for (int r = 0; r < ROWS - 3; r++)
             for (int c = 0; c < COLS - 3; c++)
-                if (b[r * COLS + c] == p && b[(r + 1) * COLS + c + 1] == p && b[(r + 2) * COLS + c + 2] == p && b[(r + 3) * COLS + c + 3] == p) return true;
+                if (b[r, c] == p && b[r + 1, c + 1] == p && b[r + 2, c + 2] == p && b[r + 3, c + 3] == p) return true;
 
         return false;
     }
 }
+
