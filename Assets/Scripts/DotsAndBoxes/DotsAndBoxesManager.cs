@@ -136,34 +136,25 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             Handheld.Vibrate();
         }
 
-        uiHandler.UpdateScoreUI(localState); //Update the score display
+        CheckBoardState();
     }
 
     public bool CheckHorizontalBox(int id)
     {
         int topBoxId = id - 5;
         int bottomBoxId = id;
-        bool top = false, bottom = false;
+        bool top, bottom;
 
-        if (topBoxId < 0) //We are the the top, only check bottom
-        {
-            bottom = CheckBox(bottomBoxId); //Check Bottom Box
-        }
-        else if (bottomBoxId > 29) //We are at the bottom, only check top 
-        {
-            top = CheckBox(topBoxId); //Check Top Box
-        }
-        else
-        {
-            top = CheckBox(topBoxId); //Check Top Box
-            bottom = CheckBox(bottomBoxId); //Check Bottom Box
-        }
+        top = CheckBox(topBoxId); //Check Top Box
+        bottom = CheckBox(bottomBoxId); //Check Bottom Box
 
         if (top) //We completed a top box
         {
             SetBoxColor(topBoxId, turnUser);
             localState.Boxes.Add(topBoxId); //Update the game state
             GameManager.instance.GetComponent<AudioManager>().PlayWobbleSound();
+
+            //Update scores
             if (turnUser == User.client)
             {
                 localState.Player1Scores++;
@@ -179,6 +170,8 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             SetBoxColor(bottomBoxId, turnUser);
             localState.Boxes.Add(bottomBoxId); //Update the game state
             GameManager.instance.GetComponent<AudioManager>().PlayWobbleSound();
+
+            //Update scores
             if (turnUser == User.client)
             {
                 localState.Player1Scores++;
@@ -243,28 +236,28 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             Handheld.Vibrate();
         }
 
-        uiHandler.UpdateScoreUI(localState); //Update the score display
+        CheckBoardState();
     }
 
     public bool CheckVerticalBox(int id)
     {
         //Check Left & Right
-        int leftBoxId = id - (int)(id / 6) - 1;
-        int rightBoxId = leftBoxId + 1;
+        int rightBoxId = id - (int)(id / 6);
+        int leftBoxId = rightBoxId - 1;
         bool left = false, right = false;
 
-        if (leftBoxId % 6 == 0) //We are at the left, only check the right
+        if (id % 6 == 0)//We are at the leftmost side(Check only the right box)
         {
-            right = CheckBox(leftBoxId); //Check Bottom Box
+            right = CheckBox(rightBoxId); //Check Right Box
         }
-        else if (rightBoxId > 29) //We are at the bottom, only check top 
+        else if ((id - 5) % 6 == 0) //We are at the rightmost side (Check only left box)
         {
-            left = CheckBox(leftBoxId); //Check Top Box
+            left = CheckBox(leftBoxId); //Check Left Box
         }
         else
         {
-            left = CheckBox(leftBoxId); //Check Top Box
-            right = CheckBox(rightBoxId); //Check Bottom Box
+            right = CheckBox(rightBoxId); //Check Right Box
+            left = CheckBox(leftBoxId); //Check Left Box
         }
 
         if (left) //We completed a top box
@@ -273,6 +266,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             localState.Boxes.Add(leftBoxId); //Update the game state
             GameManager.instance.GetComponent<AudioManager>().PlayWobbleSound();
 
+            //Update scores
             if (turnUser == User.client)
             {
                 localState.Player1Scores++;
@@ -288,6 +282,8 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             SetBoxColor(rightBoxId, turnUser);
             localState.Boxes.Add(rightBoxId); //Update the game state
             GameManager.instance.GetComponent<AudioManager>().PlayWobbleSound();
+
+            //Update scores
             if (turnUser == User.client)
             {
                 localState.Player1Scores++;
@@ -305,18 +301,12 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
     /// <param name="id">ID of the box to be checked</param>
     public bool CheckBox(int id)
     {
-        if (id < 0 || id >= 25) return false;
+        if (id < 0 || id >= 25 || localState.Boxes.Contains(id)) return false; //Do bounds checking
 
         int r = (int)(id / 5);
 
-        // Correct indices based on the grid mapping:
-        int left = id + r;
-        int right = left + 1;
-
-        return localState.HorizontalEdges.Contains(id) &&
-               localState.HorizontalEdges.Contains(id + 5) &&
-               localState.VerticalEdges.Contains(left) &&
-               localState.VerticalEdges.Contains(right);
+        return localState.HorizontalEdges.Contains(id) && localState.HorizontalEdges.Contains(id + 5) && //Top && Bottom
+               localState.VerticalEdges.Contains(id + r) && localState.VerticalEdges.Contains(id + r + 1); //Left && Right
     }
 
     public void MakeAIMove()
@@ -338,7 +328,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             }
             else
             {
-                Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move again
+                Invoke(nameof(MakeAIMove), Random.Range(0.7f, 1.5f)); //Allow the bot make a move again
             }
         }
         else if (move.V == -1) //It's a horizontal move
@@ -353,7 +343,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             }
             else
             {
-                Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move again
+                Invoke(nameof(MakeAIMove), Random.Range(0.7f, 1.5f)); //Allow the bot make a move again
             }
         }
         else
@@ -361,12 +351,18 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
             NotificationDisplay.instance.DisplayMessage("The DAB has run into a critical error!", NotificationType.error);
         }
         
-        uiHandler.UpdateScoreUI(localState); //Update the score display
+        CheckBoardState();
     }
 
     public void CheckBoardState()
     {
+        //TODO: Check for game win //Update the score display
+        if(localState.Player1Scores + localState.Player2Scores >= 25)
+        {
+            isGameOver = true;
+        }
 
+        uiHandler.UpdateScoreUI(localState);
     }
 
     public void SetHorizontalButtonColor(int button, User user)
