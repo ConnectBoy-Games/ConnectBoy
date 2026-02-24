@@ -25,11 +25,16 @@ public class FourInARowUIHandler : MonoBehaviour
         if (GameManager.gameMode == GameMode.vsBot) chatButton.SetActive(false);
     }
 
+    void FixedUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) GoBack();
+    }
+
     public void GoBack()
     {
         if (endPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
         {
-            //GoToHome();
+            GoToHome();
         }
         else if (chatPanel.activeInHierarchy)
         {
@@ -44,6 +49,16 @@ public class FourInARowUIHandler : MonoBehaviour
     public void GoToHome()
     {
         SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+    }
+
+    public void Replay()
+    {
+        SceneManager.LoadScene("FourInARow", LoadSceneMode.Single);
+    }
+
+    public void ForfeitGame()
+    {
+
     }
 
     public void SetTurnText(User turnUser, string text = null)
@@ -92,7 +107,6 @@ public class FourInARowUIHandler : MonoBehaviour
     {
         endPanel.SetActive(true);
         defeatPanel.SetActive(true);
-        //defeatText.text = name + wager.ToString(); ;
 
         if (GameManager.gameMode == GameMode.online)
         {

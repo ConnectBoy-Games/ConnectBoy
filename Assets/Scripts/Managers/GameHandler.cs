@@ -15,10 +15,10 @@ public class GameHandler : MonoBehaviour
         if (GameManager.gameSession.gameRole == GameRole.host) //Only do this check if you are the host and are waiting for a player to join the game
         {
             SessionDetails det = await SessionHandler.CheckSessionStatus(GameManager.gameSession.sessionId.ToString());
-            if (det.OtherPlayer != null) //Second player has joined the game
+            if (det.Player2 != null) //Second player has joined the game
             {
-                GameManager.gameSession.other = det.OtherPlayer; //Update the local game session
-                ScorePanel.instance.SetUsernames(det.HostPlayer.Name, det.OtherPlayer.Name); //Set the usernames in the score panel
+                GameManager.gameSession.other = det.Player2; //Update the local game session
+                ScorePanel.instance.SetUsernames(det.Player1.Name, det.Player2.Name); //Set the usernames in the score panel
                 GameManager.instance.GetComponent<AudioManager>().PlayAcceptSound();
 
                 manager.SetActive(true);

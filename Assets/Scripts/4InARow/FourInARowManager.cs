@@ -260,7 +260,30 @@ public class FourInARowManager : MonoBehaviour, IGameManager
 
     public void CheckBoardState(int row, int col)
     {
-        if (CheckWin(row, col, turnUser)) isGameOver = true;
+        if (CheckWin(row, col, turnUser))
+        {
+            isGameOver = true;
+            //TODO: Draw win line
+
+            switch (turnUser)
+            {
+                case User.bot: //Bot won
+                    GameManager.instance.GetComponent<AudioManager>().PlayDefeatSound();
+                    localState.Winner = User.bot.ToString();
+                    uiHandler.DisplayDefeatScreen("You lost the game!");
+                    break;
+                case User.client: //Player 1 won
+                    GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
+                    localState.Winner = User.client.ToString();
+                    uiHandler.DisplayWinScreen("Player 1 wins the game!");
+                    break;
+                case User.player: //Player 2 won/Online opponent won
+                    GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
+                    localState.Winner = User.player.ToString();
+                    uiHandler.DisplayWinScreen("Player 2 wins the game!");
+                    break;
+            }
+        }
     }
 
     public async void GetGameState()
