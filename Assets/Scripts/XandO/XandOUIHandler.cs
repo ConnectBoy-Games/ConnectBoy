@@ -58,7 +58,7 @@ public class XandOUIHandler : MonoBehaviour, IGameUIHandler
 
     public void ForfeitGame()
     {
-
+        GoToHome();
     }
 
     public void SetTurnText(User turnUser, string text = null)

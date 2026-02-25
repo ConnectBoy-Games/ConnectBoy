@@ -58,7 +58,7 @@ public class FourInARowUIHandler : MonoBehaviour
 
     public void ForfeitGame()
     {
-
+        GoToHome();
     }
 
     public void SetTurnText(User turnUser, string text = null)

@@ -35,9 +35,9 @@ public class MenuPanel : MonoBehaviour
         }
         else
         {
-            displayName.text = "Guest";
+            displayName.text = "Hello!";
             notificationButton.interactable = false;
-            displayImage.sprite = GameManager.instance.faceManager.GetFace(-1); //Load the default image
+            displayImage.sprite = GameManager.instance.faceManager.GetFace(3); //Load the default image
         }
     }
 

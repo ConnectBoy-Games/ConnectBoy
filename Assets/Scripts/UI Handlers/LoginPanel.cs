@@ -34,16 +34,31 @@ public class LoginPanel : MonoBehaviour
         GameManager.instance.accountManager.onAccountCreated += OnCreatedAccount;
     }
 
+    private void OnDestroy()
+    {
+        GameManager.instance.accountManager.onProfileLoaded -= OnProfileLoaded;
+        GameManager.instance.accountManager.onAccountCreated -= OnCreatedAccount;
+    }
+
     public async void OnEnable()
     {
+        await UnityServices.InitializeAsync(); //Initialize Unity Services
+
+        /* Temporarily disable Auto Login
+        //If we are already logged in, just go to the games page
         //Try logging in the moment the login page is shown
-        if (AuthenticationService.Instance.SessionTokenExists) //Check if a cached player already exists by checking if the session token exists
+        if(AuthenticationService.Instance.IsSignedIn)
+        {
+            GoToGames();
+        }
+        else if (AuthenticationService.Instance.SessionTokenExists) //Check if a cached player already exists by checking if the session token exists
         {
             loginButton.interactable = false;
             signUpButton.interactable = false;
             guestButton.interactable = false;
             Invoke(nameof(Login), 0.5f);
         }
+        */
     }
 
     private void FixedUpdate()
@@ -131,6 +146,8 @@ public class LoginPanel : MonoBehaviour
         {
             GameManager.instance.GetComponent<AudioManager>().PlayAcceptSound();
             SetProfileDetails();
+            createAccountPanel.SetActive(false);
+            loginButtonPanel.SetActive(false);
             continuePanel.SetActive(true);
         }
     }

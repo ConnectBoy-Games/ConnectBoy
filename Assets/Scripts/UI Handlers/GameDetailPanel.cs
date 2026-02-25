@@ -10,6 +10,7 @@ public class GameDetailPanel : MonoBehaviour
     [Header("Game Detail UI")]
     [SerializeField] private Image blurImage;
     [SerializeField] private Image backgroundImage;
+    [SerializeField] private Image backImage;
     [SerializeField] private TMP_Text gameTitle;
     [SerializeField] private TMP_Text gameDescription;
 
@@ -94,51 +95,51 @@ public class GameDetailPanel : MonoBehaviour
     {
         ClearImages(); //Reset all game images before showing the selected one
         GameManager.gameSession = new Wagr.Session(gameName); //Create/Reset game session //Set the details of the game manager
+        Color themeColor = Color.blue;
+
         switch (gameName)
         {
             case Wagr.GameName.xando:
                 xandoImage.gameObject.SetActive(true);
-                backgroundImage.color = xandoColor;
-                blurImage.color = xandoColor;
+                themeColor = xandoColor;
                 gameDescription.text = xandoBrief;
                 gameTitle.text = "X And O";
                 break;
             case Wagr.GameName.dotsandboxes:
                 dotsandboxesImage.gameObject.SetActive(true);
-                backgroundImage.color = dotsandboxesColor;
-                blurImage.color = dotsandboxesColor;
+                themeColor = dotsandboxesColor;
                 gameDescription.text = dotsandboxesBrief;
                 gameTitle.text = "Dots And Boxes";
                 break;
             case Wagr.GameName.fourinarow:
                 fourinarowImage.gameObject.SetActive(true);
-                backgroundImage.color = fourinarowColor;
-                blurImage.color = fourinarowColor;
+                themeColor = fourinarowColor;
                 gameDescription.text = fourinarowBrief;
                 gameTitle.text = "Four In A Row";
                 break;
             case Wagr.GameName.minisoccer:
                 minisoccerImage.gameObject.SetActive(true);
-                backgroundImage.color = minisoccerColor;
-                blurImage.color = minisoccerColor;
+                themeColor = minisoccerColor;
                 gameDescription.text = minisoccerBrief;
                 gameTitle.text = "Mini Soccer";
                 break;
             case Wagr.GameName.archery:
                 archeryImage.gameObject.SetActive(true);
-                backgroundImage.color = archeryColor;
-                blurImage.color = archeryColor;
+                themeColor = archeryColor;
                 gameDescription.text = archeryBrief;
                 gameTitle.text = "Archery";
                 break;
             case Wagr.GameName.minigolf:
                 minigolfImage.gameObject.SetActive(true);
-                backgroundImage.color = minigolfColor;
-                blurImage.color = minigolfColor;
+                themeColor = minigolfColor;
                 gameDescription.text = minigolfBrief;
                 gameTitle.text = "Mini Golf";
                 break;
         }
+
+        backgroundImage.color = themeColor;
+        blurImage.color = themeColor;
+        backImage.color = themeColor;
     }
 
     public void SelectMode(int mode)

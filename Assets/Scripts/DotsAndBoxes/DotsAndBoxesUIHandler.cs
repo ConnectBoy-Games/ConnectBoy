@@ -53,7 +53,7 @@ public class DotsAndBoxesUIHandler : MonoBehaviour
 
     public void Forfeit()
     {
-
+        GoToHome();
     }
 
     public void Replay()

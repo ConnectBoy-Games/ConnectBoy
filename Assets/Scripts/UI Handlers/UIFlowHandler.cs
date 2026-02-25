@@ -20,7 +20,6 @@ public class UIFlowHandler : MonoBehaviour
         loadScreenDisplay.SetActive(true);
         inviteDisplay.SetActive(true);
 
-        /*
         if(GameManager.instance.accountManager.loginState == LoginState.unsigned)
         {
             menuPanel.SetActive(false);
@@ -31,7 +30,6 @@ public class UIFlowHandler : MonoBehaviour
         {
             GotoMainMenu();
         }
-        */
     }
 
     void Start()

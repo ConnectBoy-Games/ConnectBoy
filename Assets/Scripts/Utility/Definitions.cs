@@ -103,9 +103,9 @@ public enum GameRole : byte
 [Serializable]
 public enum User : byte 
 {
-    bot = 0, //The other player
-    client = 1, //The client
-    player = 2 //Other player
+    bot = 1, //The bot
+    client = 2, //The client
+    player = 3 //Other player
 }
 
 [Serializable]

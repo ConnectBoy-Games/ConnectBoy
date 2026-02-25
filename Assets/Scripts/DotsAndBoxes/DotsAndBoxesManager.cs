@@ -36,6 +36,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
                 if (turnUser == User.bot) Invoke(nameof(MakeAIMove), 1f); //Make an AI move if it has the turn
                 break;
             case GameMode.vsPlayer:
+                ScorePanel.instance.SetUsernames("Player 1", "Player 2");
                 turnUser = (User)Random.Range(2, 4); //Set who has the turn
                 uiHandler.SetTurnText(turnUser);
                 break;
@@ -302,6 +303,7 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
 
     public void MakeAIMove()
     {
+        Debug.Log("Making AI move!!");
         if (isGameOver) return;
 
         DaBMove move = bot.ThinkMove(localState.HorizontalEdges, localState.VerticalEdges); //Let the bot think a move

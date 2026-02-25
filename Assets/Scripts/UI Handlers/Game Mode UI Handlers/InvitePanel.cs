@@ -4,14 +4,36 @@ using UnityEngine.UI;
 
 public class InvitePanel : MonoBehaviour
 {
+    private RectTransform rectTransform;
+    
+    [Header("UI Fields")]
     [SerializeField] private TMP_InputField wagerField;
     [SerializeField] private TMP_InputField usernameField;
     [SerializeField] private Button playButton;
+    
+    private float initialY;
 
-    private void Update()
+    void Start()
     {
-        //TODO: Add dynamic keyboard movement
-        //wagerField.onTouchScreenKeyboardStatusChanged
+        rectTransform = GetComponent<RectTransform>();
+        initialY = rectTransform.anchoredPosition.y; //Store the initial Y position of the panel
+    }
+
+    void FixedUpdate()
+    {
+        if (TouchScreenKeyboard.visible)
+        {
+            float keyboardHeight = TouchScreenKeyboard.area.height; // Get the keyboard height in screen space
+
+            // Convert screen height to local UI space (approximate) // Adjust based on Canvas Scaler
+            float shiftAmount = keyboardHeight / Screen.height * 1080; // Assuming 1080p ref
+
+            rectTransform.anchoredPosition = new Vector2(0, initialY + shiftAmount);
+        }
+        else
+        {
+            rectTransform.anchoredPosition = new Vector2(0, initialY);
+        }
     }
 
     private void OnEnable()

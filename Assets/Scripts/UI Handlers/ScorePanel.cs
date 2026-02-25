@@ -28,6 +28,12 @@ public class ScorePanel : MonoBehaviour
         }
     }
 
+    public void DisableScore()
+    {
+        yourScore.gameObject.SetActive(false);
+        otherScore.gameObject.SetActive(false);
+    }
+
     public void SetWagerText(int wager) => wagerText.text = wager.ToString();
 
     public void SetUsernames(string yours, string others)
@@ -36,9 +42,10 @@ public class ScorePanel : MonoBehaviour
         otherUsername.text = others;
     }
 
-    public void UpdateScore(string yours, string others)
+    public void UpdateScore(int player1, int player2)
     {
-        yourScore.text = yours;
-        otherScore.text = others;
+        //Update the score display
+        yourScore.text = player1.ToString();
+        otherScore.text = player2.ToString();
     }
 }

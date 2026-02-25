@@ -4,19 +4,13 @@ using UnityEngine;
 
 public class PlayerPiece : MonoBehaviour
 {
+    public MiniBallPiece piece;
     [SerializeField] private GameObject indicator;
 
     private bool isDragging = false;
     private Vector3 startPosition;
     private Vector3 currentPosition;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if(isDragging)

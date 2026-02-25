@@ -22,6 +22,8 @@ public class GameResult
 public class XAndOState
 {
     public string[] Board { get; set; }
+    public int Player1Scores { get; set; }
+    public int Player2Scores { get; set; }
     public string Winner { get; set; }
 }
 
@@ -32,7 +34,7 @@ public class DotsAndBoxesState
     public List<int> Boxes { get; set; } // owner per box
     public int Player1Scores { get; set; }
     public int Player2Scores { get; set; }
-
+    public string Winner { get; set; }
 }
 
 public class FourInARowState

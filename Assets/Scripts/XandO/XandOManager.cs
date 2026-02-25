@@ -11,6 +11,7 @@ public class XandOManager : MonoBehaviour, IGameManager
     private string userPiece; // (x or o)
     private string otherPiece; // (x or o)
     private bool isGameOver = false;
+    private bool isPaused = false;
 
     [Header("UI Handling")]
     [SerializeField] XandOUIHandler uiHandler;
@@ -33,24 +34,25 @@ public class XandOManager : MonoBehaviour, IGameManager
                 //Set who gets which piece
                 userPiece = (Random.Range(0, 2) == 1) ? "x" : "o";
                 otherPiece = (userPiece == "x") ? "o" : "x"; //Set the alternative piece
-
-                //Set who has the turn
-                turnUser = (User)Random.Range(0, 2);
+               
+                turnUser = (User)Random.Range(1, 3); //Set who has the turn
                 uiHandler.SetTurnText(turnUser);
 
                 //Set the bot difficulty
                 bot = new XandOBot(GameManager.botDifficulty, userPiece, otherPiece);
 
                 //Make an AI move if it has the turn
-                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), 1f);
+                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), 0.5f);
                 break;
             case GameMode.vsPlayer:
+                ScorePanel.instance.SetUsernames("Player 1", "Player 2");
+
                 //Set who gets which piece
                 userPiece = (Random.Range(0, 2) == 1) ? "x" : "o";
                 otherPiece = (userPiece == "x") ? "o" : "x"; //Set the alternative piece
 
                 //Set who has the turn
-                turnUser = (User)Random.Range(1, 3);
+                turnUser = (User)Random.Range(2, 4);
                 uiHandler.SetTurnText(turnUser);
                 break;
             case GameMode.online:
@@ -102,6 +104,8 @@ public class XandOManager : MonoBehaviour, IGameManager
         {
             case GameMode.vsBot:
                 turnUser = (turnUser == User.bot) ? User.client : User.bot;
+
+                if(turnUser == User.bot) Invoke(nameof(MakeAIMove), Random.Range(0.7f, 1.5f)); //Allow the bot make a move
                 break;
             case GameMode.vsPlayer:
                 turnUser = (turnUser == User.client) ? User.player : User.client;
@@ -110,12 +114,13 @@ public class XandOManager : MonoBehaviour, IGameManager
                 turnUser = (turnUser == User.client) ? User.player : User.client;
                 break;
         }
+        isPaused = false;
         uiHandler.SetTurnText(turnUser); //Display the turn text
     }
 
     public async void MakeMove(int index)//For allowing the player to make a move
     {
-        if (!isGameOver && localState.Board[index] == "f") //Valid move
+        if (!isGameOver && !isPaused && localState.Board[index] == "f") //Valid move
         {
             if (GameManager.gameMode == GameMode.vsBot && turnUser == User.client)
             {
@@ -125,7 +130,6 @@ public class XandOManager : MonoBehaviour, IGameManager
 
                 CheckBoardState(); //Check if there is a win
                 SwitchTurns(); //Hand over the turn
-                Invoke(nameof(MakeAIMove), Random.Range(0.7f, 2.5f)); //Allow the bot make a move
             }
             else if (GameManager.gameMode == GameMode.vsPlayer) //Local Player
             {
@@ -162,12 +166,20 @@ public class XandOManager : MonoBehaviour, IGameManager
 
                 ProcessState(tempState); //Process the game state
             }
+            else
+            {
+                Handheld.Vibrate();
+            }
+        }
+        else
+        {
+            Handheld.Vibrate();
         }
     }
 
     private void MakeAIMove()
     {
-        if (isGameOver) return;
+        if (isGameOver || isPaused) return;
 
         int index = bot.ThinkMove(localState.Board); //Let the bot think a move
         localState.Board[index] = otherPiece; //Update the game state
@@ -197,7 +209,9 @@ public class XandOManager : MonoBehaviour, IGameManager
 
     public void CheckBoardState()
     {
+        isPaused = true;
         int win = CheckWinState(userPiece); //Check if player has won
+
         if (win != -1)
         {
             ActivateWinLine(win);
@@ -211,7 +225,7 @@ public class XandOManager : MonoBehaviour, IGameManager
             }
             else //Game has been won but not the match, clear the board for the next round
             {
-                Invoke(nameof(ClearBoard), 1f);
+                Invoke(nameof(ClearBoard), 0.7f);
             }
         }
 
@@ -229,22 +243,41 @@ public class XandOManager : MonoBehaviour, IGameManager
             }
             else //Game has been won but not the match, clear the board for the next round
             {
-                Invoke(nameof(ClearBoard), 1f);
+                Invoke(nameof(ClearBoard), 0.7f);
             }
         }
 
 
         if (isGameOver)
         {
-            if (localState.Player1Scores > localState.Player2Scores)
+            switch (GameManager.gameMode)
             {
-                localState.Winner = User.client.ToString();
-                uiHandler.DisplayWinScreen();
-            }
-            else
-            {
-                localState.Winner = User.player.ToString();
-                uiHandler.DisplayDefeatScreen();
+                case GameMode.vsBot:
+                    if (localState.Player1Scores > localState.Player2Scores)
+                    {
+                        localState.Winner = User.client.ToString();
+                        uiHandler.DisplayWinScreen("Player 1 wins the game!");
+                    }
+                    else
+                    {
+                        localState.Winner = User.bot.ToString();
+                        uiHandler.DisplayDefeatScreen("You lost the game!");
+                    }
+                    break;
+                case GameMode.vsPlayer:
+                    if (localState.Player1Scores > localState.Player2Scores)
+                    {
+                        localState.Winner = User.client.ToString();
+                        uiHandler.DisplayWinScreen("Player 1 wins the game!");
+                    }
+                    else
+                    {
+                        localState.Winner = User.player.ToString();
+                        uiHandler.DisplayWinScreen("Player 2 wins the game!");
+                    }
+                    break;
+                case GameMode.online:
+                    break;
             }
         }
 

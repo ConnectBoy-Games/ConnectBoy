@@ -27,6 +27,7 @@ public class XandOBot
 
     public int SimpleMoves(string[] gameState)
     {
+        Debug.Log("Thinking Simple Move");
         if (gameState[4] == "f") //f means the box is empty
         {
             return 4;

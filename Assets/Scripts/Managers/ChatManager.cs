@@ -4,16 +4,35 @@ using UnityEngine;
 
 public class ChatManager : MonoBehaviour
 {
+    [SerializeField] RectTransform rectTransform;
     [SerializeField] Transform chatHolder;
     [SerializeField] GameObject chatPrefab;
 
     [SerializeField] TMP_InputField chatField;
 
     private int lastChatId = -1;
+    private float initialY;
 
     private void Update()
     {
-        //TODO: Make keyboard adjustmeny, dynamic
+        initialY = rectTransform.anchoredPosition.y; //Store the initial Y position of the panel
+    }
+
+    void FixedUpdate()
+    {
+        if (TouchScreenKeyboard.visible)
+        {
+            float keyboardHeight = TouchScreenKeyboard.area.height; // Get the keyboard height in screen space
+
+            // Convert screen height to local UI space (approximate) // Adjust based on Canvas Scaler
+            float shiftAmount = keyboardHeight / Screen.height * 1080; // Assuming 1080p ref
+
+            rectTransform.anchoredPosition = new Vector2(0, initialY + shiftAmount);
+        }
+        else
+        {
+            rectTransform.anchoredPosition = new Vector2(0, initialY);
+        }
     }
 
     private void OnEnable()
@@ -43,7 +62,6 @@ public class ChatManager : MonoBehaviour
         var chats = await SessionHandler.SendSessionChat(GameManager.gameSession.sessionId.ToString(), chatMessage);
         GameManager.instance.GetComponent<AudioManager>().PlayChatSendSound();
         UpdateUI(chats);
-
     }
 
     public async void LoadChats()

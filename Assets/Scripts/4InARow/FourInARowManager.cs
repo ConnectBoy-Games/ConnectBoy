@@ -42,6 +42,7 @@ public class FourInARowManager : MonoBehaviour, IGameManager
                 if (turnUser == User.bot) Invoke(nameof(MakeAIMove), Random.Range(0.7f, 1f)); //Make an AI move if it has the turn
                 break;
             case GameMode.vsPlayer:
+                ScorePanel.instance.SetUsernames("Player 1", "Player 2");
                 userPiece = (Random.Range(0, 2) == 1) ? 1 : 0; //Set who gets which piece
                 otherPiece = (userPiece == 1) ? 0 : 1; //Set the alternative piece
 
@@ -96,7 +97,7 @@ public class FourInARowManager : MonoBehaviour, IGameManager
         int row = GetLowestRow(column);
 
         // Check if column is valid and not full and it is the player's turn
-        if (turnUser != User.client || column < 0 || column >= Cols || localState.Board[0, column] != 0 || row < 0)
+        if (column < 0 || column >= Cols || localState.Board[0, column] != 0 || row < 0)
         {
             Handheld.Vibrate();
             return;
@@ -143,6 +144,10 @@ public class FourInARowManager : MonoBehaviour, IGameManager
             var tempState = JsonConvert.DeserializeObject<FourInARowState>(JsonConvert.SerializeObject(result.State));
 
             ProcessState(tempState); //Process the game state
+        }
+        else
+        {
+            Handheld.Vibrate();
         }
     }
 
