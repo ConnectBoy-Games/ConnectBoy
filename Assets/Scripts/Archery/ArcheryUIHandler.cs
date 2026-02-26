@@ -19,11 +19,22 @@ public class ArcheryUIHandler : MonoBehaviour
 
     [SerializeField] GameObject chatButton;
 
+    void Start()
+    {
+        //Disable the Chat Button if we are playing with a bot
+        if (GameManager.gameMode == GameMode.vsBot) chatButton.SetActive(false);
+    }
+
+    void FixedUpdate()
+    {
+        if (Input.GetKey(KeyCode.Escape)) GoBack();
+    }
+
     public void GoBack()
     {
         if (endPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
         {
-            //GoToHome();
+            GoToHome();
         }
         else if (chatPanel.activeInHierarchy)
         {
@@ -38,6 +49,16 @@ public class ArcheryUIHandler : MonoBehaviour
     public void GoToHome()
     {
         SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+    }
+
+    public void Replay()
+    {
+        SceneManager.LoadScene("Archery", LoadSceneMode.Single);
+    }
+
+    public void ForfeitGame()
+    {
+        GoToHome();
     }
 
     public void SetTurnText(User turnUser, string text = null)

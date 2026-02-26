@@ -25,11 +25,16 @@ public class MiniGolfUIHandler : MonoBehaviour, IGameUIHandler
         if (GameManager.gameMode == GameMode.vsBot) chatButton.SetActive(false);
     }
 
+    void FixedUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) GoBack();
+    }
+
     public void GoBack()
     {
         if (endPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
         {
-            //GoToHome();
+            GoToHome();
         }
         else if (chatPanel.activeInHierarchy)
         {
@@ -44,6 +49,22 @@ public class MiniGolfUIHandler : MonoBehaviour, IGameUIHandler
     public void GoToHome()
     {
         SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+    }
+
+    public void Forfeit()
+    {
+        GoToHome();
+    }
+
+    public void Replay()
+    {
+        SceneManager.LoadScene("MiniGolf", LoadSceneMode.Single);
+    }
+
+    /// <summary>The scores here represent the number of moves the player makes</summary>
+    public void UpdateScoreUI(DotsAndBoxesState state)
+    {
+        ScorePanel.instance.UpdateScore(state.Player1Scores, state.Player2Scores);
     }
 
     public void SetTurnText(User turnUser, string text = null)
@@ -92,7 +113,6 @@ public class MiniGolfUIHandler : MonoBehaviour, IGameUIHandler
     {
         endPanel.SetActive(true);
         defeatPanel.SetActive(true);
-        //defeatText.text = name + wager.ToString(); ;
 
         if (GameManager.gameMode == GameMode.online)
         {
@@ -107,5 +127,4 @@ public class MiniGolfUIHandler : MonoBehaviour, IGameUIHandler
             victoryText.text = "You lost!";
         }
     }
-
 }

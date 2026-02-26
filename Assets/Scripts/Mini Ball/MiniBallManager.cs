@@ -1,23 +1,63 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class MiniBallManager : MonoBehaviour, IGameManager
 {
     private MiniBallState localState = new();
-    private User turnUser; //Who has the turn
     private MiniBallBot bot; //Reference to the game bot
+    private User turnUser; //Who has the turn
+
     private bool isGameOver = false;
 
     [Header("UI Handling")]
     [SerializeField] private MiniBallUIHandler uiHandler;
-    [SerializeField] private Transform playerHolder; //The parent object that holds the player pieces
 
     [Header("Game Handling")]
+    [SerializeField] private Transform playerHolder; //The parent object that holds the player pieces
     public GoalZone player1Goal; // e.g., Left side
     public GoalZone player2Goal; // e.g., Right side
 
-    private int scoreP1 = 0;
-    private int scoreP2 = 0;
+    async void OnEnable() //The entry point of the Game Manager
+    {
+        ClearBoard();
+
+        switch (GameManager.gameMode)
+        {
+            case GameMode.vsBot:
+                turnUser = (User)Random.Range(1, 3); //Set who has the turn
+                uiHandler.SetTurnText(turnUser);
+
+                bot = new MiniBallBot(); //Set the bot difficulty
+                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), 1f); //Make an AI move if it has the turn
+                break;
+            case GameMode.vsPlayer:
+                ScorePanel.instance.SetUsernames("Player 1", "Player 2");
+                turnUser = (User)Random.Range(2, 4); //Set who has the turn
+                uiHandler.SetTurnText(turnUser);
+                break;
+            case GameMode.online:
+                var det = await SessionHandler.CheckSessionStatus(GameManager.gameSession.sessionId.ToString()); //Get the session details
+
+                if (det.CurrentTurn == GameManager.instance.accountManager.playerProfile.Id) //You are the starting player
+                {
+                    turnUser = User.client;
+                    uiHandler.SetTurnText(User.client);
+                }
+                else //The other player is the starting player
+                {
+                    turnUser = User.player;
+                    uiHandler.SetTurnText(User.player);
+                }
+                Invoke(nameof(GetGameState), 5f);
+                break;
+        }
+    }
+    
+    public void MakeAIMove()
+    {
+        SwitchTurns();
+    }
 
     public void ProcessPhysicsFrame(Dictionary<string, Vector2> frameData)
     {
@@ -92,6 +132,8 @@ public class MiniBallManager : MonoBehaviour, IGameManager
         {
             case GameMode.vsBot:
                 turnUser = (turnUser == User.bot) ? User.client : User.bot;
+
+                if (turnUser == User.bot && !isGameOver) Invoke(nameof(MakeAIMove), Random.Range(0.7f, 1.5f));
                 break;
             case GameMode.vsPlayer:
                 turnUser = (turnUser == User.client) ? User.player : User.client;
@@ -137,7 +179,6 @@ public class MiniBallManager : MonoBehaviour, IGameManager
 
     public void ClearBoard()
     {
-        throw new System.NotImplementedException();
     }
 
     public void CheckBoardState()
@@ -150,9 +191,25 @@ public class MiniBallManager : MonoBehaviour, IGameManager
         throw new System.NotImplementedException();
     }
 
-    public void GetGameState()
+    public async void GetGameState()
     {
-        throw new System.NotImplementedException();
+        try
+        {
+            var result = await SessionHandler.GetSessionGameState(GameManager.gameSession.sessionId.ToString());
+            var tempState = JsonConvert.DeserializeObject<MiniBallState>(JsonConvert.SerializeObject(result));
+
+            ProcessState(tempState);
+            Invoke(nameof(GetGameState), 5f); //Call itself again after 5 seconds
+        }
+        catch (System.Exception e)
+        {
+            NotificationDisplay.instance.DisplayMessage("Error getting the game state from the server: " + e.Message, NotificationType.error);
+        }
+    }
+
+    public void ProcessState(MiniBallState state)
+    {
+
     }
 }
 

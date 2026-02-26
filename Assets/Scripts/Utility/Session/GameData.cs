@@ -43,16 +43,15 @@ public class FourInARowState
     public string Winner { get; set; }
 }
 
-public class MiniGolfGameState
+public class MiniGolfState
 {
-    public bool isGameOver { get; set; } //Has the game finished?
-    public string CurrentTurn { get; set; } //ID of who has the current turn after the previous move
     public string Winner { get; set; } //ID of the current winner, empty if no winner yet or tie
 
     // The position of the ball after the shot is finished
     public float BallPosX { get; set; }
     public float BallPosY { get; set; }
-
+    public int Player1Scores { get; set; }
+    public int Player2Scores { get; set; }
     public int stateHash { get; set; }// Checksum to verify both players calculated the same result
 }
 
@@ -61,6 +60,8 @@ public class MiniBallState
     public MiniBallEntity[] entities { get; set; } // Positions of all 6 pieces + ball
     public string CurrentTurn { get; set; }
     public string Winner { get; set; }
+    public int Player1Scores { get; set; }
+    public int Player2Scores { get; set; }
 }
 
 public class ArcheryState { }

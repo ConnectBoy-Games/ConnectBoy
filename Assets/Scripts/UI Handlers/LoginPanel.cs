@@ -92,6 +92,7 @@ public class LoginPanel : MonoBehaviour
     public void LoginAsGuest()
     {
         GameManager.instance.accountManager.LoginInGuestMode();
+        GameManager.instance.GetComponent<AudioManager>().PlayThemeSound();
         backAction.Invoke();
     }
 

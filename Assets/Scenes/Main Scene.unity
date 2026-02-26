@@ -7154,6 +7154,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 436866238}
   m_CullTransparentMesh: 1
+--- !u!82 &441871691 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2262432517976843928, guid: 55e15baa5821f2b4a9a256ac2cb9f502, type: 3}
+  m_PrefabInstance: {fileID: 1544421005}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &455141076
 GameObject:
   m_ObjectHideFlags: 0
@@ -23685,9 +23690,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2125620402352336882, guid: 55e15baa5821f2b4a9a256ac2cb9f502, type: 3}
+      propertyPath: theme
+      value: 
+      objectReference: {fileID: 441871691}
     - target: {fileID: 2125620402352336894, guid: 55e15baa5821f2b4a9a256ac2cb9f502, type: 3}
       propertyPath: m_Name
       value: GameManger
+      objectReference: {fileID: 0}
+    - target: {fileID: 2262432517976843928, guid: 55e15baa5821f2b4a9a256ac2cb9f502, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55e15baa5821f2b4a9a256ac2cb9f502, type: 3}

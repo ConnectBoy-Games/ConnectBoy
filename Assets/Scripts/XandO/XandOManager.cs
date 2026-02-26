@@ -365,12 +365,20 @@ public class XandOManager : MonoBehaviour, IGameManager
 
     public async void GetGameState()
     {
-        print("Getting game State");
-        var result = await SessionHandler.GetSessionGameState(GameManager.gameSession.sessionId.ToString());
-        var tempState = JsonConvert.DeserializeObject<XAndOState>(JsonConvert.SerializeObject(result));
+        try
+        {
+            print("Getting game State");
+            var result = await SessionHandler.GetSessionGameState(GameManager.gameSession.sessionId.ToString());
+            var tempState = JsonConvert.DeserializeObject<XAndOState>(JsonConvert.SerializeObject(result));
 
-        print("Got game State");
-        ProcessState(tempState);
-        Invoke(nameof(GetGameState), 5f); //Call itself again after 5 seconds
+            print("Got game State");
+            ProcessState(tempState);
+            Invoke(nameof(GetGameState), 5f); //Call itself again after 5 seconds
+
+        }
+        catch (System.Exception ex)
+        {
+            NotificationDisplay.instance.DisplayMessage("Failed to get game state, retrying " + ex.Message, NotificationType.error);
+        }
     }
 }

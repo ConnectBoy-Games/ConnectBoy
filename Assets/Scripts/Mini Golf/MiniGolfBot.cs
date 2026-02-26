@@ -5,19 +5,20 @@ public class MiniGolfBot
 {
     private BotDifficulty difficulty;
     private Vector2 holePosition;
-    private List<WallData> walls;
+    private List<Collider> walls;
+
     private const float MAX_FORCE = 15f;
     private const float MIN_FORCE = 3f;
     private const float HOLE_RADIUS = 0.3f;
 
-    public MiniGolfBot(BotDifficulty difficulty, Vector2 holePosition, List<WallData> walls)
+    public MiniGolfBot(BotDifficulty difficulty, MiniGolfMap map)
     {
         this.difficulty = difficulty;
-        this.holePosition = holePosition;
-        this.walls = walls;
+        this.holePosition = map.holeTransform.position;
+        this.walls = map.currentLevelWalls;
     }
 
-    public void UpdateLevelData(Vector2 holePos, List<WallData> currentWalls)
+    public void UpdateLevelData(Vector2 holePos, List<Collider> currentWalls)
     {
         this.holePosition = holePos;
         this.walls = currentWalls;
@@ -39,14 +40,14 @@ public class MiniGolfBot
         // Easy: Shoots roughly towards the hole with significant noise
         Vector2 direction = (holePosition - ballPos).normalized;
         float dist = Vector2.Distance(ballPos, holePosition);
-        
+
         // Add random angle (+- 25 degrees)
         float randomAngle = Random.Range(-25f, 25f);
         direction = RotateVector(direction, randomAngle);
 
         // Randomize force roughly based on distance
         float force = Mathf.Clamp(dist * 0.8f + Random.Range(-3f, 3f), MIN_FORCE, MAX_FORCE);
-        
+
         return direction * force;
     }
 

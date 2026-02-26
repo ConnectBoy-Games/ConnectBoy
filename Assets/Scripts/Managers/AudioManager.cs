@@ -3,11 +3,12 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     private AudioSource m_AudioSource;
-
+    [SerializeField] private AudioSource theme;
     public bool sfx { get; private set; }
     public bool vibrate { get; private set; }
     public float volume { get; private set; }
 
+    [Header("Sound Clips")]
     [SerializeField] private AudioClip errorSound;
     [SerializeField] private AudioClip invalidSound;
     [SerializeField] private AudioClip acceptedSound;
@@ -136,6 +137,17 @@ public class AudioManager : MonoBehaviour
     public void PlayChatSendSound()
     {
         if (sfx) m_AudioSource.PlayOneShot(chatSendSound);
+    }
+
+    public void PlayThemeSound()
+    {
+        theme.volume = volume;
+        theme.Play();
+    }
+
+    public void StopThemeSound()
+    {
+        theme.Stop();
     }
 
     public void PlayPlaceSound()

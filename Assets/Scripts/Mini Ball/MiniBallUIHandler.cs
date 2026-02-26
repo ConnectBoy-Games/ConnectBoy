@@ -24,7 +24,43 @@ public class MiniBallUIHandler : MonoBehaviour, IGameUIHandler
         //Disable the Chat Button if we are playing with a bot
         if (GameManager.gameMode == GameMode.vsBot) chatButton.SetActive(false);
     }
+    
+    void FixedUpdate()
+    {
+        if (Input.GetKey(KeyCode.Escape)) GoBack();
+    }
 
+    public void Replay()
+    {
+        SceneManager.LoadScene("MiniSoccer", LoadSceneMode.Single);
+    }
+
+    public void ForfeitGame()
+    {
+        GoToHome();
+    }
+
+    public void GoBack()
+    {
+        if (endPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
+        {
+            GoToHome();
+        }
+        else if (chatPanel.activeInHierarchy)
+        {
+            chatPanel.SetActive(false);
+        }
+        else
+        {
+            forfeitPanel.SetActive(true);
+        }
+    }
+
+    public void GoToHome()
+    {
+        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
+    }
+    
     public void DisplayWinScreen(string text = "", int wager = -1)
     {
         endPanel.SetActive(true);
@@ -62,35 +98,6 @@ public class MiniBallUIHandler : MonoBehaviour, IGameUIHandler
         {
             victoryText.text = "You lost!";
         }
-    }
-
-    void FixedUpdate()
-    {
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            GoBack();
-        }
-    }
-
-    public void GoBack()
-    {
-        if (endPanel.activeInHierarchy || defeatPanel.activeInHierarchy)
-        {
-            //GoToHome();
-        }
-        else if (chatPanel.activeInHierarchy)
-        {
-            chatPanel.SetActive(false);
-        }
-        else
-        {
-            forfeitPanel.SetActive(true);
-        }
-    }
-
-    public void GoToHome()
-    {
-        SceneManager.LoadScene("Main Scene", LoadSceneMode.Single);
     }
 
     public void SetTurnText(User turnUser, string text = null)

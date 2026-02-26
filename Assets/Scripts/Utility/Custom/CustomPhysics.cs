@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CustomGolfPhysics : MonoBehaviour
+public class CustomGolfPhysics
 {
     // Configuration constants
     private const float DRAG = 0.98f;       // Friction (slower over time)
@@ -24,11 +23,8 @@ public class CustomGolfPhysics : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Simulates an entire shot from start to finish.
-    /// Returns the list of positions for the client to animate smoothly.
-    /// </summary>
-    public static List<Vector2> SimulateShot(Vector2 startPos, Vector2 forceVector, List<WallData> walls)
+    /// <summary> Simulates an entire shot from start to finish. Returns the list of positions for the client to animate smoothly.</summary>
+    public static List<Vector2> SimulateShot(Vector2 startPos, Vector2 forceVector, List<Collider> walls)
     {
         List<Vector2> trajectory = new List<Vector2>();
         SimBall ball = new SimBall(startPos, forceVector);
@@ -66,16 +62,11 @@ public class CustomGolfPhysics : MonoBehaviour
         return trajectory;
     }
 
-    /// <summary>
-    /// Handles Circle-Line collision math manually.
-    /// </summary>
-    private static void CheckWallCollision(SimBall ball, WallData wall)
+    /// <summary> Handles Circle-Line collision math manually. </summary>
+    private static void CheckWallCollision(SimBall ball, Collider wall)
     {
-        Vector2 p1 = new Vector2(wall.x1, wall.y1);
-        Vector2 p2 = new Vector2(wall.x2, wall.y2);
-
         // Get the closest point on the line segment to the ball
-        Vector2 closestPoint = GetClosestPointOnLineSegment(p1, p2, ball.position);
+        Vector2 closestPoint = wall.ClosestPointOnBounds(ball.position);
 
         // Calculate distance
         Vector2 diff = ball.position - closestPoint;
@@ -115,19 +106,13 @@ public class CustomGolfPhysics : MonoBehaviour
     }
 }
 
-public struct WallData
-{
-    public float x1, y1; // Start point
-    public float x2, y2; // End point
-}
-
 public class CustomSoccerPhysics
 {
     private const float FRICTION = 0.97f;
     private const float WALL_BOUNCE = 0.7f;
     private const float PIECE_BOUNCE = 0.8f; // Elasticity
 
-    public static List<Dictionary<string, Vector2>> SimulateSoccerTurn(List<MiniBallEntity> allEntities, MiniBallPiece kickedPieceId, Vector2 kickForce, WallData[] walls)
+    public static List<Dictionary<string, Vector2>> SimulateSoccerTurn(List<MiniBallEntity> allEntities, MiniBallPiece kickedPieceId, Vector2 kickForce, Collider[] walls)
     {
         // 1. Find the piece being kicked and apply initial force
         var target = allEntities.Find(e => e.Piece == kickedPieceId);

@@ -5,27 +5,53 @@ using UnityEngine;
 
 public class MiniGolfManager : MonoBehaviour, IGameManager
 {
-    private MiniGolfGameState localState;
-    private User turnUser; //Who has the tun
-    private MiniGolfBot bot; //The golf bot
-    private bool isGameover;
+    private MiniGolfState localState = new();
+    private MiniGolfBot bot;
+    private User turnUser;
+
+    private bool isGameOver = false;
 
     [Header("UI Handling")]
     [SerializeField] MiniGolfUIHandler uiHandler;
 
     [Header("Game References")]
-    public GameObject ballPrefab;
-    [SerializeField] private Transform holeTransform; 
-    private Vector2 currentBallPos;
-    private List<WallData> currentLevelWalls = new List<WallData>();
+    [SerializeField] private MiniGolfMap golfMap;
+    [SerializeField] private Transform ballObject;
 
-    private void Start()
+    async void OnEnable() //The entry point of the Game Manager
     {
-        if (GameManager.gameMode == GameMode.vsBot)
+        ClearBoard();
+
+        switch (GameManager.gameMode)
         {
-            bot = new MiniGolfBot(GameManager.botDifficulty, holeTransform.position, currentLevelWalls);
+            case GameMode.vsBot:
+                turnUser = (User)Random.Range(1, 3); //Set who has the turn
+                uiHandler.SetTurnText(turnUser);
+
+                bot = new MiniGolfBot(GameManager.botDifficulty, golfMap); //Set the bot difficulty
+                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), 1f); //Make an AI move if it has the turn
+                break;
+            case GameMode.vsPlayer:
+                ScorePanel.instance.SetUsernames("Player 1", "Player 2");
+                turnUser = (User)Random.Range(2, 4); //Set who has the turn
+                uiHandler.SetTurnText(turnUser);
+                break;
+            case GameMode.online:
+                var det = await SessionHandler.CheckSessionStatus(GameManager.gameSession.sessionId.ToString()); //Get the session details
+
+                if (det.CurrentTurn == GameManager.instance.accountManager.playerProfile.Id) //You are the starting player
+                {
+                    turnUser = User.client;
+                    uiHandler.SetTurnText(User.client);
+                }
+                else //The other player is the starting player
+                {
+                    turnUser = User.player;
+                    uiHandler.SetTurnText(User.player);
+                }
+                Invoke(nameof(GetGameState), 5f);
+                break;
         }
-        currentBallPos = ballPrefab.transform.position;
     }
 
     public void SwitchTurns()
@@ -34,10 +60,8 @@ public class MiniGolfManager : MonoBehaviour, IGameManager
         {
             case GameMode.vsBot:
                 turnUser = (turnUser == User.bot) ? User.client : User.bot;
-                if (turnUser == User.bot && !isGameover)
-                {
-                    Invoke(nameof(MakeAIMove), Random.Range(1f, 2f));
-                }
+
+                if (turnUser == User.bot && !isGameOver) Invoke(nameof(MakeAIMove), Random.Range(0.7f, 1.5f));
                 break;
             case GameMode.vsPlayer:
                 turnUser = (turnUser == User.client) ? User.player : User.client;
@@ -49,53 +73,59 @@ public class MiniGolfManager : MonoBehaviour, IGameManager
         uiHandler.SetTurnText(turnUser); //Display the turn text
     }
 
+    public async void OnLocalPlayerShoot(Vector2 shootForce)
+    {
+        if (isGameOver)
+        {
+            Handheld.Vibrate();
+            return;
+        }
+
+        if (GameManager.gameMode == GameMode.vsBot) //&& turnUser == User.client)
+        {
+            // 1. Run physics locally so we see it happen instantly
+            var trajectory = CustomGolfPhysics.SimulateShot(ballObject.position, shootForce, golfMap.currentLevelWalls);
+
+            // 2. Animate the ball (Coroutine to move along 'trajectory' list)
+            StartCoroutine(AnimateBall(trajectory));
+
+            localState.Player1Scores++; //Increase the move counter
+            //SwitchTurns();
+        }
+        else if (GameManager.gameMode == GameMode.vsPlayer)
+        {
+
+        }
+        else if (GameManager.gameMode == GameMode.online)
+        {
+            MiniGolfMove move = new MiniGolfMove
+            {
+                X = shootForce.x,
+                Y = shootForce.y
+            };
+
+            //Send move to server
+            var result = await SessionHandler.MakeMove(GameManager.gameSession.sessionId.ToString(), move);
+            var tempState = JsonConvert.DeserializeObject<MiniGolfState>(JsonConvert.SerializeObject(result.State));
+
+            ProcessState(tempState); //Process the game state
+        }
+        else
+        {
+            Handheld.Vibrate();
+        }
+    }
+
     private void MakeAIMove()
     {
-        if (isGameover) return;
-        
-        Vector2 botForce = bot.ThinkMove(currentBallPos);
-        OnAIMove(botForce);
-    }
+        if (isGameOver) return;
 
-    private void OnAIMove(Vector2 shootForce)
-    {
-        var trajectory = CustomGolfPhysics.SimulateShot(currentBallPos, shootForce, currentLevelWalls);
-        StartCoroutine(AnimateBall(trajectory));
-    }
+        Vector2 botForce = bot.ThinkMove(ballObject.position);
 
-    // Called when YOU shoot
-    public void OnLocalPlayerShoot(Vector2 shootForce)
-    {
-        // 1. Run physics locally so we see it happen instantly
-        var trajectory = CustomGolfPhysics.SimulateShot(currentBallPos, shootForce, currentLevelWalls);
-
-        // 2. Animate the ball (Coroutine to move along 'trajectory' list)
+        var trajectory = CustomGolfPhysics.SimulateShot(ballObject.position, botForce, golfMap.currentLevelWalls);
         StartCoroutine(AnimateBall(trajectory));
 
-        // 3. Create the packet to send over HTTP
-        MiniGolfMove move = new MiniGolfMove
-        {
-            X = shootForce.x,
-            Y = shootForce.y
-        };
-
-        // 4. Serialize and Send (JSON)
-        string json = JsonConvert.SerializeObject(move);
-        Debug.Log("Sending to server: " + json);
-    }
-
-    // Called when HTTP request arrives with Opponent's move
-    public void OnOpponentMoveReceived(string json)
-    {
-        // 1. Deserialize
-        MiniGolfMove move = JsonConvert.DeserializeObject<MiniGolfMove>(json);
-        Vector2 opponentForce = new Vector2(move.X, move.Y);
-
-        // 2. Run the EXACT same physics engine
-        var trajectory = CustomGolfPhysics.SimulateShot(currentBallPos, opponentForce, currentLevelWalls);
-
-        // 3. Play the animation
-        StartCoroutine(AnimateBall(trajectory));
+        localState.Player2Scores++;
     }
 
     // ... helper Coroutine AnimateBall() code here ...
@@ -105,11 +135,11 @@ public class MiniGolfManager : MonoBehaviour, IGameManager
         foreach (Vector2 targetStep in trajectory)
         {
             // While the ball is not yet at the next physics step...
-            while (Vector3.Distance(ballPrefab.transform.position, targetStep) > 0.01f)
+            while (Vector3.Distance(ballObject.transform.position, targetStep) > 0.01f)
             {
                 // Move towards it smoothly over time
-                ballPrefab.transform.position = Vector3.MoveTowards(
-                    ballPrefab.transform.position,
+                ballObject.transform.position = Vector3.MoveTowards(
+                    ballObject.transform.position,
                     targetStep,
                     10f * Time.deltaTime // Adjust speed as needed
                 );
@@ -120,24 +150,25 @@ public class MiniGolfManager : MonoBehaviour, IGameManager
         }
 
         // Update current ball position after animation ends
-        currentBallPos = ballPrefab.transform.position;
-        
+        //currentBallPos = ballObject.transform.position;
+
         // Check if the game is over (e.g., ball in hole) before switching turns
-        CheckBoardState(); 
-        if (!isGameover) SwitchTurns();
+        CheckBoardState();
+        if (!isGameOver) SwitchTurns();
     }
 
     public void ClearBoard()
     {
-        throw new System.NotImplementedException();
+        isGameOver = false;
+        //currentBallPos = ballPrefab.transform.position;
     }
 
     public void CheckBoardState()
     {
-        float distToHole = Vector2.Distance(currentBallPos, (Vector2)holeTransform.position);
+        float distToHole = Vector2.Distance(ballObject.position, (Vector2)golfMap.holeTransform.position);
         if (distToHole < 0.3f) // Threshold for sinking the ball
         {
-            isGameover = true;
+            isGameOver = true;
             uiHandler.DisplayWinScreen(turnUser == User.client ? "You Won!" : "Bot Won!");
         }
     }
@@ -147,8 +178,34 @@ public class MiniGolfManager : MonoBehaviour, IGameManager
         throw new System.NotImplementedException();
     }
 
-    public void GetGameState()
+    public async void GetGameState()
     {
-        throw new System.NotImplementedException();
+        try
+        {
+            var result = await SessionHandler.GetSessionGameState(GameManager.gameSession.sessionId.ToString());
+            var tempState = JsonConvert.DeserializeObject<MiniGolfState>(JsonConvert.SerializeObject(result));
+
+            ProcessState(tempState);
+            Invoke(nameof(GetGameState), 5f); //Call itself again after 5 seconds
+        }
+        catch (System.Exception e)
+        {
+            NotificationDisplay.instance.DisplayMessage("Error getting the game state from the server: " + e.Message, NotificationType.error);
+        }
+    }
+
+    void ProcessState(MiniGolfState state)
+    {
+        string json = "";
+
+        // 1. Deserialize
+        MiniGolfMove move = JsonConvert.DeserializeObject<MiniGolfMove>(json);
+        Vector2 opponentForce = new Vector2(move.X, move.Y);
+
+        // 2. Run the EXACT same physics engine
+        var trajectory = CustomGolfPhysics.SimulateShot(ballObject.position, opponentForce, golfMap.currentLevelWalls);
+
+        // 3. Play the animation
+        StartCoroutine(AnimateBall(trajectory));
     }
 }
