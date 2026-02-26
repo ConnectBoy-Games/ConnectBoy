@@ -303,7 +303,6 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
 
     public void MakeAIMove()
     {
-        Debug.Log("Making AI move!!");
         if (isGameOver) return;
 
         DaBMove move = bot.ThinkMove(localState.HorizontalEdges, localState.VerticalEdges); //Let the bot think a move

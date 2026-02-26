@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerPiece : MonoBehaviour
@@ -13,7 +11,7 @@ public class PlayerPiece : MonoBehaviour
 
     void Update()
     {
-        if(isDragging)
+        if (isDragging)
         {
             currentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
