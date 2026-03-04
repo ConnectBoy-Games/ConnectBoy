@@ -15,7 +15,8 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
 
     [Header("GameBoard Handling")]
     [SerializeField] Color tileDefault;
-    [SerializeField] Color edgeColor;
+    [SerializeField] Color edgeColor1; //The color of the edge for the first player
+    [SerializeField] Color edgeColor2; //The color of the edge for the second player 
     [SerializeField] Color tilePlayer1; //The color for the first player
     [SerializeField] Color tilePlayer2; //The color for the second player
     [SerializeField] Image[] boxes;
@@ -391,11 +392,11 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
     {
         if (user == User.client)
         {
-            horizontalButtons[button].CrossFadeColor(edgeColor, 1f, true, false);
+            horizontalButtons[button].CrossFadeColor(edgeColor1, 1f, true, true);
         }
         else
         {
-            horizontalButtons[button].CrossFadeColor(edgeColor, 1f, true, false);
+            horizontalButtons[button].CrossFadeColor(edgeColor2, 1f, true, true);
         }
     }
 
@@ -403,11 +404,11 @@ public class DotsAndBoxesManager : MonoBehaviour, IGameManager
     {
         if (user == User.client)
         {
-            verticalButtons[button].CrossFadeColor(edgeColor, 1f, true, false);
+            verticalButtons[button].CrossFadeColor(edgeColor1, 1f, true, true);
         }
         else
         {
-            verticalButtons[button].CrossFadeColor(edgeColor, 1f, true, false);
+            verticalButtons[button].CrossFadeColor(edgeColor2, 1f, true, true);
         }
     }
 

@@ -21,8 +21,8 @@ public class DotsAndBoxesUIHandler : MonoBehaviour
 
     void Start()
     {
-        //Disable the Chat Button if we are playing with a bot
-        if (GameManager.gameMode == GameMode.vsBot) chatButton.SetActive(false);
+        //Disable the Chat Button if we are not playing online
+        if (GameManager.gameMode != GameMode.online) chatButton.SetActive(false);
     }
     
     void FixedUpdate()
