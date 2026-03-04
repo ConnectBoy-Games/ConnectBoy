@@ -114,12 +114,14 @@ public enum MiniBallPiece : byte
 {
     Ball = 0,
 
+    //Player 1's Pieces
     Player1_Piece1 = 1,
     Player1_Piece2 = 2,
     Player1_Piece3 = 3,
     Player1_Piece4 = 4,
     Player1_Piece5 = 5,
 
+    //Player 2's Pieces (Bot or Seccond Player)
     Player2_Piece1 = 6,
     Player2_Piece2 = 7,
     Player2_Piece3 = 8,

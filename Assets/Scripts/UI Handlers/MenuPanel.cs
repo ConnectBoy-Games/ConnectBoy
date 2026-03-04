@@ -1,13 +1,11 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using TMPro;
-using Unity.Services.Authentication;
-using Unity.Services.CloudCode;
-using Unity.Services.CloudSave;
 using UnityEngine;
 using UnityEngine.UI;
 using Wagr;
+using static UnityEngine.Networking.UnityWebRequest;
 
 public class MenuPanel : MonoBehaviour
 {
@@ -74,14 +72,14 @@ public class MenuPanel : MonoBehaviour
         try
         {
             // 1. Load the "invites" key from the player's public data
-            var id = AuthenticationService.Instance.PlayerId;
+            var id = ""; //AuthenticationService.Instance.PlayerId;
             var args = new Dictionary<string, object>
             {
                 { "playerId", id },
             };
 
             // Call the Cloud Code function
-            var result = await CloudCodeService.Instance.CallEndpointAsync<CloudInvitesGetProxy>("GetInvites", args);
+            CloudInvitesGetProxy result = new();  //await CloudCodeService.Instance.CallEndpointAsync<CloudInvitesGetProxy>("GetInvites", args);
 
             if (result.success)
             {

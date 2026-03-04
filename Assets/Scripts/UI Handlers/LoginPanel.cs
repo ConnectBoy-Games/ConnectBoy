@@ -1,5 +1,4 @@
 using TMPro;
-using Unity.Services.Authentication;
 using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Events;

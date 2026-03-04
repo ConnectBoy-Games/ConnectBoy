@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Unity.Services.CloudCode;
-using Unity.Services.CloudSave;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -13,11 +11,12 @@ public class CloudSaveSystem
     {
         try
         {
-            var results = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { key });
+            //var results = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { key });
+            HashSet<string> results = new();
 
             if (results.TryGetValue(key, out var item))
             {
-                string json = item.Value.GetAsString();
+                string json = item.ToString();
                 return JsonConvert.DeserializeObject<T>(json);
             }
             else
@@ -26,15 +25,7 @@ public class CloudSaveSystem
                 return default;
             }
         }
-        catch (CloudSaveValidationException e)
-        {
-            Debug.LogError(e);
-        }
-        catch (CloudSaveRateLimitedException e)
-        {
-            Debug.LogError(e);
-        }
-        catch (CloudSaveException e)
+        catch (SystemException e)
         {
             Debug.LogError(e);
         }
@@ -47,19 +38,11 @@ public class CloudSaveSystem
         try
         {
             // Deletion of the key with write lock validation
-            await CloudSaveService.Instance.Data.Player.DeleteAsync(key, new DeleteOptions { WriteLock = writeLock });
+            //await CloudSaveService.Instance.Data.Player.DeleteAsync(key, new DeleteOptions { WriteLock = writeLock });
 
             Debug.Log($"Successfully deleted {key}");
         }
-        catch (CloudSaveValidationException e)
-        {
-            Debug.LogError(e);
-        }
-        catch (CloudSaveRateLimitedException e)
-        {
-            Debug.LogError(e);
-        }
-        catch (CloudSaveException e)
+        catch (Exception e)
         {
             Debug.LogError(e);
         }
@@ -74,19 +57,11 @@ public class CloudSaveSystem
                 { key, data }
             };
 
-            await CloudSaveService.Instance.Data.Player.SaveAsync(saveData);
+            //await CloudSaveService.Instance.Data.Player.SaveAsync(saveData);
 
             Debug.Log($"Successfully saved data for key: {key}");
         }
-        catch (CloudSaveValidationException e)
-        {
-            Debug.LogError(e);
-        }
-        catch (CloudSaveRateLimitedException e)
-        {
-            Debug.LogError(e);
-        }
-        catch (CloudSaveException e)
+        catch (Exception e)
         {
             Debug.LogError(e);
         }
@@ -101,6 +76,7 @@ public class CloudSaveSystem
                 { "requestedName", username }
             };
             
+            /*
             // Call the Cloud Code script
             var response = await CloudCodeService.Instance.CallEndpointAsync<NameResponse>("SetDisplayName", args);
 
@@ -108,8 +84,9 @@ public class CloudSaveSystem
             {
                 return true;
             }
+            */
         }
-        catch (CloudCodeException ex)
+        catch (Exception ex)
         {
             NotificationDisplay.instance.DisplayMessage($"Cloud Code Error: {ex.Message}", NotificationType.error);
         }
@@ -129,18 +106,16 @@ public class CloudSaveSystem
                 { "DpIndex", player.DpIndex }
             };
 
-            // 2. Call the function
+            /* 2. Call the function
             // We expect the Cloud Code to return an object we can parse
             var result = await CloudCodeService.Instance.CallEndpointAsync<CloudCodeResponse>("SetProfile", arguments);
 
             return result.success;
-        }
-        catch (CloudCodeException e)
-        {
-            NotificationDisplay.instance.DisplayMessage($"Cloud Code call failed: {e.Message} \n Code: {e.ErrorCode}", NotificationType.error);
+            */
         }
         catch (Exception e)
         {
+            NotificationDisplay.instance.DisplayMessage($"Cloud Code call failed: {e.Message} \n Code: {e.Source}", NotificationType.error);
             NotificationDisplay.instance.DisplayMessage($"An unexpected error occurred: {e.Message}", NotificationType.error);
         }
         return false;
@@ -176,11 +151,14 @@ public class CloudSaveSystem
             {
                 { "targetName", name }
             };
-            
+
+            /*
             var response = await CloudCodeService.Instance.CallEndpointAsync<LookupResponse>("LookUpName", args);
             return response;
+            */
+            return null;
         }
-        catch (CloudCodeException ex)
+        catch (Exception ex)
         {
             Debug.LogError($"Cloud Code Error: {ex.Message}");
             return new LookupResponse { exists = false }; // Fail safe
@@ -208,10 +186,10 @@ public class CloudSaveSystem
 
         try 
         {
-            await CloudCodeService.Instance.CallEndpointAsync("SendInvite", args);
+            //await CloudCodeService.Instance.CallEndpointAsync("SendInvite", args);
             Debug.Log($"Wager of {wager} sent to {targetUsername}!");
         }
-        catch (CloudCodeException ex)
+        catch (Exception ex)
         {
             Debug.LogError($"Failed to send invite: {ex.Message}");
             NotificationDisplay.instance.DisplayMessage("Failed to send invit: " + ex.Message, NotificationType.error);

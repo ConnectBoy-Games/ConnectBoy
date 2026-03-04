@@ -2,7 +2,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Unity.Services.Authentication;
 using UnityEngine;
 
 public class WebPoster
@@ -13,7 +12,7 @@ public class WebPoster
     {
         if (authenticate) //Set the client to have an authentication header
         {
-            string accessToken = AuthenticationService.Instance.AccessToken;
+            string accessToken = "";  //AuthenticationService.Instance.AccessToken;
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
         }
     }

@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Unity.Services.Authentication;
-using Unity.Services.CloudCode;
 using UnityEngine;
 using UnityEngine.Events;
 using Wagr;
@@ -35,7 +33,7 @@ public class NotificationPanel : MonoBehaviour
 
     public async Task LoadInvites()
     {
-        var id = AuthenticationService.Instance.PlayerId;
+        var id = ""; //AuthenticationService.Instance.PlayerId;
         try
         {
             var args = new Dictionary<string, object>
@@ -44,7 +42,7 @@ public class NotificationPanel : MonoBehaviour
             };
 
             // Call the Cloud Code function
-            var result = await CloudCodeService.Instance.CallEndpointAsync<CloudInvitesGetProxy>("GetInvites", args);
+            CloudInvitesGetProxy result = new(); //= await CloudCodeService.Instance.CallEndpointAsync<CloudInvitesGetProxy>("GetInvites", args);
 
             if (result.success)
             {
