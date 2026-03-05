@@ -28,7 +28,7 @@ public class MiniBallManager : MonoBehaviour, IGameManager
                 turnUser = (User)Random.Range(1, 3); //Set who has the turn
                 uiHandler.SetTurnText(turnUser);
 
-                bot = new MiniBallBot(); //Set the bot difficulty
+                bot = new MiniBallBot(GameManager.botDifficulty); //Set the bot difficulty
                 if (turnUser == User.bot) Invoke(nameof(MakeAIMove), 1f); //Make an AI move if it has the turn
                 break;
             case GameMode.vsPlayer:
