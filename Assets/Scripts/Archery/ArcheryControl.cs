@@ -18,6 +18,11 @@ public class ArcheryControl : MonoBehaviour
     [SerializeField] private Transform leftSpawn;
     [SerializeField] private Transform rightSpawn;
 
+    [Header("Wind Influence")]
+    [Tooltip("How strongly the wind nudges the aim dummy per second (world units). " +
+             "Higher values make aiming noticeably harder in strong wind.")]
+    [SerializeField] private float windAimInfluence = 0.12f;
+
     private ArrowState arrowState = ArrowState.Idle;
     private float t = 0;
 
@@ -25,7 +30,26 @@ public class ArcheryControl : MonoBehaviour
 
     void Update()
     {
+        ApplyWindToDummy();
         HandleTouchInput();
+    }
+
+    /// <summary>
+    /// Drifts the aim dummy each frame by the current wind vector.
+    /// This creates continuous, organic instability in the player's crosshair
+    /// while they are holding their finger down – stronger gusts are harder to fight.
+    /// </summary>
+    private void ApplyWindToDummy()
+    {
+        if (dummy == null) return;
+        if (WindSystem.Instance == null) return;
+
+        Vector2 wind = WindSystem.Instance.CurrentWind;
+        // Translate in XY (screen-space feel). Z is ignored – camera is looking down Z.
+        dummy.transform.Translate(
+            new Vector3(wind.x, wind.y, 0f) * windAimInfluence * Time.deltaTime,
+            Space.World
+        );
     }
 
     void HandleTouchInput()
