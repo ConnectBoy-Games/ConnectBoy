@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af9f52070d560984190b01768ae6e464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  theme: {fileID: 2262432517976843928}
   errorSound: {fileID: 8300000, guid: c895d6319a8affc4483dde3f3acd1666, type: 3}
   invalidSound: {fileID: 8300000, guid: b945a14915d9e9f4196b70cc89a263fa, type: 3}
   acceptedSound: {fileID: 8300000, guid: 172991bd1dbf85a47aee90b26c2ab36b, type: 3}
@@ -187,7 +188,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 12bcafbc8d22b9f4ea534c11dc3d2d9a, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.45
   m_Pitch: 0.8
   Loop: 1

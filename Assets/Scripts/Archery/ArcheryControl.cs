@@ -34,7 +34,7 @@ public class ArcheryControl : MonoBehaviour
         {
             t += Time.deltaTime; //Start counting time finger is on screen
             delta = Input.GetTouch(0).deltaPosition; //Get the delta position of the finger
-            Camera.main.fieldOfView = Mathf.Lerp(60, 65, t/0.5f); //Zoom in the camera
+            Camera.main.fieldOfView = Mathf.Lerp(82, 95, t/0.5f); //Zoom in the camera
 
             if(Input.GetTouch(0).phase == TouchPhase.Ended || t > releaseTimer) //Finger has been lifted from the screen
             {
@@ -58,7 +58,7 @@ public class ArcheryControl : MonoBehaviour
 
             if(arrowState == ArrowState.Idle)
             {
-                //Camera.main.fieldOfView = 60; //Reset FOV
+                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 82, 1); //Reset FOV
             }
         }
     }

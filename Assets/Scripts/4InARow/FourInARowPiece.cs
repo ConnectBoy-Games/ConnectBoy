@@ -6,12 +6,12 @@ public class FourInARowPiece : MonoBehaviour
     Vector3 targetPos, startPos;
     float t = 0, mag = 0;
 
-    void FixedUpdate()
+    void Update()
     {
         if (move)
         {
             t += Time.deltaTime;
-            transform.position = Vector3.Slerp(startPos, targetPos, t / (0.02f * mag));
+            transform.position = Vector3.Slerp(startPos, targetPos, t / (0.015f * mag));
         }
     }
 

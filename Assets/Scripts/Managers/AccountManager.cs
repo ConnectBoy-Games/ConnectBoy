@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Services.Authentication;
-using Unity.Services.Authentication.PlayerAccounts;
-using Unity.Services.CloudCode;
 using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,13 +18,14 @@ public class AccountManager
 
     public async void Setup()
     {
-        await UnityServices.InitializeAsync(); //Initialize Unity Services
+        //await UnityServices.InitializeAsync(); //Initialize Unity Services
         loginState = LoginState.unsigned;
         SetupEvents();
     }
 
     private void SetupEvents()
     {
+        /* Sign In Callbacks
         //Sign in to authentication service with the access token from player accounts
         PlayerAccountService.Instance.SignedIn += async () =>
         {
@@ -55,12 +53,14 @@ public class AccountManager
             NotificationDisplay.instance.DisplayMessage("You Have Been Signed Out!");
             GameManager.instance.accountManager.loginState = LoginState.unsigned;
         };
+        */
     }
 
     public async Task Login()
     {
         try
         {
+            /* Handling Authentication
             //Check if a cached player already exists and try signing in with that session token
             if (AuthenticationService.Instance.SessionTokenExists)
             {
@@ -75,6 +75,7 @@ public class AccountManager
             {
                 await PlayerAccountService.Instance.StartSignInAsync();
             }
+            */
         }
         catch (Exception ex)
         {
@@ -85,7 +86,8 @@ public class AccountManager
 
     public async Task<bool> LoadProfile()
     {
-        var id = AuthenticationService.Instance.PlayerId;
+        //var id = AuthenticationService.Instance.PlayerId;
+        string id = "";
         try
         {
             var args = new Dictionary<string, object>
@@ -95,7 +97,7 @@ public class AccountManager
             };
 
             // Call the Cloud Code function
-            var response = await CloudCodeService.Instance.CallEndpointAsync<CloudProfileGetProxy>("GetProfile", args);
+            CloudProfileGetProxy response = new();// = await CloudCodeService.Instance.CallEndpointAsync<CloudProfileGetProxy>("GetProfile", args);
 
             if (response.success)
             {
@@ -122,21 +124,23 @@ public class AccountManager
 
     public void SignOut(bool clearSessionToken = false)
     {
+        /*Sign Out Functions
         // Sign out of Unity Authentication, with the option to clear the session token
         AuthenticationService.Instance.SignOut(clearSessionToken);
 
         // Sign out of Unity Player Accounts
         PlayerAccountService.Instance.SignOut();
+        */
     }
 
     public async Task CreateAccount(string username, int dpIndex)
     {
         try
         {
-            Player player = new(AuthenticationService.Instance.PlayerId, username, dpIndex);
+            Player player = new("", username, dpIndex);
             PlayerStats stats = new();
 
-            await CloudSaveSystem.SetProfile(AuthenticationService.Instance.PlayerId, player);
+            await CloudSaveSystem.SetProfile("", player);
             await CloudSaveSystem.SaveSpecificData("stats", stats);
             await CloudSaveSystem.SetUsername(username);
             onAccountCreated?.Invoke(true);
@@ -156,7 +160,7 @@ public class AccountManager
 
         // Shows how to get an access token
         Debug.Log($"Access Token: {AuthenticationService.Instance.AccessToken}");
-        */
+        
 
         // this is true if the access token exists, but it can be expired or refreshing
         Debug.Log($"Is SignedIn: {AuthenticationService.Instance.IsSignedIn}");
@@ -166,11 +170,13 @@ public class AccountManager
 
         // this is true if the access token exists but has expired
         Debug.Log($"Is Expired: {AuthenticationService.Instance.IsExpired}");
+        */
     }
 
     public void DeleteAccount()
     {
-        Application.OpenURL(PlayerAccountService.Instance.AccountPortalUrl);
+        //TODO: Implement the delete account functionality
+        Application.OpenURL("https://connectboy-games.web.app/terms.html");
     }
 
     public void OpenTerms()
