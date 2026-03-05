@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MiniBallBot : MonoBehaviour
+public class MiniBallBot
 {
-    // Start is called before the first frame update
-    void Start()
+    public MiniBallBot()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public MiniBallMove MakeMove(MiniBallState state)
     {
-        
+        //Play piece
+        //Lock game
+        return null;
     }
 }

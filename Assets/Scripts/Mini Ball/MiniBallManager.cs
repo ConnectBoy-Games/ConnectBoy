@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -8,15 +7,16 @@ public class MiniBallManager : MonoBehaviour, IGameManager
     private MiniBallBot bot; //Reference to the game bot
     private User turnUser; //Who has the turn
 
-    private bool isGameOver = false;
+    public bool isGameOver = false;
+    public bool isPaused = false;
 
     [Header("UI Handling")]
     [SerializeField] private MiniBallUIHandler uiHandler;
 
     [Header("Game Handling")]
-    [SerializeField] private Transform playerHolder; //The parent object that holds the player pieces
-    public GoalZone player1Goal; // e.g., Left side
-    public GoalZone player2Goal; // e.g., Right side
+    [SerializeField] private Transform ball;
+    [SerializeField] TeamManager team1; //The parent object that holds the player 1 pieces
+    [SerializeField] TeamManager team2; //The parent object that holds the player 2 pieces
 
     async void OnEnable() //The entry point of the Game Manager
     {
@@ -53,77 +53,19 @@ public class MiniBallManager : MonoBehaviour, IGameManager
                 break;
         }
     }
-    
+
+    //Called after the player(turnUser) has made a move
+    public async void MadeMove(MiniBallMove move)
+    {
+
+        //Wait for a couple of seconds and then process the game 
+    }
+
     public void MakeAIMove()
     {
-        SwitchTurns();
-    }
+        var move = bot.MakeMove(localState); //Make move
 
-    public void ProcessPhysicsFrame(Dictionary<string, Vector2> frameData)
-    {
-        // 1. Get the ball's position from this specific frame
-        if (frameData.TryGetValue("Ball", out Vector2 ballPos))
-        {
-            // 2. Check if it entered Player 1's goal (means Player 2 scored)
-            if (player1Goal.Contains(ballPos))
-            {
-                OnGoalScored("Player 2");
-            }
-            // 3. Check if it entered Player 2's goal (means Player 1 scored)
-            else if (player2Goal.Contains(ballPos))
-            {
-                OnGoalScored("Player 1");
-            }
-        }
-    }
-
-    private void OnGoalScored(string winner)
-    {
-        Debug.Log($"GOAL! {winner} scores!");
-        // Stop simulation, trigger UI, and reset the field
-    }
-
-    public static MiniBallEntity[] GetKickoffFormation()
-    {
-        return new MiniBallEntity[]
-        {
-            // Ball in the center
-            new MiniBallEntity { Piece = MiniBallPiece.Ball, PosX = 0, PosY = 0},
-
-            // Player 1 Team A (Left side - Blue)
-            new MiniBallEntity { Piece = MiniBallPiece.Player1_Piece1, PosX = -8, PosY = 0, },
-            new MiniBallEntity { Piece = MiniBallPiece.Player1_Piece2, PosX = -4, PosY = -2, },
-            new MiniBallEntity { Piece = MiniBallPiece.Player1_Piece3, PosX = -2, PosY = 2, },
-
-            // Player 2 Team B (Right side - Red)
-            new MiniBallEntity { Piece = MiniBallPiece.Player2_Piece1, PosX = 8, PosY = 0, },
-            new MiniBallEntity { Piece = MiniBallPiece.Player2_Piece2, PosX = 4, PosY = 2, },
-            new MiniBallEntity { Piece = MiniBallPiece.Player2_Piece3, PosX = 2, PosY = -2, }
-        };
-    }
-
-    public void ExecuteReset(MatchReset packet)
-    {
-        // Stop any ongoing physics or animations
-        StopAllCoroutines();
-
-        foreach (var data in packet.entities)
-        {
-            // Find the GameObject representing this piece
-            GameObject piece = GameObject.Find(data.Piece.ToString());
-
-            if (piece != null)
-            {
-                // 1. Move the visual object
-                piece.transform.position = new Vector3(data.PosX, data.PosY, 0);
-
-                // 2. Clear any velocities (so they don't start moving immediately)
-                data.velX = 0;
-                data.velY = 0;
-            }
-        }
-
-        Debug.Log("Field reset. Ready for next turn.");
+        MadeMove(move); //Report the move that was made
     }
 
     public void SwitchTurns()
@@ -143,52 +85,86 @@ public class MiniBallManager : MonoBehaviour, IGameManager
                 break;
         }
         uiHandler.SetTurnText(turnUser); //Display the turn text
-        SetIndicator();
+        ActivatePlayers(turnUser);
     }
 
-    private void SetIndicator()
+    private void ActivatePlayers(User user)
     {
-        switch (turnUser)
+        switch (user)
         {
-            case User.bot:
-                foreach (Transform piece in playerHolder)
-                {
-                    piece.GetComponent<PlayerPiece>().SetIndictator(true);
-                }
-                break;
-            case User.client:
-                foreach (Transform piece in playerHolder)
-                {
-                    piece.GetComponent<PlayerPiece>().SetIndictator(true);
-                }
-                break;
             case User.player:
-                foreach (Transform piece in playerHolder)
-                {
-                    piece.GetComponent<PlayerPiece>().SetIndictator(true);
-                }
+                //Activate Team 1
+                team1.SetPlayersStatus(true);
+                team1.SetIndicator(true);
+
+                //Deactivate Team 2
+                team2.SetPlayersStatus(false);
+                team2.SetIndicator(false);
+                break;
+            default: //Bots And Other Players
+                //Activate Team 2
+                team2.SetPlayersStatus(true);
+                team2.SetIndicator(true);
+
+                //Deactivate Team 1
+                team1.SetPlayersStatus(false);
+                team1.SetIndicator(false);
                 break;
         }
     }
-    
-    /// <summary>Places the player's pieces according to a predefined formation</summary>
-    private void PlacePieces(int form)
+
+    private void ResetPlayerPieces()
     {
 
     }
 
     public void ClearBoard()
     {
+        ResetPlayerPieces();
     }
 
     public void CheckBoardState()
     {
-        throw new System.NotImplementedException();
+        
     }
 
-    public int CheckWinState(string piece)
+    public void CheckWinState()
     {
-        throw new System.NotImplementedException();
+        if (localState.Player1Scores + localState.Player2Scores >= 3)
+        {
+            //Game Has Been Won
+            isGameOver = true;
+
+            switch (GameManager.gameMode)
+            {
+                case GameMode.vsBot:
+                    if (localState.Player1Scores > localState.Player2Scores)
+                    {
+                        localState.Winner = User.client.ToString();
+                        uiHandler.DisplayWinScreen("Player 1 wins the game!");
+                    }
+                    else
+                    {
+                        localState.Winner = User.bot.ToString();
+                        uiHandler.DisplayDefeatScreen("You lost the game!");
+                    }
+                    break;
+                case GameMode.vsPlayer:
+                    if (localState.Player1Scores > localState.Player2Scores)
+                    {
+                        localState.Winner = User.client.ToString();
+                        uiHandler.DisplayWinScreen("Player 1 wins the game!");
+                    }
+                    else
+                    {
+                        localState.Winner = User.player.ToString();
+                        uiHandler.DisplayWinScreen("Player 2 wins the game!");
+                    }
+                    break;
+                case GameMode.online:
+                    break;
+            }
+        }
     }
 
     public async void GetGameState()
@@ -213,16 +189,3 @@ public class MiniBallManager : MonoBehaviour, IGameManager
     }
 }
 
-public class GoalZone
-{
-    public User teamName;
-    public float minX, maxX;
-    public float minY, maxY;
-
-    // A helper to check if the ball is currently inside this box
-    public bool Contains(Vector2 point)
-    {
-        return point.x >= minX && point.x <= maxX &&
-               point.y >= minY && point.y <= maxY;
-    }
-}
