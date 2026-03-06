@@ -2,20 +2,21 @@ using UnityEngine;
 
 public class PlayerPiece : MonoBehaviour
 {
-    [SerializeField] TeamManager teamManager;
-    [SerializeField] LineRenderer aim;
     public MiniBallPiece piece;
-
-    [Header("UI")]
+    public TeamManager teamManager;
+    public bool isPlayable = false; //Used to limit whose player pieces can be played(Turn management)
     public static bool locked = false; //Locks up all the player pieces
-    public bool isPlayable = false; //Used to limit whose player pieces can be played
 
     [Header("UI")]
-    [SerializeField] private GameObject indicator;
+    [SerializeField] LineRenderer aim;
+    [SerializeField] GameObject indicator;
+    [SerializeField] Ball.PieceState pieceState = Ball.PieceState.Idle; //Is the player moving or not
 
-    private Rigidbody rb; 
+    //Physics Handling
+    private Rigidbody rb;
     private bool isDragging = false;
     private Vector3 startPosition, currentPosition;
+    private float minVelocity = 0.1f; //The minimum velocity the ball needs to be considered moving
 
     void Start()
     {
@@ -30,39 +31,62 @@ public class PlayerPiece : MonoBehaviour
             Vector3 pos = new Vector3((startPosition - currentPosition).normalized.x, 0, (startPosition - currentPosition).normalized.z);
             aim.SetPosition(aim.positionCount - 1, pos * 15);
         }
+        else if (pieceState == Ball.PieceState.Idle && rb.velocity.magnitude >= minVelocity)
+        {
+            pieceState = Ball.PieceState.Moving;
+        }
+        else if (pieceState == Ball.PieceState.Moving && rb.velocity.magnitude <= minVelocity)
+        {
+            //Stop the player from moving
+            rb.velocity = Vector2.zero;
+            pieceState = Ball.PieceState.Idle;
+        }
     }
 
     void OnMouseDown()
     {
-        if(isPlayable && !locked) //The Player's pieces are currently active and the game state is not locked
+        if (isPlayable && !locked) //The Player's pieces are currently active and the game state is not locked
         {
             isDragging = true;
             aim.gameObject.SetActive(true);
             startPosition = transform.position;
-            SetIndictator(false);
+            teamManager.SetIndicator(false); //Disable the indicator for all the players in the team
         }
     }
 
     void OnMouseUp()
     {
         var mag = (startPosition - currentPosition).magnitude;
-        
+
         //Minimum magnitude is 40
         if (mag > 40 && isPlayable && !locked) //The Player's pieces are currently active and the game state is not locked
         {
-            //locked = true; //Lock all the pieces so none can make a move
-            Ball.ballState = Ball.BallState.Moving;
-            
-            var magnitude = 3 * mag;
-            var direction = (startPosition - currentPosition).normalized;
-            rb.AddForce(magnitude * direction, ForceMode.VelocityChange);
+            isDragging = false;
+            MakeMove(startPosition - currentPosition);
+        }
+        else if (isPlayable) //It is the player's turn
+        {
+            teamManager.SetIndicator(true);
         }
 
         aim.gameObject.SetActive(false);
     }
 
+    public void MakeMove(Vector3 direction)
+    {
+        locked = true; //Lock all the pieces so none can make a move
+        var mag = 3 * direction.magnitude;
+        rb.AddForce(mag * direction.normalized, ForceMode.VelocityChange);
+        teamManager.MakeMove(); //Report that a move has been made
+    }
+
     public void SetIndictator(bool state)
     {
         indicator.SetActive(state);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        GameManager.instance.GetComponent<AudioManager>().PlayPlaceSound();
     }
 }

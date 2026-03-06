@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    public static BallState ballState;
+    public static PieceState ballState;
     public MiniBallPiece piece = MiniBallPiece.Ball;
 
     [SerializeField] MiniBallManager manager;
@@ -17,26 +17,31 @@ public class Ball : MonoBehaviour
 
     void Update()
     {
-        if (ballState == BallState.Moving && rb.velocity.magnitude <= minVelocity)
+        if (ballState == PieceState.Moving && rb.velocity.magnitude <= minVelocity)
         {
-            Debug.Log("Ball Stopped Moving!");
-            ballState = BallState.Idle;
-
             //Stop the movement of the ball //Record the move //Switch turns
+            ballState = PieceState.Idle;
             rb.velocity = Vector3.zero;
-
-            manager.MadeMove(new MiniBallMove
-            {
-                forceX = 0,
-                forceY = 0,
-                PieceId = piece
-            });
+            manager.BallMoved();
         }
     }
 
-    public enum BallState : byte
+    public void PlayEffect()
     {
-        Idle = 0, //Moving
-        Moving = 1, //Not Moving
+        starEffect.Play();
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (rb.velocity.magnitude > minVelocity)
+        {
+            ballState = PieceState.Moving;
+        }
+    }
+
+    public enum PieceState : byte
+    {
+        Idle = 0, //Not Moving
+        Moving = 1, //Moving
     }
 }

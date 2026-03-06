@@ -1,11 +1,12 @@
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MiniBallManager : MonoBehaviour, IGameManager
 {
     private MiniBallState localState = new();
-    private MiniBallBot bot; //Reference to the game bot
-    private User turnUser; //Who has the turn
+    private MiniBallBot bot;
+    private User turnUser;
 
     public bool isGameOver = false;
     public bool isPaused = false;
@@ -14,12 +15,17 @@ public class MiniBallManager : MonoBehaviour, IGameManager
     [SerializeField] private MiniBallUIHandler uiHandler;
 
     [Header("Game Handling")]
-    [SerializeField] private Transform ball;
+    [SerializeField] Transform ball;
+    [SerializeField] List<Collider> walls; //List of the bounding walls in the game ("Not including the posts'")
     [SerializeField] TeamManager team1; //The parent object that holds the player 1 pieces
     [SerializeField] TeamManager team2; //The parent object that holds the player 2 pieces
 
     async void OnEnable() //The entry point of the Game Manager
     {
+        isGameOver = false;
+        team1.manager = this;
+        team2.manager = this;
+        ScorePanel.instance.UpdateScore(0, 0);
         ClearBoard();
 
         switch (GameManager.gameMode)
@@ -52,20 +58,58 @@ public class MiniBallManager : MonoBehaviour, IGameManager
                 Invoke(nameof(GetGameState), 5f);
                 break;
         }
+
+        ActivatePlayers(turnUser);
     }
 
-    //Called after the player(turnUser) has made a move
-    public async void MadeMove(MiniBallMove move)
+    public async void MadeMove() // Called by the player piece after making a move
     {
+        // Delay for 4 secs to allow the players finish moving and the ball to settle down before switching turns and recording the move
+        await System.Threading.Tasks.Task.Delay(4000);
 
-        //Wait for a couple of seconds and then process the game 
+        team1.CheckPlayers(); //Check if any of the players in team 1 are stuck in the post and move them out
+        team2.CheckPlayers(); //Check if any of the players in team 2 are stuck in the post and move them out
+
+        // Continue normal processing
+        SwitchTurns();
+
+        // TODO: For online mode, send the recorded frames over the network
+    }
+
+    // Called by the ball after it stops moving
+    public void BallMoved()
+    {
+        team1.CheckPlayers(); //Check if any of the players in team 1 are stuck in the post and move them out
+        team2.CheckPlayers(); //Check if any of the players in team 2 are stuck in the post and move them out
+
+        if (team1.CheckGoal(ball))
+        {
+            localState.Player1Scores++;
+            ClearBoard();
+        }
+        else if (team2.CheckGoal(ball))
+        {
+            localState.Player2Scores++;
+            ClearBoard();
+        }
+
+        //Update the score panel with the new score values
+        ScorePanel.instance.UpdateScore(localState.Player1Scores, localState.Player2Scores);
+        CheckWinState();
     }
 
     public void MakeAIMove()
     {
-        var move = bot.MakeMove(localState); //Make move
+        var move = bot.MakeMove(team1, team2, ball); //Let the AI think the move
 
-        MadeMove(move); //Report the move that was made
+        foreach (Transform player in team2.transform)
+        {
+            if (player.GetComponent<PlayerPiece>().piece == move.PieceId)
+            {
+                player.GetComponent<PlayerPiece>().MakeMove(new Vector3(move.forceX, 0, move.forceZ) / 3);
+                break;
+            }
+        }
     }
 
     public void SwitchTurns()
@@ -90,9 +134,13 @@ public class MiniBallManager : MonoBehaviour, IGameManager
 
     private void ActivatePlayers(User user)
     {
+        PlayerPiece.locked = false;
+        team1.reportedMove = false;
+        team2.reportedMove = false;
+
         switch (user)
         {
-            case User.player:
+            case User.client:
                 //Activate Team 1
                 team1.SetPlayersStatus(true);
                 team1.SetIndicator(true);
@@ -101,7 +149,17 @@ public class MiniBallManager : MonoBehaviour, IGameManager
                 team2.SetPlayersStatus(false);
                 team2.SetIndicator(false);
                 break;
-            default: //Bots And Other Players
+
+            case User.bot:
+                //Activate Team 2
+                team2.SetIndicator(true);
+
+                //Deactivate Team 1
+                team1.SetPlayersStatus(false);
+                team1.SetIndicator(false);
+                break;
+
+            case User.player: //Bots And Other Players
                 //Activate Team 2
                 team2.SetPlayersStatus(true);
                 team2.SetIndicator(true);
@@ -113,26 +171,19 @@ public class MiniBallManager : MonoBehaviour, IGameManager
         }
     }
 
-    private void ResetPlayerPieces()
-    {
-
-    }
-
     public void ClearBoard()
     {
-        ResetPlayerPieces();
-    }
-
-    public void CheckBoardState()
-    {
-        
+        //Set the same formation for both teams
+        int formationIndex = Random.Range(0, team1.formations.Count);
+        team1.SetFormation(formationIndex);
+        team2.SetFormation(formationIndex);
+        ball.position = Vector3.zero;
     }
 
     public void CheckWinState()
     {
-        if (localState.Player1Scores + localState.Player2Scores >= 3)
+        if (localState.Player1Scores >= 3 || localState.Player2Scores >= 3) //Game Has Been Won
         {
-            //Game Has Been Won
             isGameOver = true;
 
             switch (GameManager.gameMode)
