@@ -2,51 +2,99 @@ using UnityEngine;
 
 public class MiniGolfBall : MonoBehaviour
 {
-    [SerializeField] private MiniGolfManager manager;
+    public MiniGolfManager manager;
+    public bool isPlayable = false; //Used to limit whose player pieces can be played(Turn management)
+    public bool locked = false; //Locks up all the player pieces
 
     [Header("Shot Trajectory")]
-    public LineRenderer lineRenderer;
+    [SerializeField] LineRenderer aim;
+    Ball.PieceState pieceState = Ball.PieceState.Idle; //Is the ball moving or not
     public int resolution = 30; // Number of dots
     public float timeStep = 0.1f; // Seconds between dots
 
+    //Physics Handling
+    private Rigidbody rb;
     private bool isDragging = false;
-    private Vector3 startPosition;
-    private Vector3 currentPosition;
+    private Vector3 startPosition, currentPosition;
+    private float minVelocity = 0.1f; //The minimum velocity the ball needs to be considered moving
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     void Update()
     {
         if (isDragging)
         {
             currentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 pos = new Vector3((startPosition - currentPosition).normalized.x, 0, (startPosition - currentPosition).normalized.z);
+            aim.SetPosition(aim.positionCount - 1, pos * 15);
+        }
+        else if (pieceState == Ball.PieceState.Idle && rb.velocity.magnitude >= minVelocity)
+        {
+            pieceState = Ball.PieceState.Moving;
+        }
+        else if (pieceState == Ball.PieceState.Moving && rb.velocity.magnitude <= minVelocity)
+        {
+            //Stop the player from moving
+            rb.velocity = Vector2.zero;
+            pieceState = Ball.PieceState.Idle;
         }
     }
 
-    private void OnMouseDown()
+    void OnMouseDown()
     {
-        isDragging = true;
-        startPosition = transform.position;
+        if (isPlayable && !locked) //The ball is  active and the game state is not locked
+        {
+            isDragging = true;
+            aim.gameObject.SetActive(true);
+            startPosition = transform.position;
+        }
     }
 
-    private void OnMouseUp()
+    void OnMouseUp()
     {
-        var rb = GetComponent<Rigidbody>();
+        var mag = (startPosition - currentPosition).magnitude;
 
-        var magnitude = -2 * (currentPosition - startPosition).magnitude;
-        var direction = (currentPosition - startPosition).normalized;
-        rb.AddForce(magnitude * direction, ForceMode.VelocityChange);
+        //Minimum magnitude is 40
+        if (mag > 0.1f && isPlayable && !locked) //The Player's pieces are currently active and the game state is not locked
+        {
+            isDragging = false;
+            MakeMove(startPosition - currentPosition);
+        }
+        aim.gameObject.SetActive(false);
+    }
 
-        //manager.OnLocalPlayerShoot(magnitude * direction);
+    public void MakeMove(Vector3 direction)
+    {
+        locked = true; //Lock all the pieces so none can make a move
+        var mag = 3 * direction.magnitude;
+        rb.AddForce(mag * direction.normalized, ForceMode.VelocityChange);
+        manager.MakeMove();
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Wall"))
+        {
+            GameManager.instance.GetComponent<AudioManager>().PlayPlaceSound();
+        }
+        else if (collision.collider.CompareTag("Hole"))
+        {
+            GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
+        }
     }
 
     public void HideTrajectory()
     {
-        lineRenderer.positionCount = 0;
+        aim.positionCount = 0;
     }
 
     public void ShowTrajectory(Vector2 startPos, Vector2 force)
     {
         Vector2 velocity = force / 1.0f; // Simplified: Initial velocity = Force / Mass
-        lineRenderer.positionCount = resolution;
+        aim.positionCount = resolution;
         Vector3[] points = new Vector3[resolution];
 
         for (int i = 0; i < resolution; i++)
@@ -67,11 +115,13 @@ public class MiniGolfBall : MonoBehaviour
                 RaycastHit2D hit = Physics2D.Linecast(points[i - 1], points[i]);
                 if (hit.collider != null)
                 {
-                    lineRenderer.positionCount = i;
+                    aim.positionCount = i;
                     break;
                 }
             }
         }
-        lineRenderer.SetPositions(points);
+        aim.SetPositions(points);
     }
 }
+
+

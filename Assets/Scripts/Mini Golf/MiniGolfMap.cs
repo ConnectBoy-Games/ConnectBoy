@@ -3,16 +3,19 @@ using UnityEngine;
 
 public class MiniGolfMap : MonoBehaviour
 {
-    public Transform holeTransform;
-    public List<Collider> currentLevelWalls = new List<Collider>();
+    public Collider hole;
+    public List<Collider> walls;
+    public List<Collider> obstacles;
 
-    public void han()
+    public bool CheckBall(Vector3 ballPosition)
     {
-        /*
-        BoxCollider col = new();
-        Collider cod = (Collider)col;
+        float distToHole = Vector2.Distance(ballPosition, hole.transform.position);
 
-        cod.bounds.Contains
-        */
+        if (hole.bounds.Contains(ballPosition) || distToHole < 0.3f) // Threshold for sinking the ball
+        {
+            return true;
+        }
+
+        return false;
     }
 }

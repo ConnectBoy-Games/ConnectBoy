@@ -142,7 +142,7 @@ public class CustomSoccerPhysics
             // B. Update Positions and check Walls
             foreach (var entity in allEntities)
             {
-                Vector2 pos = new Vector2(entity.PosX, entity.PosY);
+                Vector2 pos = new Vector2(entity.PosX, entity.PosZ);
                 Vector2 vel = new Vector2(entity.velX, entity.velY);
 
                 if (vel.magnitude > 0.01f)
@@ -160,7 +160,7 @@ public class CustomSoccerPhysics
                     vel = Vector2.zero;
                 }
 
-                entity.PosX = pos.x; entity.PosY = pos.y;
+                entity.PosX = pos.x; entity.PosZ = pos.y;
                 entity.velX = vel.x; entity.velY = vel.y;
 
                 currentFrame.Add(entity.Piece.ToString(), pos);
@@ -175,8 +175,8 @@ public class CustomSoccerPhysics
 
     private static void ResolveCircleCollision(MiniBallEntity a, MiniBallEntity b)
     {
-        Vector2 posA = new Vector2(a.PosX, a.PosY);
-        Vector2 posB = new Vector2(b.PosX, b.PosY);
+        Vector2 posA = new Vector2(a.PosX, a.PosZ);
+        Vector2 posB = new Vector2(b.PosX, b.PosZ);
         float distance = Vector2.Distance(posA, posB);
         float minDistance = MiniBallEntity.radius + MiniBallEntity.radius;
 
@@ -187,8 +187,8 @@ public class CustomSoccerPhysics
             // 1. Separate the overlapping circles
             float overlap = minDistance - distance;
             Vector2 separation = normal * (overlap / 2f);
-            a.PosX += separation.x; a.PosY += separation.y;
-            b.PosX -= separation.x; b.PosY -= separation.y;
+            a.PosX += separation.x; a.PosZ += separation.y;
+            b.PosX -= separation.x; b.PosZ -= separation.y;
 
             // 2. Simple Elastic Collision (Momentum Swap)
             Vector2 velA = new Vector2(a.velX, a.velY);

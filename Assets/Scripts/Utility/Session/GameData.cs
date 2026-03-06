@@ -57,7 +57,7 @@ public class MiniGolfState
 
 public class MiniBallState
 {
-    public MiniBallEntity[] entities { get; set; } // Positions of all 6 pieces + ball
+    public List<MiniBallEntity> entities { get; set; } // Positions of all 6 pieces + ball
     public string CurrentTurn { get; set; }
     public string Winner { get; set; }
     public int Player1Scores { get; set; }
@@ -90,13 +90,13 @@ public class MiniGolfMove
     public float X { get; set; }
     public float Y { get; set; }
 }
+
 public class MiniBallMove
 {
     public MiniBallPiece PieceId { get; set; } // Which piece was kicked
     public float forceX { get; set; }
-    public float forceY { get; set; }
+    public float forceZ { get; set; }
 }
-
 
 public class MiniBallEntity
 {
@@ -105,7 +105,7 @@ public class MiniBallEntity
 
     public MiniBallPiece Piece { get; set; } //The type of piece e.g., "Player1_Piece1", "Ball"
     public float PosX { get; set; } //Current X position of the piece
-    public float PosY { get; set; } //Current Y position of the piece
+    public float PosZ { get; set; } //Current Y position of the piece
     public float velX { get; set; } //Current X velocity of the piece
     public float velY { get; set; } //Current Y velocity of the piece
 }

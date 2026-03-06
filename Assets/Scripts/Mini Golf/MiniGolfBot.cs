@@ -4,7 +4,7 @@ using UnityEngine;
 public class MiniGolfBot
 {
     private BotDifficulty difficulty;
-    private Vector2 holePosition;
+    private Collider hole;
     private List<Collider> walls;
 
     private const float MAX_FORCE = 15f;
@@ -14,17 +14,17 @@ public class MiniGolfBot
     public MiniGolfBot(BotDifficulty difficulty, MiniGolfMap map)
     {
         this.difficulty = difficulty;
-        this.holePosition = map.holeTransform.position;
-        this.walls = map.currentLevelWalls;
+        this.hole = map.hole;
+        this.walls = map.walls;
     }
 
-    public void UpdateLevelData(Vector2 holePos, List<Collider> currentWalls)
+    public void UpdateLevelData(MiniGolfMap map)
     {
-        this.holePosition = holePos;
-        this.walls = currentWalls;
+        this.hole = map.hole;
+        this.walls = map.walls;
     }
 
-    public Vector2 ThinkMove(Vector2 ballPos)
+    public Vector3 ThinkMove(Vector3 ballPos)
     {
         return difficulty switch
         {
@@ -35,11 +35,11 @@ public class MiniGolfBot
         };
     }
 
-    private Vector2 CalculateEasyMove(Vector2 ballPos)
+    private Vector3 CalculateEasyMove(Vector3 ballPos)
     {
         // Easy: Shoots roughly towards the hole with significant noise
-        Vector2 direction = (holePosition - ballPos).normalized;
-        float dist = Vector2.Distance(ballPos, holePosition);
+        Vector2 direction = (hole.transform.position - ballPos).normalized;
+        float dist = Vector2.Distance(ballPos, hole.transform.position);
 
         // Add random angle (+- 25 degrees)
         float randomAngle = Random.Range(-25f, 25f);
@@ -51,11 +51,11 @@ public class MiniGolfBot
         return direction * force;
     }
 
-    private Vector2 CalculateMediumMove(Vector2 ballPos)
+    private Vector3 CalculateMediumMove(Vector3 ballPos)
     {
         // Medium: Shoots more accurately towards the hole, but still no bounce consideration
-        Vector2 direction = (holePosition - ballPos).normalized;
-        float dist = Vector2.Distance(ballPos, holePosition);
+        Vector2 direction = (hole.transform.position - ballPos).normalized;
+        float dist = Vector2.Distance(ballPos, hole.transform.position);
 
         // Add small random angle (+- 5 degrees)
         float randomAngle = Random.Range(-5f, 5f);
@@ -67,7 +67,7 @@ public class MiniGolfBot
         return direction * force;
     }
 
-    private Vector2 CalculateHardMove(Vector2 ballPos)
+    private Vector3 CalculateHardMove(Vector3 ballPos)
     {
         // Hard: Simulates many shots including bank shots to find the best path
         Vector2 bestMove = Vector2.zero;
@@ -89,7 +89,7 @@ public class MiniGolfBot
                 // Find the closest this trajectory gets to the hole
                 foreach (Vector2 point in trajectory)
                 {
-                    float d = Vector2.Distance(point, holePosition);
+                    float d = Vector2.Distance(point, hole.transform.position);
                     if (d < closestDist)
                     {
                         closestDist = d;

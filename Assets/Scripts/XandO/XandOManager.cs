@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class XandOManager : MonoBehaviour, IGameManager
@@ -34,7 +34,7 @@ public class XandOManager : MonoBehaviour, IGameManager
                 //Set who gets which piece
                 userPiece = (Random.Range(0, 2) == 1) ? "x" : "o";
                 otherPiece = (userPiece == "x") ? "o" : "x"; //Set the alternative piece
-               
+
                 turnUser = (User)Random.Range(1, 3); //Set who has the turn
                 uiHandler.SetTurnText(turnUser);
 
@@ -105,7 +105,7 @@ public class XandOManager : MonoBehaviour, IGameManager
             case GameMode.vsBot:
                 turnUser = (turnUser == User.bot) ? User.client : User.bot;
 
-                if(turnUser == User.bot) Invoke(nameof(MakeAIMove), Random.Range(0.7f, 1.5f)); //Allow the bot make a move
+                if (turnUser == User.bot) Invoke(nameof(MakeAIMove), Random.Range(0.7f, 1.5f)); //Allow the bot make a move
                 break;
             case GameMode.vsPlayer:
                 turnUser = (turnUser == User.client) ? User.player : User.client;
@@ -210,23 +210,14 @@ public class XandOManager : MonoBehaviour, IGameManager
     public void CheckBoardState()
     {
         isPaused = true;
-        int win = CheckWinState(userPiece); //Check if player has won
 
+        int win = CheckWinState(userPiece); //Check if player has won
         if (win != -1)
         {
             ActivateWinLine(win);
             localState.Player1Scores++;
             GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
             ScorePanel.instance.UpdateScore(localState.Player1Scores, localState.Player2Scores);
-
-            if (localState.Player1Scores + localState.Player2Scores >= 3) //Playing a best of 3 rounds
-            {
-                isGameOver = true;
-            }
-            else //Game has been won but not the match, clear the board for the next round
-            {
-                Invoke(nameof(ClearBoard), 0.7f);
-            }
         }
 
         win = CheckWinState(otherPiece); //Check if bot or other player has won
@@ -236,17 +227,16 @@ public class XandOManager : MonoBehaviour, IGameManager
             localState.Player2Scores++;
             GameManager.instance.GetComponent<AudioManager>().PlayVictorySound();
             ScorePanel.instance.UpdateScore(localState.Player1Scores, localState.Player2Scores);
-
-            if (localState.Player1Scores + localState.Player2Scores >= 3) //Playing a best of 3 rounds
-            {
-                isGameOver = true;
-            }
-            else //Game has been won but not the match, clear the board for the next round
-            {
-                Invoke(nameof(ClearBoard), 0.7f);
-            }
         }
 
+        if (localState.Player1Scores >= 3 || localState.Player2Scores >= 3) //Playing a best of 3 rounds
+        {
+            isGameOver = true;
+        }
+        else //Game has been won but not the match, clear the board for the next round
+        {
+            Invoke(nameof(ClearBoard), 0.7f);
+        }
 
         if (isGameOver)
         {
