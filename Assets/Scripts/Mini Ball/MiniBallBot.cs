@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -16,8 +15,8 @@ public class MiniBallBot
 {
     private readonly BotDifficulty difficulty;
 
-    private const float MIN_FORCE         = 45f;
-    private const float MAX_FORCE         = 120f;
+    private const float MIN_FORCE = 45f;
+    private const float MAX_FORCE = 65f;
     private const float GOAL_DANGER_RADIUS = 2f;  // triggers defensive clear (hard only)
 
     public MiniBallBot(BotDifficulty difficulty)
@@ -25,16 +24,14 @@ public class MiniBallBot
         this.difficulty = difficulty;
     }
 
-    // ── Public entry point ────────────────────────────────────────────────────
-
     public MiniBallMove MakeMove(TeamManager team1, TeamManager team2, Transform ball)
     {
         return difficulty switch
         {
-            BotDifficulty.low    => ThinkEasy(team1, team2, ball),
+            BotDifficulty.low => ThinkEasy(team1, team2, ball),
             BotDifficulty.medium => ThinkMedium(team1, team2, ball),
-            BotDifficulty.high   => ThinkHard(team1, team2, ball),
-            _                    => ThinkEasy(team1, team2, ball),
+            BotDifficulty.high => ThinkHard(team1, team2, ball),
+            _ => ThinkEasy(team1, team2, ball),
         };
     }
 
@@ -44,12 +41,12 @@ public class MiniBallBot
     // Adds significant random angular noise so the ball is imprecise.
     private MiniBallMove ThinkEasy(TeamManager team1, TeamManager team2, Transform ball)
     {
-        Vector2 ballPos    = Flat(ball.position);
+        Vector2 ballPos = Flat(ball.position);
         Vector2 oppGoalPos = Flat(team1.goalZone.transform.position);
-        Vector2 idealDir   = (oppGoalPos - ballPos).normalized;
+        Vector2 idealDir = (oppGoalPos - ballPos).normalized;
 
-        MiniBallMove bestMove  = null;
-        float        bestScore = float.MinValue;
+        MiniBallMove bestMove = null;
+        float bestScore = float.MinValue;
 
         foreach (MiniBallEntity player in team2.GetPlayers())
         {
@@ -80,14 +77,14 @@ public class MiniBallBot
     // Penalises hitting the ball toward own goal.
     private MiniBallMove ThinkMedium(TeamManager team1, TeamManager team2, Transform ball)
     {
-        Vector2 ballPos    = Flat(ball.position);
+        Vector2 ballPos = Flat(ball.position);
         Vector2 oppGoalPos = Flat(team1.goalZone.transform.position);
         Vector2 ownGoalPos = Flat(team2.goalZone.transform.position);
-        Vector2 idealDir   = (oppGoalPos - ballPos).normalized;
-        Vector2 dangerDir  = (ownGoalPos - ballPos).normalized;
+        Vector2 idealDir = (oppGoalPos - ballPos).normalized;
+        Vector2 dangerDir = (ownGoalPos - ballPos).normalized;
 
-        MiniBallMove bestMove  = null;
-        float        bestScore = float.MinValue;
+        MiniBallMove bestMove = null;
+        float bestScore = float.MinValue;
 
         foreach (MiniBallEntity player in team2.GetPlayers())
         {
@@ -100,9 +97,9 @@ public class MiniBallBot
             {
                 Vector2 testHitDir = RotateVector(baseHitDir, offset);
 
-                float goalAlign    = Vector2.Dot(testHitDir, idealDir);
-                float dangerAlign  = Vector2.Dot(testHitDir, dangerDir);
-                float score        = goalAlign - Mathf.Max(0f, dangerAlign) * 1.5f;
+                float goalAlign = Vector2.Dot(testHitDir, idealDir);
+                float dangerAlign = Vector2.Dot(testHitDir, dangerDir);
+                float score = goalAlign - Mathf.Max(0f, dangerAlign) * 1.5f;
 
                 if (score > bestScore)
                 {
@@ -110,7 +107,7 @@ public class MiniBallBot
                     // Push the player from the opposite side of the intended ball exit
                     // (approach from behind the ball relative to the adjusted hit direction)
                     Vector2 approachDir = RotateVector(baseHitDir, offset);
-                    float   force       = MAX_FORCE * 0.75f;
+                    float force = MAX_FORCE * 0.75f;
                     bestMove = BuildMove(player.Piece, approachDir * force);
                 }
             }
@@ -124,7 +121,7 @@ public class MiniBallBot
     // Strong own-goal penalty; always uses maximum force.
     private MiniBallMove ThinkHard(TeamManager team1, TeamManager team2, Transform ball)
     {
-        Vector2 ballPos    = Flat(ball.position);
+        Vector2 ballPos = Flat(ball.position);
         Vector2 ownGoalPos = Flat(team2.goalZone.transform.position);
 
         // DEFENSIVE: if ball is dangerously close to own goal, clear it away
@@ -136,15 +133,15 @@ public class MiniBallBot
 
         // OFFENSIVE
         Vector2 oppGoalPos = Flat(team1.goalZone.transform.position);
-        Vector2 idealDir   = (oppGoalPos - ballPos).normalized;
-        Vector2 dangerDir  = (ownGoalPos - ballPos).normalized;
+        Vector2 idealDir = (oppGoalPos - ballPos).normalized;
+        Vector2 dangerDir = (ownGoalPos - ballPos).normalized;
 
-        MiniBallMove bestMove  = null;
-        float        bestScore = float.MinValue;
+        MiniBallMove bestMove = null;
+        float bestScore = float.MinValue;
 
         foreach (MiniBallEntity player in team2.GetPlayers())
         {
-            Vector2 playerPos  = new(player.PosX, player.PosZ);
+            Vector2 playerPos = new(player.PosX, player.PosZ);
             Vector2 baseHitDir = (ballPos - playerPos).normalized;
 
             // Fine arc: every 5° from –30° to +30°
@@ -152,9 +149,9 @@ public class MiniBallBot
             {
                 Vector2 testHitDir = RotateVector(baseHitDir, deg);
 
-                float goalAlign   = Vector2.Dot(testHitDir, idealDir);
+                float goalAlign = Vector2.Dot(testHitDir, idealDir);
                 float dangerAlign = Vector2.Dot(testHitDir, dangerDir);
-                float score       = goalAlign - Mathf.Max(0f, dangerAlign) * 3f;
+                float score = goalAlign - Mathf.Max(0f, dangerAlign) * 3f;
 
                 if (score > bestScore)
                 {
@@ -171,10 +168,10 @@ public class MiniBallBot
     // The bot player closest to the ball kicks it straight toward the opponent's post.
     private MiniBallMove TryClearBall(TeamManager team1, TeamManager team2, Transform ball)
     {
-        Vector2       ballPos     = Flat(ball.position);
-        MiniBallPiece bestPiece   = MiniBallPiece.Player2_Piece1;
-        float         closestDist = float.MaxValue;
-        bool          found       = false;
+        Vector2 ballPos = Flat(ball.position);
+        MiniBallPiece bestPiece = MiniBallPiece.Player2_Piece1;
+        float closestDist = float.MaxValue;
+        bool found = false;
 
         foreach (MiniBallEntity player in team2.GetPlayers())
         {
@@ -182,15 +179,15 @@ public class MiniBallBot
             if (d < closestDist)
             {
                 closestDist = d;
-                bestPiece   = player.Piece;
-                found       = true;
+                bestPiece = player.Piece;
+                found = true;
             }
         }
 
         if (!found) return null;
 
         Vector2 oppGoalPos = Flat(team1.goalZone.transform.position);
-        Vector2 clearDir   = (oppGoalPos - ballPos).normalized;
+        Vector2 clearDir = (oppGoalPos - ballPos).normalized;
         return BuildMove(bestPiece, clearDir * MAX_FORCE);
     }
 

@@ -89,7 +89,6 @@ public class TeamManager : MonoBehaviour
 
         if (goalZone.Contains(ball.position) || scoreCount > 0)
         {
-            ball.GetComponent<Ball>().PlayEffect(); //Play the star effect to indicate a goal
             return true;
         }
         return false;
@@ -104,6 +103,14 @@ public class TeamManager : MonoBehaviour
             {
                 player.position = GetFormation(Random.Range(0, formations.Count))[Random.Range(0, 5)].position;
             }
+        }
+    }
+
+    public void StopPlayers()
+    {
+        foreach (Transform player in transform)
+        {
+            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
 

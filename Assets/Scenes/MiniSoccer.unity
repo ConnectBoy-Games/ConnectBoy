@@ -2055,7 +2055,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!199 &538380727
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -7891,6 +7891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece: 0
+  moved: 0
   manager: {fileID: 1548526530}
   starEffect: {fileID: 538380728}
   minVelocity: 0.1
@@ -9951,7 +9952,7 @@ Light:
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
-    m_Resolution: -1
+    m_Resolution: 3
     m_CustomResolution: -1
     m_Strength: 0.4
     m_Bias: 0.05

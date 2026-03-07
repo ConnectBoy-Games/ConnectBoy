@@ -4,13 +4,14 @@ public class Ball : MonoBehaviour
 {
     public static PieceState ballState;
     public MiniBallPiece piece = MiniBallPiece.Ball;
+    public bool moved = false; //Used to check if the ball moved in a particular turn
 
     [SerializeField] MiniBallManager manager;
     [SerializeField] ParticleSystem starEffect; //The particle effect that plays when a goal is scored
     [SerializeField] float minVelocity = 0.1f; //The minimum velocity the ball needs to be considered moving
     private Rigidbody rb;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
@@ -23,12 +24,20 @@ public class Ball : MonoBehaviour
             ballState = PieceState.Idle;
             rb.velocity = Vector3.zero;
             manager.BallMoved();
+            moved = true;
         }
     }
 
     public void PlayEffect()
     {
         starEffect.Play();
+    }
+
+    public void ResetBall()
+    {
+        moved = false;
+        starEffect.Stop();
+        rb.velocity = Vector3.zero;
     }
 
     void OnCollisionEnter(Collision collision)

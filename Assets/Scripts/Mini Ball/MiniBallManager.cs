@@ -64,42 +64,63 @@ public class MiniBallManager : MonoBehaviour, IGameManager
 
     public async void MadeMove() // Called by the player piece after making a move
     {
-        // Delay for 4 secs to allow the players finish moving and the ball to settle down before switching turns and recording the move
-        await System.Threading.Tasks.Task.Delay(4000);
+        if (isGameOver) return;
 
-        team1.CheckPlayers(); //Check if any of the players in team 1 are stuck in the post and move them out
-        team2.CheckPlayers(); //Check if any of the players in team 2 are stuck in the post and move them out
+        if (ball.GetComponent<Ball>().moved == false) //Ball was not moved in this turn
+        {
+            // Delay for 4 secs to allow the players finish moving before switching turns and recording the move
+            await System.Threading.Tasks.Task.Delay(4000);
+            SwitchTurns();
+            CheckPlayers(); //Check if any of the players are stuck in the post and move them out
+        }
 
-        // Continue normal processing
-        SwitchTurns();
+        //If the ball was moved, the turn will be switched in the BallMoved() function
+        //after the ball stops moving and the move will be recorded there as well
 
         // TODO: For online mode, send the recorded frames over the network
     }
 
     // Called by the ball after it stops moving
-    public void BallMoved()
+    public async void BallMoved()
     {
-        team1.CheckPlayers(); //Check if any of the players in team 1 are stuck in the post and move them out
-        team2.CheckPlayers(); //Check if any of the players in team 2 are stuck in the post and move them out
+        if (isGameOver) return;
+
+        bool scored = false;
+        await System.Threading.Tasks.Task.Delay(500); //Wait half a second 
+        CheckPlayers(); //Check if any of the players are stuck in the post and move them out
 
         if (team1.CheckGoal(ball))
         {
-            localState.Player1Scores++;
-            ClearBoard();
+            localState.Player2Scores++;
+            scored = true;
         }
         else if (team2.CheckGoal(ball))
         {
-            localState.Player2Scores++;
-            ClearBoard();
+            localState.Player1Scores++;
+            scored = true;
         }
 
         //Update the score panel with the new score values
         ScorePanel.instance.UpdateScore(localState.Player1Scores, localState.Player2Scores);
         CheckWinState();
+
+        if(scored)
+        {
+            await System.Threading.Tasks.Task.Delay(1000);
+            SwitchTurns();
+            ClearBoard();
+        }
+        else //No goals were scored but the ball was moved, so we switch turns after a delay
+        {
+            await System.Threading.Tasks.Task.Delay(1000);
+            SwitchTurns();
+        }
     }
 
     public void MakeAIMove()
     {
+        if (isGameOver) return;
+
         var move = bot.MakeMove(team1, team2, ball); //Let the AI think the move
 
         foreach (Transform player in team2.transform)
@@ -128,8 +149,23 @@ public class MiniBallManager : MonoBehaviour, IGameManager
                 turnUser = (turnUser == User.client) ? User.player : User.client;
                 break;
         }
+
+        StopPlayers(); //Stop all the players from moving
         uiHandler.SetTurnText(turnUser); //Display the turn text
         ActivatePlayers(turnUser);
+    }
+
+    private void CheckPlayers()
+    {
+        team1.CheckPlayers(); //Check if any of the players in team 1 are stuck in the post and move them out
+        team2.CheckPlayers(); //Check if any of the players in team 2 are stuck in the post and move them out
+    }
+
+    private void StopPlayers()
+    {
+        //Stops all the players from moving by setting their velocity to zero
+        team1.StopPlayers();
+        team2.StopPlayers();
     }
 
     private void ActivatePlayers(User user)
@@ -178,6 +214,7 @@ public class MiniBallManager : MonoBehaviour, IGameManager
         team1.SetFormation(formationIndex);
         team2.SetFormation(formationIndex);
         ball.position = Vector3.zero;
+        ball.GetComponent<Ball>().ResetBall();
     }
 
     public void CheckWinState()
