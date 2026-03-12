@@ -1,7 +1,7 @@
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UnityEngine;
 
 public class WebPoster
@@ -12,7 +12,7 @@ public class WebPoster
     {
         if (authenticate) //Set the client to have an authentication header
         {
-            string accessToken = "";  //AuthenticationService.Instance.AccessToken;
+            string accessToken = PlayerPrefs.GetString("AccessToken", ""); // Authentication Access Token;
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
         }
     }
@@ -47,6 +47,33 @@ public class WebPoster
             return default;
         }
 
+        string responseBody = await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<TResponse>(responseBody);
+    }
+
+    public async Task DeleteRequestAsync(string url)
+    {
+        var response = await client.DeleteAsync(url);
+
+        if (response.IsSuccessStatusCode == false)
+        {
+            Debug.LogError($"Request failed with status code: {response.StatusCode}");
+        }
+    }
+
+    public async Task<TResponse> PutRequestAsync<TRequest, TResponse>(string url, object data)
+    {
+        //Serialize the data to Json
+        string jsonRequest = JsonConvert.SerializeObject(data);
+        var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+        //Execute the PUT request
+        var response = await client.PutAsync(url, content);
+        if (response.IsSuccessStatusCode == false)
+        {
+            Debug.LogError($"Request failed with status code: {response.StatusCode}");
+            return default;
+        }
         string responseBody = await response.Content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<TResponse>(responseBody);
     }
