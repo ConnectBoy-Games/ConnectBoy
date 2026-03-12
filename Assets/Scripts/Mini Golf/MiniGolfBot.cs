@@ -84,7 +84,7 @@ public class MiniGolfBot
             foreach (float force in forceLevels)
             {
                 Vector2 testMove = dir * force;
-                var trajectory = CustomGolfPhysics.SimulateShot(ballPos, testMove, walls);
+                var trajectory = new List<Vector2>(); //CustomGolfPhysics.SimulateShot(ballPos, testMove, walls);
 
                 // Find the closest this trajectory gets to the hole
                 foreach (Vector2 point in trajectory)

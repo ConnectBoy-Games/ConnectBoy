@@ -173,6 +173,6 @@ public class MiniGolfManager : MonoBehaviour, IGameManager
         Vector2 opponentForce = new Vector2(move.X, move.Y);
 
         // 2. Run the EXACT same physics engine
-        var trajectory = CustomGolfPhysics.SimulateShot(ball.position, opponentForce, golfMap.walls);
+        //var trajectory = CustomGolfPhysics.SimulateShot(ball.position, opponentForce, golfMap.walls);
     }
 }

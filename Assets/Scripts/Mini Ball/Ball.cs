@@ -18,11 +18,11 @@ public class Ball : MonoBehaviour
 
     void Update()
     {
-        if (ballState == PieceState.Moving && rb.velocity.magnitude <= minVelocity)
+        if (ballState == PieceState.Moving && rb.linearVelocity.magnitude <= minVelocity)
         {
             //Stop the movement of the ball //Record the move //Switch turns
             ballState = PieceState.Idle;
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             manager.BallMoved();
             moved = true;
         }
@@ -37,12 +37,12 @@ public class Ball : MonoBehaviour
     {
         moved = false;
         starEffect.Stop();
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (rb.velocity.magnitude > minVelocity)
+        if (rb.linearVelocity.magnitude > minVelocity)
         {
             ballState = PieceState.Moving;
         }

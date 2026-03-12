@@ -1,5 +1,4 @@
 using TMPro;
-using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -28,7 +27,6 @@ public class LoginPanel : MonoBehaviour
 
     public async void Start()
     {
-        await UnityServices.InitializeAsync(); //Initialize Unity Services
         GameManager.instance.accountManager.onProfileLoaded += OnProfileLoaded;
         GameManager.instance.accountManager.onAccountCreated += OnCreatedAccount;
     }
@@ -41,8 +39,6 @@ public class LoginPanel : MonoBehaviour
 
     public async void OnEnable()
     {
-        await UnityServices.InitializeAsync(); //Initialize Unity Services
-
         /* Temporarily disable Auto Login
         //If we are already logged in, just go to the games page
         //Try logging in the moment the login page is shown

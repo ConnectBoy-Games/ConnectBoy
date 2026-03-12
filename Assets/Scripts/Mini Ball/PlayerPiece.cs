@@ -31,14 +31,14 @@ public class PlayerPiece : MonoBehaviour
             Vector3 pos = new Vector3((startPosition - currentPosition).normalized.x, 0, (startPosition - currentPosition).normalized.z);
             aim.SetPosition(aim.positionCount - 1, pos * 15);
         }
-        else if (pieceState == Ball.PieceState.Idle && rb.velocity.magnitude >= minVelocity)
+        else if (pieceState == Ball.PieceState.Idle && rb.linearVelocity.magnitude >= minVelocity)
         {
             pieceState = Ball.PieceState.Moving;
         }
-        else if (pieceState == Ball.PieceState.Moving && rb.velocity.magnitude <= minVelocity)
+        else if (pieceState == Ball.PieceState.Moving && rb.linearVelocity.magnitude <= minVelocity)
         {
             //Stop the player from moving
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             pieceState = Ball.PieceState.Idle;
         }
     }

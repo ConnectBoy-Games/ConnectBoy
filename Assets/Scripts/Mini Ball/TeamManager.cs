@@ -110,7 +110,7 @@ public class TeamManager : MonoBehaviour
     {
         foreach (Transform player in transform)
         {
-            player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            player.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         }
     }
 

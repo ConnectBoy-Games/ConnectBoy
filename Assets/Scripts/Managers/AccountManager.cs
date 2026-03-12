@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.Events;
 using Wagr;
@@ -18,7 +17,6 @@ public class AccountManager
 
     public async void Setup()
     {
-        //await UnityServices.InitializeAsync(); //Initialize Unity Services
         loginState = LoginState.unsigned;
         SetupEvents();
     }
